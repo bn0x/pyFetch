@@ -5,8 +5,36 @@ from colorama import Fore, Back, Style
 from win32api import GetSystemMetrics
 global printed
 printed = 0
+global ascii
+
+print Style.BRIGHT
+
 
 _ntuple_diskusage = collections.namedtuple('usage', 'total used free')
+
+ascii_windows = [
+	colorama.Fore.RED + " ,.=:!!t3Z3z., " + colorama.Fore.RESET,
+	colorama.Fore.RED + " :tt:::tt333EE3 " + colorama.Fore.RESET,
+	colorama.Fore.RED + " Et:::ztt33EEEL " + colorama.Fore.GREEN + "@Ee., ..," + colorama.Fore.RESET,
+	colorama.Fore.RED + " ;tt:::tt333EE7 " + colorama.Fore.GREEN + ";EEEEEEttttt33#" + colorama.Fore.RESET,
+	colorama.Fore.RED + " :Et:::zt333EEQ. " + colorama.Fore.GREEN + "$EEEEEttttt33QL" + colorama.Fore.RESET,
+	colorama.Fore.RED + " ;3=*^````*4EEV " + colorama.Fore.GREEN + ":EEEEEEttttt33@." + colorama.Fore.RESET,
+	colorama.Fore.BLUE + " ,.=::::!t=., ` " + colorama.Fore.GREEN + "@EEEEEEtttz33QF " + colorama.Fore.RESET,
+	colorama.Fore.BLUE + " ;::::::::zt33) " + colorama.Fore.GREEN + "`4EEEtttji3P* " + colorama.Fore.RESET,
+	colorama.Fore.BLUE + " :t::::::::tt33. " + colorama.Fore.YELLOW + ":Z3z.. `` ,..g. " + colorama.Fore.RESET,
+	colorama.Fore.BLUE + " i::::::::zt33F " + colorama.Fore.YELLOW + "AEEEtttt::::ztF " + colorama.Fore.RESET,
+	colorama.Fore.BLUE + " ;:::::::::t33V " + colorama.Fore.YELLOW + ";EEEttttt::::t3 " + colorama.Fore.RESET,
+	colorama.Fore.BLUE + " E::::::::zt33L " + colorama.Fore.YELLOW + "@EEEtttt::::z3F " + colorama.Fore.RESET,
+	colorama.Fore.BLUE + " {3=*^````*4E3) " + colorama.Fore.YELLOW + ";EEEtttt:::::tZ` " + colorama.Fore.RESET,
+	colorama.Fore.BLUE + " ` " + colorama.Fore.YELLOW + "             :EEEEtttt::::z7 " + colorama.Fore.RESET,
+	colorama.Fore.YELLOW + "                 `VEzjt:;;z>*` " + colorama.Fore.RESET,
+]
+
+def get_ascii():
+	if platform.system() == 'Windows':
+		return ascii_windows
+
+ascii = get_ascii()
 
 if os.name == 'nt':
     import ctypes
@@ -30,7 +58,7 @@ else:
 disk_usage.__doc__ = __doc__
 
 def bytes2human(n):
-    symbols = ('K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y')
+    symbols = ('KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB')
     prefix = {}
     for i, s in enumerate(symbols):
         prefix[s] = 1 << (i+1)*10
@@ -44,29 +72,29 @@ def bytes2human(n):
 def Name():
 	hostName = socket.gethostname()
 	userName = getpass.getuser()
-	print Fore.RED + "       :tt:::tt333EE3" + Fore.RED + "                Name: " + Fore.WHITE + userName + "@" + hostName
+	print("%s" + Fore.RED + "                  Name: " + Fore.WHITE + userName + Fore.RED + "@" + Fore.WHITE + hostName) % ascii[1] 
 
 
 #Windows Kernel Version?
 def winKernel():
 	kerNel = platform.platform()
-	print Fore.RED + "       Et:::ztt33EEEL " + Fore.GREEN + "@Ee.,      ..," + Fore.RED + " Kernel: " + Fore.WHITE + kerNel
+	print("%s" + Fore.RED + "         Kernel: " + Fore.WHITE + kerNel) % ascii[2]
 
 #Operating System
 def oS():
 	oS = platform.win32_ver()
 	if '6.1.' in oS[1]:
-    		print Fore.RED + "      ;tt:::tt333EE7 " + Fore.GREEN + ";EEEEEEttttt33#" + Fore.RED + " Operating System: " + Fore.WHITE + "Windows 7 " + oS[2]
+    		print("%s" + Fore.RED + "   Operating System: " + Fore.WHITE + "Windows 7 " + oS[2]) % ascii[3]
 	elif '6.0.' in oS[1]:
-    		print Fore.RED + "      ;tt:::tt333EE7 " + Fore.GREEN + ";EEEEEEttttt33#" + Fore.RED + " Operating System: " + Fore.WHITE + "Windows Vista" + oS[2]
+    		print("%s" + Fore.RED + "   Operating System: " + Fore.WHITE + "Windows Vista" + oS[2]) % ascii[3]
 	elif '6.2.' in oS[1]:
-                print Fore.RED + "      ;tt:::tt333EE7 " + Fore.GREEN + ";EEEEEEttttt33#" + Fore.RED + " Operating System: " + Fore.WHITE + "Windows 8" + oS[2]
+                print("%s" + Fore.RED + "   Operating System: " + Fore.WHITE + "Windows 8" + oS[2]) % ascii[3]
 	elif '5.1.' in os[1]:
-    		print Fore.RED + "      ;tt:::tt333EE7 " + Fore.GREEN + ";EEEEEEttttt33#" + Fore.RED + " Operating System: " + Fore.WHITE + "Windows XP" + oS[2]
+    		print("%s" + Fore.RED + "   Operating System: " + Fore.WHITE + "Windows XP" + oS[2]) % ascii[3]
 	elif '5.0.' in oS[1]:
-    		print Fore.RED + "      ;tt:::tt333EE7 " + Fore.GREEN + ";EEEEEEttttt33#" + Fore.RED + " Operating System: " + Fore.WHITE + "Windows 2000" + oS[2]
+    		print("%s" + Fore.RED + "   Operating System: " + Fore.WHITE + "Windows 2000" + oS[2]) % ascii[3]
 	else:
-    		print Fore.RED + "      ;tt:::tt333EE7 " + Fore.GREEN + ";EEEEEEttttt33#" + Fore.RED + " Operating System: " + Fore.WHITE + platform.release()
+    		print("%s" + Fore.RED + "   Operating System: " + Fore.WHITE + platform.release()) % ascii[3]
 
 #RAM Usage // Not coded yet, can't find a good way.
 
@@ -77,7 +105,7 @@ def winUpTime():
 	upTime = upTime[3]
 	upTime = upTime.split(" ")
 	upTime = upTime[3]
-	print(Fore.RED + "     :Et:::zt333EEQ. " + Fore.GREEN + "$EEEEEttttt33QL" + Fore.RED + " Up Since: " + Fore.WHITE + "%s" % (upTime))
+	print("%s" + Fore.RED + "  Up Since: " + Fore.WHITE + "%s" % (upTime)) % ascii[4]
 
 
 #Theme // Uncoded, don't know how to find
@@ -89,28 +117,22 @@ def detectBBLean():
 	global printed
 	for process in c.Win32_Process (name="explorer.exe"):
 		printed = 1
-		print Fore.RED +  "     ,.=::::!t=., ` " + Fore.GREEN + "@EEEEEEtttz33QF"  + Fore.RED + "  Shell: " + Fore.WHITE + "Explorer"
+		print("%s" + Fore.RED + "  Shell: " + Fore.WHITE + "Explorer") % ascii[6]
 	for process in c.Win32_Process (name="blackbox.exe"):
 		if printed == 1:
                     None
 		else:
-		    print "     ,.=::::!t=., ` @EEEEEEtttz33QF" + Fore.RED + "  Shell: " + Fore.WHITE + "bbLean"
+		    print("%s" + Fore.RED + "  Shell: " + Fore.WHITE + "bbLean") % ascii[6]
 
 def screenRes():
-    print Fore.RED +  "    ;::::::::zt33)   " + Fore.GREEN + "`4EEEtttji3P*" + Fore.RED + "   Resolution:" + Fore.WHITE, GetSystemMetrics (0), Fore.BLUE + "x", Fore.WHITE + str(GetSystemMetrics(1))
+    print ascii[7], Fore.RED + "   Resolution:" + Fore.WHITE, str(GetSystemMetrics (0)) + Fore.RED + "x" + Fore.WHITE + str(GetSystemMetrics(1))
 
 def winProcessor():
-    print Fore.CYAN + "   i::::::::zt33F" + Fore.YELLOW + " AEEEtttt::::ztF" + Fore.RED + "    CPU:" + Fore.WHITE, platform.processor()
+    print ascii[8] + Fore.RED + " CPU:" + Fore.WHITE, platform.processor()
 
 def diskMinMax():
 	usage = disk_usage('C:\\')
-	print Fore.CYAN + "   ;:::::::::t33V " + Fore.YELLOW + ";EEEttttt::::t3"  + Fore.RED + "    Disk:" + Fore.WHITE, bytes2human(usage.free) + "/" + bytes2human(usage.total)
-
-def ansiArt():
-	print Fore.CYAN + "  E::::::::zt33L " + Fore.YELLOW +"@EEEtttt::::z3F"
-	print Fore.CYAN + " {3=*^````*4E3)  " + Fore.YELLOW +";EEEtttt:::::tZ`"
-	print Fore.CYAN + "             ` " + Fore.YELLOW + ":EEEEtttt::::z7"
-	print Fore.CYAN + "                 " + Fore.YELLOW + "`VEzjt:;;z>*`"
+	print ascii[9] + Fore.RED + "  Disk:" + Fore.GREEN, bytes2human(usage.free) + Fore.RED + "/" + Fore.BLUE + bytes2human(usage.total)
 
 def screenShot():
     	from time import gmtime, strftime
@@ -118,18 +140,20 @@ def screenShot():
     	im = ImageGrab.grab()
     	im.save('pyFetch-' + strftime("%Y-%m-%d-%H-%M-%S", gmtime()) + ".png")
 
-print(Fore.RED + "         ,.=:!!t3Z3z.," + Fore.GREEN + "               Info" )
+print("")
+print("")
+print(ascii[0] + Fore.CYAN + "                    Info" )
 Name()
 winKernel()
 oS()
 winUpTime()
-print( Fore.RED + "     ;3=*^````*4EEV " + Fore.GREEN + ":EEEEEEttttt33@." + Fore.GREEN + " Theming")
+print(ascii[5] + Fore.CYAN + "   Theming")
 detectBBLean()
 screenRes()
-print( Fore.CYAN + "   :t::::::::tt33. " + Fore.YELLOW + ":Z3z..  `` ,..g." + Fore.GREEN + "  Hardware")
-winProcessor()
+print(ascii[8] + Fore.CYAN + "  Hardware")
+#winProcessor()
 diskMinMax()
-ansiArt()
+print '\n'.join(ascii[11:])
 try:
 	if sys.argv[1] == "-s":
 		screenShot()
