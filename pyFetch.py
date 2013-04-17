@@ -18,11 +18,11 @@ init()
 from colorama import Fore, Back, Style
 from win32api import GetSystemMetrics
 
-global printed
-printed = 0
 global ascii
 global totalRam
 global availableRam
+global blackbox
+blackbox = 0
 
 print Style.BRIGHT
 
@@ -172,16 +172,19 @@ def winUpTime(): #Uptime
 
 #Shell Detect/bbLean Dectection Detection
 def detectBBLean(): #Detect what shell is being used, currently only support Explorer and bbLean
-	c = wmi.WMI ()
-	global printed
-	for process in c.Win32_Process (name="explorer.exe"):
-		printed = 1
-		print("%s" + Fore.RED + "   Shell: " + Fore.WHITE + "Explorer") % ascii[6]
-	for process in c.Win32_Process (name="blackbox.exe"):
-		if printed == 1:
-                    None
-		else:
-		    print("%s" + Fore.RED + "   Shell: " + Fore.WHITE + "bbLean") % ascii[6]
+    c = wmi.WMI ()
+    global printed
+    global blackbox
+    for process in c.Win32_Process (name="blackbox.exe"):
+        blackbox = blackbox+1
+
+def winShell():
+    global blackbox
+    if blackbox == 1:
+        print(ascii[6] + Fore.RED + "   Shell: " + Fore.WHITE + "bbLean")
+    else:
+        print(ascii[6] + Fore.RED + "   Shell: " + Fore.WHITE + "Explorer")
+		
 
 def screenRes(): #Screen Resolution
     print ascii[8], Fore.RED + " Resolution:" + Fore.WHITE, str(GetSystemMetrics (0)) + Fore.RED + "x" + Fore.WHITE + str(GetSystemMetrics(1))
@@ -225,6 +228,7 @@ defaultBrowser()
 
 print(ascii[6] + Fore.CYAN + "  Theming") #Theming section
 detectBBLean()
+winShell()
 winVisualStyle()
 screenRes()
 
