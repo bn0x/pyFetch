@@ -1,9 +1,23 @@
-import socket, getpass, os, sys, platform, wmi, collections, colorama, _winreg, ctypes, datetime, subprocess, re
+import socket #Used for hostname
+import getpass #Used for username
+import os #Various functions
+import sys #Various functions
+import platform #Various functions
+import wmi #Various functions
+import collections #Various functions
+import colorama #Coloring
+import _winreg #Various functions
+import ctypes #Various functions
+import datetime #Specificallyish for uptime
+import subprocess #Various functions
+import re #Various functions
+
 from datetime import datetime
 from colorama import init
 init()
 from colorama import Fore, Back, Style
 from win32api import GetSystemMetrics
+
 global printed
 printed = 0
 global ascii
@@ -104,20 +118,18 @@ def bytes2human(n):
             return '%.1f%s' % (value, s)
     return "%sB" % n
 
-#Name
-def Name():
+def Name(): #Name
 	hostName = socket.gethostname()
 	userName = getpass.getuser()
 	print("%s" + Fore.RED + "                  Name: " + Fore.WHITE + userName + Fore.RED + "@" + Fore.WHITE + hostName) % ascii[1] 
 
 
-#Windows Kernel Version
-def winKernel():
+def winKernel(): #Windows Kernel Version
 	kerNel = platform.platform()
 	print("%s" + Fore.RED + "         Kernel: " + Fore.WHITE + kerNel) % ascii[2]
 
-#Operating System
-def oS():
+
+def oS(): #Operating System
 	oS = platform.win32_ver()
 	if '6.1.' in oS[1]:
     		print("%s" + Fore.RED + "   Operating System: " + Fore.WHITE + "Windows 7 " + oS[2]) % ascii[3]
@@ -132,18 +144,16 @@ def oS():
 	else:
     		print("%s" + Fore.RED + "   Operating System: " + Fore.WHITE + platform.release()) % ascii[3]
 
-#RAM Usage
-
-def currentRamUsage():
+def currentRamUsage(): #Ram Free and Maximum
     global availableRam
     global totalRam
     availableRam = availableRam / (1024*1024)
     totalRam = totalRam / (1024*1024)
-    print(ascii[11] + Fore.RED + "  RAM: " + Fore.GREEN + "%sMB" + Fore.RED + "/" + Fore.BLUE + "%sMB") % (availableRam, totalRam)
+    print(ascii[12] + Fore.RED + " RAM: " + Fore.GREEN + "%sMB" + Fore.RED + "/" + Fore.BLUE + "%sMB") % (availableRam, totalRam)
 
 
-#Uptime
-def winUpTime():   
+
+def winUpTime(): #Uptime
   	output = subprocess.check_output(["net", "stats", "srv"])
         timestring = " ".join(output.split("\n")[3].split()[2:]).strip()
         timestring = re.sub("p.m.", "PM", timestring)
@@ -159,11 +169,9 @@ def winUpTime():
         upHours = upMinutes / 60
 	print("%s" + Fore.RED + "  Uptime: " + Fore.WHITE + str(upHours) + Fore.CYAN + "H" + Fore.RED + " " + Fore.WHITE + str(upMinutes) + Fore.CYAN + "M" + Fore.RED + " " + Fore.WHITE + str(diff.seconds) + Fore.CYAN + "S") % ascii[4]
 
-#Theme // Uncoded, don't know how to find
-
 
 #Shell Detect/bbLean Dectection Detection
-def detectBBLean():
+def detectBBLean(): #Detect what shell is being used, currently only support Explorer and bbLean
 	c = wmi.WMI ()
 	global printed
 	for process in c.Win32_Process (name="explorer.exe"):
@@ -175,44 +183,53 @@ def detectBBLean():
 		else:
 		    print("%s" + Fore.RED + "  Shell: " + Fore.WHITE + "bbLean") % ascii[6]
 
-def screenRes():
-    print ascii[7], Fore.RED + "   Resolution:" + Fore.WHITE, str(GetSystemMetrics (0)) + Fore.RED + "x" + Fore.WHITE + str(GetSystemMetrics(1))
+def screenRes(): #Screen Resolution
+    print ascii[8], Fore.RED + "Resolution:" + Fore.WHITE, str(GetSystemMetrics (0)) + Fore.RED + "x" + Fore.WHITE + str(GetSystemMetrics(1))
 
-def winProcessor():
-    print ascii[9] + Fore.RED + "  CPU:" + Fore.WHITE, get_registry_value("HKEY_LOCAL_MACHINE", "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0", "ProcessorNameString")
+def winProcessor(): #Processor
+    print ascii[10] + Fore.RED + "  CPU:" + Fore.WHITE, get_registry_value("HKEY_LOCAL_MACHINE", "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0", "ProcessorNameString")
 
-def winGPU():
+def winGPU(): #GPU/Graphics Card
     reg = subprocess.check_output(["wmic", "path", "Win32_VideoController", "get", "caption"]).split("\n")[1:]
-    print ascii[10] + Fore.RED + "  GPU: " + Fore.WHITE + ", ".join(filter(bool, [s.strip() for s in reg]))
+    print ascii[11] + Fore.RED + "  GPU: " + Fore.WHITE + ", ".join(filter(bool, [s.strip() for s in reg]))
     
 
-def diskMinMax():
+def diskMinMax(): #Disk max and free
 	usage = disk_usage('C:\\')
-	print ascii[12] + Fore.RED + "  Disk:" + Fore.GREEN, bytes2human(usage.free) + Fore.RED + "/" + Fore.BLUE + bytes2human(usage.total)
+	print ascii[13] + Fore.RED + "  Disk:" + Fore.GREEN, bytes2human(usage.free) + Fore.RED + "/" + Fore.BLUE + bytes2human(usage.total)
 
-def screenShot():
+def screenShot(): #-s screenshot
     	from time import gmtime, strftime
 	from PIL import ImageGrab
     	im = ImageGrab.grab()
     	im.save('pyFetch-' + strftime("%Y-%m-%d-%H-%M-%S", gmtime()) + ".png")
 
+def winVisualStyle(): #Windows 7 Visual Style
+	visualStyle = get_registry_value("HKEY_CURRENT_USER", "Software\Microsoft\Windows\CurrentVersion\ThemeManager", "DllName")
+	visualStyle = visualStyle.split('\\')[-1].split(".")[0]
+	print(ascii[7] + Fore.RED + "    Visual Style: " + Fore.WHITE + "%s") % (visualStyle)
+
 print("")
 print("")
-print(ascii[0] + Fore.CYAN + "                    Info" )
+
+print(ascii[0] + Fore.CYAN + "                    Info" ) #General Information
 Name()
 winKernel()
 oS()
 winUpTime()
-print(ascii[5] + Fore.CYAN + "   Theming")
+
+print(ascii[5] + Fore.CYAN + "   Theming") #Theming section
 detectBBLean()
+winVisualStyle()
 screenRes()
-print(ascii[8] + Fore.CYAN + "  Hardware")
+
+print(ascii[9] + Fore.CYAN + "   Hardware") #Hardware related statistics
 winProcessor()
 winGPU()
 ramValue()
 currentRamUsage()
 diskMinMax()
-print '\n'.join(ascii[13:])
+print '\n'.join(ascii[14:])
 try:
 	if sys.argv[1] == "-s":
 		screenShot()
