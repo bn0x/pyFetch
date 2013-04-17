@@ -3,6 +3,8 @@ from colorama import init
 init()
 from colorama import Fore, Back, Style
 from win32api import GetSystemMetrics
+global printed
+printed = 0
 
 _ntuple_diskusage = collections.namedtuple('usage', 'total used free')
 
@@ -80,11 +82,15 @@ def winUpTime():
 #Shell Detect/bbLean Dectection Detection
 def detectBBLean():
 	c = wmi.WMI ()
-
+	global printed
 	for process in c.Win32_Process (name="explorer.exe"):
+		printed = 1
 		print Fore.RED +  "     ,.=::::!t=., ` " + Fore.GREEN + "@EEEEEEtttz33QF"  + Fore.RED + "  Shell: " + Fore.WHITE + "Explorer"
 	for process in c.Win32_Process (name="blackbox.exe"):
-		print "     ,.=::::!t=., ` @EEEEEEtttz33QF" + Fore.RED + "  Shell: " + Fore.WHITE + "bbLean"
+		if printed == 1:
+                    None
+		else:
+		    print "     ,.=::::!t=., ` @EEEEEEtttz33QF" + Fore.RED + "  Shell: " + Fore.WHITE + "bbLean"
 
 def screenRes():
     print Fore.RED +  "    ;::::::::zt33)   " + Fore.GREEN + "`4EEEtttji3P*" + Fore.RED + "   Resolution:" + Fore.WHITE, GetSystemMetrics (0), Fore.BLUE + "x", Fore.WHITE + str(GetSystemMetrics(1))
