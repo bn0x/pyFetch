@@ -154,18 +154,26 @@ def currentRamUsage(): #Ram Free and Maximum
 
 
 def winUpTime(): #Uptime
-  	output = subprocess.check_output(["net", "stats", "srv"])
-        timestring = " ".join(output.split("\n")[3].split()[2:]).strip()
-        timestring = re.sub("p.m.", "PM", timestring)
-        timestring = re.sub("a.m.", "AM", timestring)
-	try:
-            diff = datetime.now() - datetime.strptime(timestring, "%d/%m/%Y %I:%M:%S %p")
-	except:
+    output = subprocess.check_output(["net", "stats", "srv"])
+    timestring = " ".join(output.split("\n")[3].split()[2:]).strip()
+    timestring = re.sub("p.m.", "PM", timestring)
+    timestring = re.sub("a.m.", "AM", timestring)
+    try:
+        diff = datetime.now() - datetime.strptime(timestring, "%d/%m/%Y %I:%M:%S %p")
+    except:
+        try:
             diff = datetime.now() - datetime.strptime(timestring, "%m/%d/%Y %I:%M:%S %p")
-            
-        upMinutes = diff.seconds / 60
-        upHours = upMinutes / 60
-	print("%s" + Fore.RED + "   Uptime: " + Fore.WHITE + str(upHours) + Fore.CYAN + "H" + Fore.RED + " " + Fore.WHITE + str(upMinutes) + Fore.CYAN + "M" + Fore.RED + " " + Fore.WHITE + str(diff.seconds) + Fore.CYAN + "S") % ascii[4]
+        except:
+            try:
+                diff = datetime.now() - datetime.strptime(timestring, "%m/%d/%Y %I:%M:%S")
+            except:
+                try:
+                    diff = datetime.now() - datetime.strptime(timestring, "%d/%m/%Y %I:%M:%S")
+                except:
+                    print("Cannot get date and time.")
+    upMinutes = diff.seconds / 60
+    upHours = upMinutes / 60
+    print("%s" + Fore.RED + "   Uptime: " + Fore.WHITE + str(upHours) + Fore.CYAN + "H" + Fore.RED + " " + Fore.WHITE + str(upMinutes) + Fore.CYAN + "M" + Fore.RED + " " + Fore.WHITE + str(diff.seconds) + Fore.CYAN + "S") % ascii[4]
 
 
 #Shell Detect/bbLean Dectection Detection
