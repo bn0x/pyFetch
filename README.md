@@ -6,7 +6,7 @@ Current Information
 Name:<br />
 Kernel:<br />
 Operating System:<br />
-Uptime:<br />
+Up Since:<br />
 <br/>
 Shell:<br />
 Resolution:<br />
