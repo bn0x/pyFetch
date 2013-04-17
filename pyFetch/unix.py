@@ -120,7 +120,7 @@ def screen_resolution():
     """
 
     try:
-        output = subprocess.check_output(["xrandr"]).split("\n")
+        output = subprocess.check_output(["xrandr"], stderr=subprocess.STDOUT).split("\n")
         for x in output:
             if 'connected' in x:
                 x = x.split()[2].split("+")[0].split("x")
