@@ -119,4 +119,14 @@ def screen_resolution():
     :rtype: dict
     """
 
-    return { 'x': 0, 'y': 0 }
+    try:
+        output = subprocess.check_output(["xrandr"]).split("\n")
+        for x in output:
+            if 'connected' in x:
+                x = x.split()[2].split("+")[0].split("x")
+                return { 'x': x[0], 'y': x[1] }
+
+        return { 'x': 0, 'y': 0 }
+
+    except:
+        return { 'x': 0, 'y': 0 }
