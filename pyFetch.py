@@ -1,4 +1,4 @@
-import socket, getpass, os, sys, platform, wmi, collections, win32api, colorama
+import socket, getpass, os, sys, platform, wmi, collections, colorama
 from colorama import init
 init()
 from colorama import Fore, Back, Style
@@ -59,6 +59,8 @@ def oS():
     		print Fore.RED + "      ;tt:::tt333EE7 " + Fore.GREEN + ";EEEEEEttttt33#" + Fore.RED + " Operating System: " + Fore.WHITE + "Windows 7 " + oS[2]
 	elif '5.1.' in oS[1]:
     		print Fore.RED + "      ;tt:::tt333EE7 " + Fore.GREEN + ";EEEEEEttttt33#" + Fore.RED + " Operating System: " + Fore.WHITE + "Windows Vista" + oS[2]
+	elif '6.2.' in oS[1]:
+                print Fore.RED + "      ;tt:::tt333EE7 " + Fore.GREEN + ";EEEEEEttttt33#" + Fore.RED + " Operating System: " + Fore.WHITE + "Windows 8" + oS[2]
 	elif 'XP' or 'xp' in platform.release():
     		print Fore.RED + "      ;tt:::tt333EE7 " + Fore.GREEN + ";EEEEEEttttt33#" + " Operating System: " + Fore.WHITE + "Windows XP" + oS[2]
 	else:
