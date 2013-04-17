@@ -1,6 +1,7 @@
 pyFetch<br />
 This is currently windows only and for atleast right now, plans for GNU/Linux.<br />
 <br />
+<img src="preview-screenshot.png" alt="Screenshot"><br />
 Current Information
 
 Name: userName@hostName<br />
