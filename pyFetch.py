@@ -121,35 +121,35 @@ def bytes2human(n):
 def Name(): #Name
 	hostName = socket.gethostname()
 	userName = getpass.getuser()
-	print("%s" + Fore.RED + "                  Name: " + Fore.WHITE + userName + Fore.RED + "@" + Fore.WHITE + hostName) % ascii[1] 
+	print("%s" + Fore.RED + "                   Name: " + Fore.WHITE + userName + Fore.RED + "@" + Fore.WHITE + hostName) % ascii[1] 
 
 
 def winKernel(): #Windows Kernel Version
 	kerNel = platform.platform()
-	print("%s" + Fore.RED + "         Kernel: " + Fore.WHITE + kerNel) % ascii[2]
+	print("%s" + Fore.RED + "          Kernel: " + Fore.WHITE + kerNel) % ascii[2]
 
 
 def oS(): #Operating System
 	oS = platform.win32_ver()
 	if '6.1.' in oS[1]:
-    		print("%s" + Fore.RED + "   Operating System: " + Fore.WHITE + "Windows 7 " + oS[2]) % ascii[3]
+    		print("%s" + Fore.RED + "    Operating System: " + Fore.WHITE + "Windows 7 " + oS[2]) % ascii[3]
 	elif '6.0.' in oS[1]:
-    		print("%s" + Fore.RED + "   Operating System: " + Fore.WHITE + "Windows Vista" + oS[2]) % ascii[3]
+    		print("%s" + Fore.RED + "    Operating System: " + Fore.WHITE + "Windows Vista" + oS[2]) % ascii[3]
 	elif '6.2.' in oS[1]:
-                print("%s" + Fore.RED + "   Operating System: " + Fore.WHITE + "Windows 8" + oS[2]) % ascii[3]
+                print("%s" + Fore.RED + "    Operating System: " + Fore.WHITE + "Windows 8" + oS[2]) % ascii[3]
 	elif '5.1.' in os[1]:
-    		print("%s" + Fore.RED + "   Operating System: " + Fore.WHITE + "Windows XP" + oS[2]) % ascii[3]
+    		print("%s" + Fore.RED + "    Operating System: " + Fore.WHITE + "Windows XP" + oS[2]) % ascii[3]
 	elif '5.0.' in oS[1]:
-    		print("%s" + Fore.RED + "   Operating System: " + Fore.WHITE + "Windows 2000" + oS[2]) % ascii[3]
+    		print("%s" + Fore.RED + "    Operating System: " + Fore.WHITE + "Windows 2000" + oS[2]) % ascii[3]
 	else:
-    		print("%s" + Fore.RED + "   Operating System: " + Fore.WHITE + platform.release()) % ascii[3]
+    		print("%s" + Fore.RED + "    Operating System: " + Fore.WHITE + platform.release()) % ascii[3]
 
 def currentRamUsage(): #Ram Free and Maximum
     global availableRam
     global totalRam
     availableRam = availableRam / (1024*1024)
     totalRam = totalRam / (1024*1024)
-    print(ascii[12] + Fore.RED + " RAM: " + Fore.GREEN + "%sMB" + Fore.RED + "/" + Fore.BLUE + "%sMB") % (availableRam, totalRam)
+    print(ascii[12] + Fore.RED + "  RAM: " + Fore.GREEN + "%sMB" + Fore.RED + "/" + Fore.BLUE + "%sMB") % (availableRam, totalRam)
 
 
 
@@ -167,7 +167,7 @@ def winUpTime(): #Uptime
             print("WHAT THE FUCKING DATE SYSTEM FAGGOT.")
         upMinutes = diff.seconds / 60
         upHours = upMinutes / 60
-	print("%s" + Fore.RED + "  Uptime: " + Fore.WHITE + str(upHours) + Fore.CYAN + "H" + Fore.RED + " " + Fore.WHITE + str(upMinutes) + Fore.CYAN + "M" + Fore.RED + " " + Fore.WHITE + str(diff.seconds) + Fore.CYAN + "S") % ascii[4]
+	print("%s" + Fore.RED + "   Uptime: " + Fore.WHITE + str(upHours) + Fore.CYAN + "H" + Fore.RED + " " + Fore.WHITE + str(upMinutes) + Fore.CYAN + "M" + Fore.RED + " " + Fore.WHITE + str(diff.seconds) + Fore.CYAN + "S") % ascii[4]
 
 
 #Shell Detect/bbLean Dectection Detection
@@ -176,27 +176,27 @@ def detectBBLean(): #Detect what shell is being used, currently only support Exp
 	global printed
 	for process in c.Win32_Process (name="explorer.exe"):
 		printed = 1
-		print("%s" + Fore.RED + "  Shell: " + Fore.WHITE + "Explorer") % ascii[6]
+		print("%s" + Fore.RED + "   Shell: " + Fore.WHITE + "Explorer") % ascii[6]
 	for process in c.Win32_Process (name="blackbox.exe"):
 		if printed == 1:
                     None
 		else:
-		    print("%s" + Fore.RED + "  Shell: " + Fore.WHITE + "bbLean") % ascii[6]
+		    print("%s" + Fore.RED + "   Shell: " + Fore.WHITE + "bbLean") % ascii[6]
 
 def screenRes(): #Screen Resolution
-    print ascii[8], Fore.RED + "Resolution:" + Fore.WHITE, str(GetSystemMetrics (0)) + Fore.RED + "x" + Fore.WHITE + str(GetSystemMetrics(1))
+    print ascii[8], Fore.RED + " Resolution:" + Fore.WHITE, str(GetSystemMetrics (0)) + Fore.RED + "x" + Fore.WHITE + str(GetSystemMetrics(1))
 
 def winProcessor(): #Processor
-    print ascii[10] + Fore.RED + "  CPU:" + Fore.WHITE, get_registry_value("HKEY_LOCAL_MACHINE", "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0", "ProcessorNameString")
+    print ascii[10] + Fore.RED + "   CPU:" + Fore.WHITE, get_registry_value("HKEY_LOCAL_MACHINE", "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0", "ProcessorNameString")
 
 def winGPU(): #GPU/Graphics Card
     reg = subprocess.check_output(["wmic", "path", "Win32_VideoController", "get", "caption"]).split("\n")[1:]
-    print ascii[11] + Fore.RED + "  GPU: " + Fore.WHITE + ", ".join(filter(bool, [s.strip() for s in reg]))
+    print ascii[11] + Fore.RED + "   GPU: " + Fore.WHITE + ", ".join(filter(bool, [s.strip() for s in reg]))
     
 
 def diskMinMax(): #Disk max and free
 	usage = disk_usage('C:\\')
-	print ascii[13] + Fore.RED + "  Disk:" + Fore.GREEN, bytes2human(usage.free) + Fore.RED + "/" + Fore.BLUE + bytes2human(usage.total)
+	print ascii[13] + Fore.RED + "   Disk:" + Fore.GREEN, bytes2human(usage.free) + Fore.RED + "/" + Fore.BLUE + bytes2human(usage.total)
 
 def screenShot(): #-s screenshot
     	from time import gmtime, strftime
@@ -207,28 +207,28 @@ def screenShot(): #-s screenshot
 def winVisualStyle(): #Windows 7 Visual Style
 	visualStyle = get_registry_value("HKEY_CURRENT_USER", "Software\Microsoft\Windows\CurrentVersion\ThemeManager", "DllName")
 	visualStyle = visualStyle.split('\\')[-1].split(".")[0]
-	print(ascii[7] + Fore.RED + "    Visual Style: " + Fore.WHITE + "%s") % (visualStyle)
+	print(ascii[7] + Fore.RED + "     Visual Style: " + Fore.WHITE + "%s") % (visualStyle)
 
 def defaultBrowser(): #Default webbrowser
     webBrowser = get_registry_value("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice", "Progid")
-    print(ascii[5] + Fore.RED + "  Browser: " + Fore.WHITE + webBrowser)
+    print(ascii[5] + Fore.RED + "   Browser: " + Fore.WHITE + webBrowser)
 
 print("")
 print("")
 
-print(ascii[0] + Fore.CYAN + "                    Info" ) #General Information
+print(ascii[0] + Fore.CYAN + "                   Info" ) #General Information
 Name()
 winKernel()
 oS()
 winUpTime()
 defaultBrowser()
 
-print(ascii[6] + Fore.CYAN + "   Theming") #Theming section
+print(ascii[6] + Fore.CYAN + "  Theming") #Theming section
 detectBBLean()
 winVisualStyle()
 screenRes()
 
-print(ascii[9] + Fore.CYAN + "   Hardware") #Hardware related statistics
+print(ascii[9] + Fore.CYAN + "  Hardware") #Hardware related statistics
 winProcessor()
 winGPU()
 ramValue()
