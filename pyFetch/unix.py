@@ -83,6 +83,7 @@ def os_release():
 
     :rtype: string
     """
+
     try:
         output = subprocess.check_output(["uname", "-sr"])
         return output.strip()
@@ -110,7 +111,17 @@ def gpu():
     :rtype: string
     """
 
-    return "Unknown"    
+    try:
+        output = subprocess.check_output(["lspci"], stderr=subprocess.STDOUT).split("\n")
+        for x in output:
+            if 'VGA' in x:
+                x = x.split(":")[2].strip()
+                return x
+
+        return "Unknown"    
+
+    except:
+        return "Unknown"    
 
 def screen_resolution():
     """\
