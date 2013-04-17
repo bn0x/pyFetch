@@ -182,9 +182,8 @@ def winProcessor():
     print ascii[9] + Fore.RED + "  CPU:" + Fore.WHITE, get_registry_value("HKEY_LOCAL_MACHINE", "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0", "ProcessorNameString")
 
 def winGPU():
-    gpuLines = os.popen("wmic path Win32_VideoController get caption").readlines()
-    gpuLines = gpuLines[1].strip('\r\n')
-    print ascii[9] + Fore.RED + "  GPU: " + Fore.WHITE + gpuLines
+    reg = subprocess.check_output(["wmic", "path", "Win32_VideoController", "get", "caption"]).split("\n")[1:]
+    print ascii[9] + Fore.RED + "  GPU: " + Fore.WHITE + ", ".join(filter(bool, [s.strip() for s in reg]))
     
 
 def diskMinMax():
