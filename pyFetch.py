@@ -209,6 +209,10 @@ def winVisualStyle(): #Windows 7 Visual Style
 	visualStyle = visualStyle.split('\\')[-1].split(".")[0]
 	print(ascii[7] + Fore.RED + "    Visual Style: " + Fore.WHITE + "%s") % (visualStyle)
 
+def defaultBrowser(): #Default webbrowser
+    webBrowser = get_registry_value("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice", "Progid")
+    print(ascii[5] + Fore.RED + "  Browser: " + Fore.WHITE + webBrowser)
+
 print("")
 print("")
 
@@ -217,8 +221,9 @@ Name()
 winKernel()
 oS()
 winUpTime()
+defaultBrowser()
 
-print(ascii[5] + Fore.CYAN + "   Theming") #Theming section
+print(ascii[6] + Fore.CYAN + "   Theming") #Theming section
 detectBBLean()
 winVisualStyle()
 screenRes()
@@ -230,6 +235,7 @@ ramValue()
 currentRamUsage()
 diskMinMax()
 print '\n'.join(ascii[14:])
+
 try:
 	if sys.argv[1] == "-s":
 		screenShot()
