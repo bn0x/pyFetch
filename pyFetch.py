@@ -1,4 +1,5 @@
-import socket, getpass, os, sys, platform, wmi, collections, colorama
+import socket, getpass, os, sys, platform, wmi, collections, colorama, _winreg, ctypes, datetime, subprocess, re
+from datetime import datetime
 from colorama import init
 init()
 from colorama import Fore, Back, Style
@@ -6,8 +7,43 @@ from win32api import GetSystemMetrics
 global printed
 printed = 0
 global ascii
+global totalRam
+global availableRam
 
 print Style.BRIGHT
+
+def get_registry_value(key, subkey, value):
+    if sys.platform != 'win32':
+        raise OSError("get_registry_value is only supported on Windows")
+        
+    import _winreg
+    key = getattr(_winreg, key)
+    handle = _winreg.OpenKey(key, subkey)
+    (value, type) = _winreg.QueryValueEx(handle, value)
+    return value
+
+def ramValue():
+	global totalRam
+	global availableRam
+        kernel32 = ctypes.windll.kernel32
+        c_ulong = ctypes.c_ulong
+        class MEMORYSTATUS(ctypes.Structure):
+            _fields_ = [
+                ('dwLength', c_ulong),
+                ('dwMemoryLoad', c_ulong),
+                ('dwTotalPhys', c_ulong),
+                ('dwAvailPhys', c_ulong),
+                ('dwTotalPageFile', c_ulong),
+                ('dwAvailPageFile', c_ulong),
+                ('dwTotalVirtual', c_ulong),
+                ('dwAvailVirtual', c_ulong)
+            ]
+            
+        memoryStatus = MEMORYSTATUS()
+        memoryStatus.dwLength = ctypes.sizeof(MEMORYSTATUS)
+        kernel32.GlobalMemoryStatus(ctypes.byref(memoryStatus))
+        totalRam = memoryStatus.dwTotalPhys
+        availableRam = memoryStatus.dwAvailPhys
 
 
 _ntuple_diskusage = collections.namedtuple('usage', 'total used free')
@@ -75,7 +111,7 @@ def Name():
 	print("%s" + Fore.RED + "                  Name: " + Fore.WHITE + userName + Fore.RED + "@" + Fore.WHITE + hostName) % ascii[1] 
 
 
-#Windows Kernel Version?
+#Windows Kernel Version
 def winKernel():
 	kerNel = platform.platform()
 	print("%s" + Fore.RED + "         Kernel: " + Fore.WHITE + kerNel) % ascii[2]
@@ -96,16 +132,27 @@ def oS():
 	else:
     		print("%s" + Fore.RED + "   Operating System: " + Fore.WHITE + platform.release()) % ascii[3]
 
-#RAM Usage // Not coded yet, can't find a good way.
+#RAM Usage
+
+def currentRamUsage():
+    global availableRam
+    global totalRam
+    availableRam = availableRam / (1024*1024)
+    totalRam = totalRam / (1024*1024)
+    print(ascii[9] + Fore.RED + "  RAM: " + Fore.GREEN + "%sMB" + Fore.RED + "/" + Fore.BLUE + "%sMB") % (availableRam, totalRam)
 
 
 #Uptime
 def winUpTime():   
-	upTime = os.popen("net stats srv").readlines()
-	upTime = upTime[3]
-	upTime = upTime.split(" ")
-	upTime = upTime[3]
-	print("%s" + Fore.RED + "  Up Since: " + Fore.WHITE + "%s" % (upTime)) % ascii[4]
+  	output = subprocess.check_output(["net", "stats", "srv"])
+        timestring = " ".join(output.split("\n")[3].split()[2:]).strip()
+        timestring = re.sub("p.m.", "PM", timestring)
+        timestring = re.sub("a.m.", "AM", timestring)
+        diff = datetime.now() - datetime.strptime(timestring, "%m/%d/%Y %I:%M:%S %p")
+        upMinutes = diff.seconds / 60
+        upHours = upMinutes / 60
+    
+	print("%s" + Fore.RED + "  Uptime: " + Fore.WHITE + str(upHours) + Fore.CYAN + "H" + Fore.RED + " " + Fore.WHITE + str(upMinutes) + Fore.CYAN + "M" + Fore.RED + " " + Fore.WHITE + str(diff.seconds) + Fore.CYAN + "S") % ascii[4]
 
 
 #Theme // Uncoded, don't know how to find
@@ -128,11 +175,17 @@ def screenRes():
     print ascii[7], Fore.RED + "   Resolution:" + Fore.WHITE, str(GetSystemMetrics (0)) + Fore.RED + "x" + Fore.WHITE + str(GetSystemMetrics(1))
 
 def winProcessor():
-    print ascii[8] + Fore.RED + " CPU:" + Fore.WHITE, platform.processor()
+    print ascii[9] + Fore.RED + "  CPU:" + Fore.WHITE, get_registry_value("HKEY_LOCAL_MACHINE", "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0", "ProcessorNameString")
+
+def winGPU():
+    gpuLines = os.popen("wmic path Win32_VideoController get caption").readlines()
+    gpuLines = gpuLines[1].strip('\r\n')
+    print ascii[9] + Fore.RED + "  GPU: " + Fore.WHITE + gpuLines
+    
 
 def diskMinMax():
 	usage = disk_usage('C:\\')
-	print ascii[9] + Fore.RED + "  Disk:" + Fore.GREEN, bytes2human(usage.free) + Fore.RED + "/" + Fore.BLUE + bytes2human(usage.total)
+	print ascii[11] + Fore.RED + "  Disk:" + Fore.GREEN, bytes2human(usage.free) + Fore.RED + "/" + Fore.BLUE + bytes2human(usage.total)
 
 def screenShot():
     	from time import gmtime, strftime
@@ -151,7 +204,10 @@ print(ascii[5] + Fore.CYAN + "   Theming")
 detectBBLean()
 screenRes()
 print(ascii[8] + Fore.CYAN + "  Hardware")
-#winProcessor()
+winProcessor()
+winGPU()
+ramValue()
+currentRamUsage()
 diskMinMax()
 print '\n'.join(ascii[11:])
 try:
