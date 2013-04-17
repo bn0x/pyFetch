@@ -106,6 +106,12 @@ def ansiArt():
 	print Fore.CYAN + "             ` " + Fore.YELLOW + ":EEEEtttt::::z7"
 	print Fore.CYAN + "                 " + Fore.YELLOW + "`VEzjt:;;z>*`"
 
+def screenShot():
+    	from time import gmtime, strftime
+	from PIL import ImageGrab
+    	im = ImageGrab.grab()
+    	im.save('pyFetch-' + strftime("%Y-%m-%d-%H-%M-%S", gmtime()) + ".png")
+
 print(Fore.RED + "         ,.=:!!t3Z3z.," + Fore.GREEN + "               Info" )
 Name()
 winKernel()
@@ -118,6 +124,11 @@ print( Fore.CYAN + "   :t::::::::tt33. " + Fore.YELLOW + ":Z3z..  `` ,..g." + Fo
 winProcessor()
 diskMinMax()
 ansiArt()
+try:
+	if sys.argv[1] == "-s":
+		screenShot()
+except:
+        None
 
 
 
