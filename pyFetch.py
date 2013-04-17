@@ -148,12 +148,16 @@ def winUpTime():
         timestring = " ".join(output.split("\n")[3].split()[2:]).strip()
         timestring = re.sub("p.m.", "PM", timestring)
         timestring = re.sub("a.m.", "AM", timestring)
-        diff = datetime.now() - datetime.strptime(timestring, "%m/%d/%Y %I:%M:%S %p")
+	try:
+            diff = datetime.now() - datetime.strptime(timestring, "%d/%m/%Y %I:%M:%S %p")
+	except ValueError:
+            # yay, americans
+            diff = datetime.now() - datetime.strptime(timestring, "%m/%d/%Y %I:%M:%S %p")
+	except:
+            print("WHAT THE FUCKING DATE SYSTEM FAGGOT.")
         upMinutes = diff.seconds / 60
         upHours = upMinutes / 60
-    
 	print("%s" + Fore.RED + "  Uptime: " + Fore.WHITE + str(upHours) + Fore.CYAN + "H" + Fore.RED + " " + Fore.WHITE + str(upMinutes) + Fore.CYAN + "M" + Fore.RED + " " + Fore.WHITE + str(diff.seconds) + Fore.CYAN + "S") % ascii[4]
-
 
 #Theme // Uncoded, don't know how to find
 
