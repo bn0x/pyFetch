@@ -67,15 +67,11 @@ def oS():
 
 #Uptime
 def winUpTime():   
-	upTime = os.popen("uptime.exe").readline()
+	upTime = os.popen("net stats srv").readlines()
+	upTime = upTime[3]
 	upTime = upTime.split(" ")
 	upTime = upTime[3]
-	upTime = upTime.split(":")
-	upHours = upTime[0]
-	upMinutes = upTime[1]
-	upSeconds = upTime[2]
-	upSeconds = upSeconds.strip('\r\n')
-	print(Fore.RED + "     :Et:::zt333EEQ. " + Fore.GREEN + "$EEEEEttttt33QL" + Fore.RED + " Uptime: " + Fore.WHITE + "%s:%s:%s" % (upHours, upMinutes, upSeconds))
+	print(Fore.RED + "     :Et:::zt333EEQ. " + Fore.GREEN + "$EEEEEttttt33QL" + Fore.RED + " Up Since: " + Fore.WHITE + "%s" % (upTime))
 
 
 #Theme // Uncoded, don't know how to find
