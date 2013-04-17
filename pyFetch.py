@@ -7,10 +7,31 @@ from colorama import Fore, Back, Style
 pyFetch, a Python system information tool
 """
 
+lineno = 0
+
+def line(ascii, text = "", fill = False):
+    """\
+    Print a line of ASCII art followed by text. Used by the draw() function.
+    If `fill` is `True`, this function will print all remaining lines of ASCII art.
+
+    :param ascii: list
+    :param text: string
+    :param fill: bool
+    """
+
+    global lineno
+    if fill:
+        print '\n'.join(ascii[lineno:])
+    else:
+        print "%s %s" % (ascii[lineno], text)
+
+    lineno += 1
+
 def draw():
     """\
     Draw the system's ASCII art and output system information.
     """
+
     system = pyFetch.system
 
     ascii = system.ascii_art
@@ -18,19 +39,19 @@ def draw():
     ram = system.ram()
     res = system.screen_resolution()
 
-    print ascii[0]
-    print "%s %sOS:     %s%s" % (ascii[1], Fore.WHITE, Fore.CYAN, system.os_release())
-    print "%s %sName:   %s%s%s@%s%s" % (ascii[2], Fore.WHITE, Fore.YELLOW, __import__('getpass').getuser(), Fore.WHITE, Fore.CYAN, __import__('socket').gethostname())
-    print "%s %sUptime: %s%s" % (ascii[3], Fore.WHITE, Fore.CYAN, pyFetch.format.time_metric(system.uptime()))
-    print ascii[4]
-    print "%s %sDisk:   %s%s%s/%s%s" % (ascii[5], Fore.WHITE, Fore.YELLOW, pyFetch.format.sizeof_fmt(disk['free']), Fore.WHITE, Fore.CYAN, pyFetch.format.sizeof_fmt(disk['total']))
-    print "%s %sRAM:    %s%s%s/%s%s" % (ascii[6], Fore.WHITE, Fore.YELLOW, pyFetch.format.sizeof_fmt(ram['free']), Fore.WHITE, Fore.CYAN, pyFetch.format.sizeof_fmt(ram['total']))
-    print "%s %sCPU:    %s%s" % (ascii[7], Fore.WHITE, Fore.CYAN, system.cpu())
-    print ascii[8]
-    print "%s %sGPU:    %s%s" % (ascii[9], Fore.WHITE, Fore.CYAN, system.gpu())
-    print "%s %sRes:    %s%s%sx%s%s" % (ascii[10], Fore.WHITE, Fore.CYAN, res['x'], Fore.WHITE, Fore.CYAN, res['y'])
+    line(ascii)
+    line(ascii, "%sOS:     %s%s" % (Fore.WHITE, Fore.CYAN, system.os_release()))
+    line(ascii, "%sName:   %s%s%s@%s%s" % (Fore.WHITE, Fore.YELLOW, __import__('getpass').getuser(), Fore.WHITE, Fore.CYAN, __import__('socket').gethostname()))
+    line(ascii, "%sUptime: %s%s" % (Fore.WHITE, Fore.CYAN, pyFetch.format.time_metric(system.uptime())))
+    line(ascii)
+    line(ascii, "%sDisk:   %s%s%s/%s%s" % (Fore.WHITE, Fore.YELLOW, pyFetch.format.sizeof_fmt(disk['free']), Fore.WHITE, Fore.CYAN, pyFetch.format.sizeof_fmt(disk['total'])))
+    line(ascii, "%sRAM:    %s%s%s/%s%s" % (Fore.WHITE, Fore.YELLOW, pyFetch.format.sizeof_fmt(ram['free']), Fore.WHITE, Fore.CYAN, pyFetch.format.sizeof_fmt(ram['total'])))
+    line(ascii, "%sCPU:    %s%s" % (Fore.WHITE, Fore.CYAN, system.cpu()))
+    line(ascii)
+    line(ascii, "%sGPU:    %s%s" % (Fore.WHITE, Fore.CYAN, system.gpu()))
+    line(ascii, "%sRes:    %s%s%sx%s%s" % (Fore.WHITE, Fore.CYAN, res['x'], Fore.WHITE, Fore.CYAN, res['y']))
     
-    print '\n'.join(ascii[11:])
+    line(ascii, fill=True)
     print Style.RESET_ALL
 
 if __name__ == "__main__":
