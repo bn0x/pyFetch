@@ -139,7 +139,7 @@ def currentRamUsage():
     global totalRam
     availableRam = availableRam / (1024*1024)
     totalRam = totalRam / (1024*1024)
-    print(ascii[9] + Fore.RED + "  RAM: " + Fore.GREEN + "%sMB" + Fore.RED + "/" + Fore.BLUE + "%sMB") % (availableRam, totalRam)
+    print(ascii[11] + Fore.RED + "  RAM: " + Fore.GREEN + "%sMB" + Fore.RED + "/" + Fore.BLUE + "%sMB") % (availableRam, totalRam)
 
 
 #Uptime
@@ -183,12 +183,12 @@ def winProcessor():
 
 def winGPU():
     reg = subprocess.check_output(["wmic", "path", "Win32_VideoController", "get", "caption"]).split("\n")[1:]
-    print ascii[9] + Fore.RED + "  GPU: " + Fore.WHITE + ", ".join(filter(bool, [s.strip() for s in reg]))
+    print ascii[10] + Fore.RED + "  GPU: " + Fore.WHITE + ", ".join(filter(bool, [s.strip() for s in reg]))
     
 
 def diskMinMax():
 	usage = disk_usage('C:\\')
-	print ascii[11] + Fore.RED + "  Disk:" + Fore.GREEN, bytes2human(usage.free) + Fore.RED + "/" + Fore.BLUE + bytes2human(usage.total)
+	print ascii[12] + Fore.RED + "  Disk:" + Fore.GREEN, bytes2human(usage.free) + Fore.RED + "/" + Fore.BLUE + bytes2human(usage.total)
 
 def screenShot():
     	from time import gmtime, strftime
@@ -212,16 +212,9 @@ winGPU()
 ramValue()
 currentRamUsage()
 diskMinMax()
-print '\n'.join(ascii[11:])
+print '\n'.join(ascii[13:])
 try:
 	if sys.argv[1] == "-s":
 		screenShot()
 except:
         None
-
-
-
-
-
-
-
