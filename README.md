@@ -3,13 +3,13 @@ This is currently windows only and for atleast right now, no plans for GNU/Linux
 <br />
 Current Information
 
-Name:
-Kernel:
-Operating 
-Uptime:
-
-Shell:
-Resolution: 
-
-CPU: 
-Disk:
+Name:<br />
+Kernel:<br />
+Operating System:<br />
+Uptime:<br />
+<br/>
+Shell:<br />
+Resolution:<br />
+<br />
+CPU:<br />
+Disk:<br />
