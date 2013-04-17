@@ -3,15 +3,16 @@ This is currently windows only and for atleast right now, plans for GNU/Linux.<b
 <br />
 Current Information
 
-Name:<br />
-Kernel:<br />
-Operating System:<br />
+Name: userName@hostName<br />
+Kernel: Kernel<br />
+Operating System: OS ServicePack<br />
 Uptime: H M S (Total hours, minutes, and seconds, not H:M:S)<br />
 <br/>
-Shell:<br />
-Resolution:<br />
+Shell: bbLean or Explorer<br />
+Theme: Visual Style being currently used<br />
+Resolution: Your screen resolution, example: 1366x768<br />
 <br />
-CPU:<br />
-GPU:<br />
-RAM:<br />
-Disk:<br />
+CPU: Your CPU<br />
+GPU: Your GPU<br />
+RAM: FreeRam/MaxRam<br />
+Disk: Free DiskSpace/Max Diskspace (Currently only works with C:/)<br />
