@@ -1,22 +1,24 @@
+import os
 import re
+from colorama import Fore, Back, Style
 
 ascii_art = [
-    "##        ########  ##       ",
-    "##        ##    ##  ##       ",
-    "##        ##    ##  ##       ",
-    "##        ##    ##  ##       ",
-    "##        ##    ##  ##       ",
-    "##        ##    ##  ##       ",
-    "########  ########  ######## ",
-    "                             ",
-    "  (i don't have real ascii   ",
-    " art for your system, sorry) ",
-    "                             ",
-    "#    # ##    # ###### #    # ",
-    "#    # # #   #   ##    #  #  ",
-    "#    # #  #  #   ##     ##   ",
-    "#    # #   # #   ##    #  #  ",
-    "###### #    ## ###### #    # ",
+                "                             ",
+    Fore.RED  + "##        ########  ##       ",
+    Fore.RED  + "##        ##    ##  ##       ",
+    Fore.RED  + "##        ##    ##  ##       ",
+    Fore.RED  + "##        ##    ##  ##       ",
+    Fore.RED  + "##        ##    ##  ##       ",
+    Fore.RED  + "########  ########  ######## ",
+    Fore.CYAN + "                             ",
+    Fore.CYAN + "  (i don't have real ascii   ",
+    Fore.CYAN + " art for your system, sorry) ",
+    Fore.CYAN + "                             ",
+    Fore.RED  +"#    # ##    # ###### #    # ",
+    Fore.RED  +"#    # # #   #   ##    #  #  ",
+    Fore.RED  +"#    # #  #  #   ##     ##   ",
+    Fore.RED  +"#    # #   # #   ##    #  #  ",
+    Fore.RED  +"###### #    ## ###### #    # ",
 ]
 
 def disk_usage(path):
@@ -60,8 +62,8 @@ def ram():
 
     return {
         'total': total,
-        'used': used,
-        'free': total - used
+        'used': total - free,
+        'free': free
     }
 
 def uptime():
