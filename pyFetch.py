@@ -38,10 +38,12 @@ def draw():
     disk = system.system_disk_usage()
     ram = system.ram()
     res = system.screen_resolution()
+    
+    import getpass, socket
 
     line(ascii)
     line(ascii, "%sOS:     %s%s" % (Fore.WHITE, Fore.CYAN, system.os_release()))
-    line(ascii, "%sName:   %s%s%s@%s%s" % (Fore.WHITE, Fore.YELLOW, __import__('getpass').getuser(), Fore.WHITE, Fore.CYAN, __import__('socket').gethostname()))
+    line(ascii, "%sName:   %s%s%s@%s%s" % (Fore.WHITE, Fore.YELLOW, getpass.getuser(), Fore.WHITE, Fore.CYAN, socket.gethostname()))
     line(ascii, "%sUptime: %s%s" % (Fore.WHITE, Fore.CYAN, pyFetch.format.time_metric(system.uptime())))
     line(ascii)
     line(ascii, "%sDisk:   %s%s free %s/%s %s total" % (Fore.WHITE, Fore.YELLOW, pyFetch.format.sizeof_fmt(disk['free']), Fore.WHITE, Fore.CYAN, pyFetch.format.sizeof_fmt(disk['total'])))
