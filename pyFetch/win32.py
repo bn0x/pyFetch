@@ -266,7 +266,8 @@ def window_manager():
         ]
 
         shell = get_registry_value("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon", "Shell")
-        if not shell:
+        
+        if shell == None or shell == "":
             shell = get_registry_value("HKEY_LOCAL_MACHINE", "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon", "Shell")
 
         for shell_ret, shell_str in shells:
