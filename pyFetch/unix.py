@@ -192,3 +192,12 @@ def window_manager():
 
 
     return { 'raw': "Unknown", 'name': "Unknown" }
+
+def visual_style():
+    """\
+    Get current GTK Theme.
+
+    :rtype: str
+    """
+
+    return { 'raw': "Unknown", 'name': "Unknown"}
