@@ -2,7 +2,7 @@ c:\python27\python.exe setup.py py2exe
 
 cd dist
 copy ..\dist_tools\pyFetch.bat .
-copy c:\python27\lib\site-packages\Pythonwin\mfc90.dll .
+copy c:\python27\lib\site-packages\Pythonwin\mfc90.dll Microsoft.VC90.MFC.dll
 "c:\Program Files (x86)\7-Zip\7z.exe" a -y ..\pyFetch.7z *
 cd ..
 
