@@ -11,6 +11,7 @@ import ctypes #Various functions
 import datetime #Specificallyish for uptime
 import subprocess #Various functions
 import re #Various functions
+import time #Making sure screenshot captures full
 
 from datetime import datetime
 from colorama import init
@@ -149,9 +150,9 @@ def currentRamUsage(): #Ram Free and Maximum
     global totalRam
     availableRam = availableRam / (1024*1024)
     totalRam = totalRam / (1024*1024)
-    print(ascii[12] + Fore.RED + "  RAM: " + Fore.GREEN + "%sMB" + Fore.RED + "/" + Fore.BLUE + "%sMB") % (availableRam, totalRam)
+    print(ascii[13] + Fore.RED + "   RAM: " + Fore.GREEN + "%sMB" + Fore.RED + "/" + Fore.BLUE + "%sMB") % (availableRam, totalRam)
 
-def time_metric(secs=60): #Coded by aki--aki
+def time_metric(secs=60):
     time = ''
     for metric_secs, metric_char in [[7*24*60*60, 'w '], [24*60*60, 'd '], [60*60, 'h '], [60, 'm ']]:
         if secs > metric_secs:
@@ -161,7 +162,7 @@ def time_metric(secs=60): #Coded by aki--aki
         time += '{}s'.format(secs)
     return time
 
-def winUpTime(): #Uptime coded by aki--aki
+def winUpTime(): 
     from datetime import timedelta
     ret = ctypes.windll.kernel32.GetTickCount64()
     diff = timedelta(milliseconds = ret)
@@ -191,12 +192,12 @@ def winProcessor(): #Processor
 
 def winGPU(): #GPU/Graphics Card
     reg = subprocess.check_output(["wmic", "path", "Win32_VideoController", "get", "caption"]).split("\n")[1:]
-    print ascii[11] + Fore.RED + "   GPU: " + Fore.WHITE + ", ".join(filter(bool, [s.strip() for s in reg]))
+    print ascii[12] + Fore.RED + "  GPU: " + Fore.WHITE + ", ".join(filter(bool, [s.strip() for s in reg]))
     
 
 def diskMinMax(): #Disk max and free
 	usage = disk_usage('C:\\')
-	print ascii[13] + Fore.RED + "   Disk:" + Fore.GREEN, bytes2human(usage.free) + Fore.RED + "/" + Fore.BLUE + bytes2human(usage.total)
+	print ascii[14] + Fore.RED + "    Disk:" + Fore.GREEN, bytes2human(usage.free) + Fore.RED + "/" + Fore.BLUE + bytes2human(usage.total)
 
 def screenShot(): #-s screenshot
     	from time import gmtime, strftime
@@ -217,6 +218,16 @@ def defaultBrowser(): #Default webbrowser
             return None
     print "%s %s  Browser: %sUnknown" % (ascii[5], Fore.RED, Fore.WHITE)
 
+def cpuUsage():
+    pcount = 0
+    per = 0.0
+
+    c = wmi.WMI()
+    for p in c.Win32_Processor():
+        pcount += 1
+        per += p.LoadPercentage
+    print "%s%s   CPU Usage: %s%s" % (ascii[11], Fore.RED, Fore.WHITE, per / pcount)
+
 print("")
 print("")
 
@@ -235,14 +246,16 @@ screenRes()
 
 print(ascii[9] + Fore.CYAN + "  Hardware") #Hardware related statistics
 winProcessor()
+cpuUsage()
 winGPU()
 ramValue()
 currentRamUsage()
 diskMinMax()
-print '\n'.join(ascii[14:])
+print '\n'.join(ascii[15:])
 
 try:
-	if sys.argv[1] == "-s":
-		screenShot()
+    time.sleep(1)
+    if sys.argv[1] == "-s":
+        screenShot()
 except:
-        None
+    None
