@@ -247,3 +247,21 @@ def screen_shot():
         return True
     except:
         return False
+
+def window_manager():
+    """\
+    Current window manager/shell
+    Supports: bbLean, Explorer
+
+    :rtype: str
+    """
+
+    try:
+        shell = get_registry_value("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon", "Shell")
+        for shell_ret, shell_str in [ ["expstart.exe", "Explorer"], ["blackbox.exe", "bbLean"], ["explorer.exe", "Explorer"] ]:
+            if shell_ret in shell:
+                name = shell_str
+        return { 'raw': shell, 'name': name }
+    
+    except:
+        return { 'raw': "Unknown", 'name': "Unknown" }

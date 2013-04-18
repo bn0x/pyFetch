@@ -183,3 +183,14 @@ def screen_shot():
     except:
         return False
 
+
+def window_manager():
+    """\
+    Detects and prints current window manager
+    Supports: <insert list of supported wm>
+
+    :rtype: str
+    """
+
+    return None    
+
