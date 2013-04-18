@@ -58,14 +58,14 @@ def draw():
     line(ascii, "%sBrowser: %s%s" % (Fore.WHITE, Fore.CYAN, system.web_browser()['name']))
     line(ascii, "%sTheme:   %s%s" % (Fore.WHITE, Fore.CYAN, system.visual_style()['name']))
     line(ascii)
-    line(ascii, "%sDisk:    %s%s free %s/%s %s total" % (Fore.WHITE, Fore.YELLOW, pyFetch.format.sizeof_fmt(disk['free']), Fore.WHITE, Fore.CYAN, pyFetch.format.sizeof_fmt(disk['total'])))
-    line(ascii, "%sRAM:     %s%s free %s/%s %s total" % (Fore.WHITE, Fore.YELLOW, pyFetch.format.sizeof_fmt(ram['free']), Fore.WHITE, Fore.CYAN, pyFetch.format.sizeof_fmt(ram['total'])))
+    line(ascii, "%sDisk:    %s%s used %s/%s %s total" % (Fore.WHITE, Fore.YELLOW, pyFetch.format.sizeof_fmt(disk['used']), Fore.WHITE, Fore.CYAN, pyFetch.format.sizeof_fmt(disk['total'])))
+    line(ascii, "%sRAM:     %s%s used %s/%s %s total" % (Fore.WHITE, Fore.YELLOW, pyFetch.format.sizeof_fmt(ram['used']), Fore.WHITE, Fore.CYAN, pyFetch.format.sizeof_fmt(ram['total'])))
     line(ascii)
     line(ascii, "%sCPU:     %s%s" % (Fore.WHITE, Fore.CYAN, cpu['name']))
-    line(ascii, "%sUsage:   %s%s%%" % (Fore.WHITE, Fore.CYAN, cpu['load_percentage']))
+    line(ascii, "%sUsage:   %s%s%s%s/100%%" % (Fore.WHITE, Fore.CYAN, Fore.YELLOW, cpu['load_percentage'], Fore.CYAN))
     line(ascii)
     line(ascii, "%sGPU:     %s%s" % (Fore.WHITE, Fore.CYAN, system.gpu()))
-    line(ascii, "%sRes:     %s%s%sx%s%s" % (Fore.WHITE, Fore.CYAN, res['x'], Fore.WHITE, Fore.CYAN, res['y']))
+    line(ascii, "%sRes:     %s%s%s%sx%s%s%s" % (Fore.WHITE, Fore.CYAN, Fore.YELLOW, res['x'], Fore.CYAN, Fore.CYAN, Fore.YELLOW, res['y']))
     line(ascii, fill=True)
     print Style.RESET_ALL
 
