@@ -56,6 +56,7 @@ def draw():
     line(ascii)
     line(ascii, "%sWM:      %s%s" % (Fore.WHITE, Fore.CYAN, system.window_manager()['name']))
     line(ascii, "%sBrowser: %s%s" % (Fore.WHITE, Fore.CYAN, system.web_browser()['name']))
+    line(ascii, "%sTheme:   %s%s" % (Fore.WHITE, Fore.CYAN, system.visual_style()['name']))
     line(ascii)
     line(ascii, "%sDisk:    %s%s free %s/%s %s total" % (Fore.WHITE, Fore.YELLOW, pyFetch.format.sizeof_fmt(disk['free']), Fore.WHITE, Fore.CYAN, pyFetch.format.sizeof_fmt(disk['total'])))
     line(ascii, "%sRAM:     %s%s free %s/%s %s total" % (Fore.WHITE, Fore.YELLOW, pyFetch.format.sizeof_fmt(ram['free']), Fore.WHITE, Fore.CYAN, pyFetch.format.sizeof_fmt(ram['total'])))
