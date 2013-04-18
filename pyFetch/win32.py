@@ -4,6 +4,7 @@ import ctypes
 import subprocess
 import re
 import _winreg
+import wmi
 from win32api import GetSystemMetrics
 from datetime import datetime, timedelta
 from colorama import Fore, Back, Style
@@ -131,7 +132,7 @@ def os_release():
     winver = platform.win32_ver()[1]
     for ver_num, ver_str in windows_vers:
         if ver_num in winver:
-            return ver_str
+            return "%s %s" % (ver_str, platform.win32_ver()[2])
 
     return "Unknown"
 
@@ -144,6 +145,24 @@ def cpu():
 
     reg = get_registry_value("HKEY_LOCAL_MACHINE", "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0","ProcessorNameString")
     return ' '.join([s.strip() for s in reg.split()])
+
+def cpu_usage():
+    """\
+    Get the CPU usage as a percentage.
+
+    :rtype: float
+    """
+
+    pcount = 0
+    per = 0.0
+
+    c = wmi.WMI()
+    for p in c.Win32_Processor():
+        pcount += 1
+        per += p.LoadPercentage
+
+    return per / pcount
+
 
 def gpu():
     """\

@@ -104,6 +104,27 @@ def cpu():
 
     return "Unknown"
 
+def cpu_usage():
+    """\
+    Get the CPU usage as a percentage.
+
+    :rtype: float
+    """
+
+    try:
+        output = subprocess.check_output(["top", "-bn1"], stderr=subprocess.STDOUT).split("\n")
+        for x in output:
+            if '%Cpu(s)' in x:
+                y = x.split(",")
+                for z in y:
+                    if 'id' in z:
+                        z = re.sub("id", "", z)
+                        return 100 - float(z.strip())
+        return 0.0
+
+    except:
+        return 0.0
+
 def gpu():
     """\
     Get the GPU name.
