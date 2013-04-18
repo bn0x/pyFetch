@@ -5,6 +5,10 @@ import subprocess
 import re
 import _winreg
 import wmi
+import win32gui
+import win32ui
+import win32con
+import win32api
 from win32api import GetSystemMetrics
 from datetime import datetime, timedelta
 from colorama import Fore, Back, Style
@@ -247,8 +251,36 @@ def screen_shot():
     try:
         import PIL
         from PIL import ImageGrab
+        hwnd = win32gui.GetDesktopWindow()
+ 
+        SM_XVIRTUALSCREEN = 76
+        SM_YVIRTUALSCREEN = 77
+        SM_CXVIRTUALSCREEN = 78
+        SM_CYVIRTUALSCREEN = 79
+        w = vscreenwidth = win32api.GetSystemMetrics(SM_CXVIRTUALSCREEN)
+        h = vscreenheigth = win32api.GetSystemMetrics(SM_CYVIRTUALSCREEN)
+        l = vscreenx = win32api.GetSystemMetrics(SM_XVIRTUALSCREEN)
+        t = vscreeny = win32api.GetSystemMetrics(SM_YVIRTUALSCREEN)
+        r = l + w
+        b = t + h
 
-        PIL.ImageGrab.grab().save('pyFetch-' + re.sub(":", "-", str(datetime.now())) + ".png")
+ 
+        hwndDC = win32gui.GetWindowDC(hwnd)
+        mfcDC  = win32ui.CreateDCFromHandle(hwndDC)
+        saveDC = mfcDC.CreateCompatibleDC()
+ 
+        saveBitMap = win32ui.CreateBitmap()
+        saveBitMap.CreateCompatibleBitmap(mfcDC, w, h)
+        saveDC.SelectObject(saveBitMap)
+        saveDC.BitBlt((0, 0), (w, h),  mfcDC,  (l, t),  win32con.SRCCOPY)
+        saveBitMap.SaveBitmapFile(saveDC,  'screencapture.bmp')
+
+        bmpinfo = saveBitMap.GetInfo()
+        bmpstr = saveBitMap.GetBitmapBits(True)
+ 
+        import Image
+        im = Image.frombuffer('RGB', (bmpinfo['bmWidth'], bmpinfo['bmHeight']), bmpstr, 'raw', 'BGRX', 0, 1)
+        im.save('pyFetch-' + re.sub(":", "-", str(datetime.now())) + ".png")
         return True
     except:
         return False
