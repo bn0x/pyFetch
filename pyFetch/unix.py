@@ -190,6 +190,5 @@ def window_manager():
     :rtype: dict
     """
 
-    return { 'raw': "Unknown", 'name': "Unknown" }
 
-    return None    
+    return { 'raw': "Unknown", 'name': "Unknown" }
