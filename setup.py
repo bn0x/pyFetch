@@ -5,8 +5,7 @@ setup(
 	console=['pyFetch.py'],
 	options={
                 "py2exe":{
-                        "bundle_files": 1,
-                        "optimize": 2,
+                        "bundle_files": 1
                 }
 	        }
 )
