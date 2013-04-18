@@ -66,7 +66,7 @@ _ntuple_diskusage = collections.namedtuple('usage', 'total used free')
 ascii_windows = [
 	colorama.Fore.RED + " ,.=:!!t3Z3z., " + colorama.Fore.RESET,
 	colorama.Fore.RED + " :tt:::tt333EE3 " + colorama.Fore.RESET,
-	colorama.Fore.RED + " Et:::ztt33EEEL " + colorama.Fore.GREEN + "@Ee., ..," + colorama.Fore.RESET,
+	colorama.Fore.RED + " Et:::ztt33EEEL " + colorama.Fore.GREEN + "@Ee.,       ..," + colorama.Fore.RESET,
 	colorama.Fore.RED + " ;tt:::tt333EE7 " + colorama.Fore.GREEN + ";EEEEEEttttt33#" + colorama.Fore.RESET,
 	colorama.Fore.RED + " :Et:::zt333EEQ. " + colorama.Fore.GREEN + "$EEEEEttttt33QL" + colorama.Fore.RESET,
 	colorama.Fore.RED + " ;3=*^````*4EEV " + colorama.Fore.GREEN + ":EEEEEEttttt33@." + colorama.Fore.RESET,
@@ -127,7 +127,7 @@ def Name(): #Name
 
 def winKernel(): #Windows Kernel Version
 	kerNel = platform.platform()
-	print("%s" + Fore.RED + "          Kernel: " + Fore.WHITE + kerNel) % ascii[2]
+	print("%s" + Fore.RED + "    Kernel: " + Fore.WHITE + kerNel) % ascii[2]
 
 
 def oS(): #Operating System

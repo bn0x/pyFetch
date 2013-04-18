@@ -1,7 +1,7 @@
 pyFetch
 =======
 
-![Screenshot](http://puu.sh/2C8ZT)
+![Screenshot](http://puu.sh/2CaVr)
 
 Usage
 -----
