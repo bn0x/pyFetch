@@ -105,15 +105,8 @@ def uptime():
     :rtype: int
     """
 
-    output = subprocess.check_output(["net", "stats", "srv"])
-    timestring = " ".join(output.split("\n")[3].split()[2:]).strip()
-    timestring = re.sub("p.m.", "PM", timestring)
-    timestring = re.sub("a.m.", "AM", timestring)
-    try:
-        diff = datetime.now() - datetime.strptime(timestring, "%d/%m/%Y %I:%M:%S %p")
-    except ValueError:
-        # yay, americans
-        diff = datetime.now() - datetime.strptime(timestring, "%m/%d/%Y %I:%M:%S %p")
+    ret = ctypes.windll.kernel32.GetTickCount64()
+    diff = datetime.now() - datetime.fromtimestamp(ret)
 
     return diff.seconds
 
