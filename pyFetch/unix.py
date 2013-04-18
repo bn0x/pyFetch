@@ -157,3 +157,12 @@ def screen_resolution():
 
     except:
         return { 'x': 0, 'y': 0 }
+
+def web_browser():
+    """\
+    Get the default webbrowser of the system.
+
+    :rtype: dict
+    """
+
+    return { 'raw': "Unknown", 'name': "Unknown" }
