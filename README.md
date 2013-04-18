@@ -17,3 +17,4 @@ Requirements
 
 * [PyWin32](http://sourceforge.net/projects/pywin32)
 * [WMI](https://pypi.python.org/pypi/WMI)
+* [PIL](https://pypi.python.org/pypi/PIL) (for screenshotting)
