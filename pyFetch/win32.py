@@ -45,7 +45,7 @@ winX_ascii = [
     Fore.CYAN   + " E::::::zt33L " + Fore.YELLOW + "@EEEtttt::z3F " + Fore.RESET,
     Fore.CYAN   + " {3=*^``*4E3) " + Fore.YELLOW + ";EEEtttt:::tZ " + Fore.RESET,
     Fore.CYAN   + " `            " + Fore.YELLOW + ":EEEEtt::::z7 " + Fore.RESET,
-    Fore.YELLOW + "              " +                "`VEz:;;z>*`  " + Fore.RESET,
+    Fore.YELLOW + "              " +               " `VEz:;;z>*`  " + Fore.RESET,
 ]
 
 if float(platform.win32_ver()[1][:3]) > 6.1:
@@ -285,7 +285,7 @@ def visual_style():
 
     :rtype: dict
     """
-    
+
     try:
         visualStyle = get_registry_value("HKEY_CURRENT_USER", "Software\Microsoft\Windows\CurrentVersion\ThemeManager", "DllName")
         visualStyle = visualStyle.split('\\')[-1].split(".")[0]
