@@ -249,39 +249,30 @@ def screen_shot():
     """
 
     try:
-        import PIL
-        from PIL import ImageGrab
         hwnd = win32gui.GetDesktopWindow()
  
-        SM_XVIRTUALSCREEN = 76
-        SM_YVIRTUALSCREEN = 77
-        SM_CXVIRTUALSCREEN = 78
-        SM_CYVIRTUALSCREEN = 79
-        w = vscreenwidth = win32api.GetSystemMetrics(SM_CXVIRTUALSCREEN)
-        h = vscreenheigth = win32api.GetSystemMetrics(SM_CYVIRTUALSCREEN)
-        l = vscreenx = win32api.GetSystemMetrics(SM_XVIRTUALSCREEN)
-        t = vscreeny = win32api.GetSystemMetrics(SM_YVIRTUALSCREEN)
-        r = l + w
-        b = t + h
+        vscreenwidth = win32api.GetSystemMetrics(78)
+        vscreenheight = win32api.GetSystemMetrics(79)
+        vscreenx = win32api.GetSystemMetrics(76)
+        vscreeny = win32api.GetSystemMetrics(77)
 
- 
-        hwndDC = win32gui.GetWindowDC(hwnd)
-        mfcDC  = win32ui.CreateDCFromHandle(hwndDC)
+        mfcDC = win32ui.CreateDCFromHandle(win32gui.GetWindowDC(hwnd))
         saveDC = mfcDC.CreateCompatibleDC()
  
         saveBitMap = win32ui.CreateBitmap()
-        saveBitMap.CreateCompatibleBitmap(mfcDC, w, h)
+        saveBitMap.CreateCompatibleBitmap(mfcDC, vscreenwidth, vscreenheight)
         saveDC.SelectObject(saveBitMap)
-        saveDC.BitBlt((0, 0), (w, h),  mfcDC,  (l, t),  win32con.SRCCOPY)
-        saveBitMap.SaveBitmapFile(saveDC,  'screencapture.bmp')
+        saveDC.BitBlt((0, 0), (vscreenwidth, vscreenheight), mfcDC, (vscreenx, vscreeny), win32con.SRCCOPY)
 
         bmpinfo = saveBitMap.GetInfo()
         bmpstr = saveBitMap.GetBitmapBits(True)
- 
+
         import Image
         im = Image.frombuffer('RGB', (bmpinfo['bmWidth'], bmpinfo['bmHeight']), bmpstr, 'raw', 'BGRX', 0, 1)
         im.save('pyFetch-' + re.sub(":", "-", str(datetime.now())) + ".png")
+
         return True
+
     except:
         return False
 
