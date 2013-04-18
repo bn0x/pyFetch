@@ -5,7 +5,7 @@ import subprocess
 import re
 import _winreg
 from win32api import GetSystemMetrics
-from datetime import datetime
+from datetime import datetime, timedelta
 from colorama import Fore, Back, Style
 
 ascii_art = [
@@ -35,6 +35,7 @@ def get_registry_value(key, subkey, value):
     :param subkey: string
     :param value: string
     """
+
     key = getattr(_winreg, key)
     handle = _winreg.OpenKey(key, subkey)
     (value, type) = _winreg.QueryValueEx(handle, value)
@@ -96,6 +97,7 @@ def system_disk_usage():
 
     :rtype: dict
     """
+
     return disk_usage(os.getenv("SystemDrive") + "\\")
 
 def uptime():
@@ -106,7 +108,7 @@ def uptime():
     """
 
     ret = ctypes.windll.kernel32.GetTickCount64()
-    diff = datetime.now() - datetime.fromtimestamp(ret)
+    diff = timedelta(milliseconds = ret)
 
     return diff.seconds
 
@@ -149,6 +151,7 @@ def gpu():
 
     :rtype: string
     """
+
     try:
         reg = subprocess.check_output(["wmic", "path", "Win32_VideoController", "get", "caption"]).split("\n")[1:]
         r = []
