@@ -276,38 +276,38 @@ def screen_shot():
     except:
         return False
 
-def window_manager(): 
+def window_manager(blackbox=False, sharp=False, litestep=False, emerge=False): 
     """\
     Get current window manager.
 
     :rtype: dict
     """
 
-    shells = [ 
-        ["explorer", "Explorer"],
-        ["expstart", "Explorer"],
-        ["blackbox", "bbLean"],
-        ["sharpenviro", "SharpEnviro"],
-        ["litestep", "LiteStep"],
-        ["emerge", "Emerge Desktop"],
-    ]
+    c = wmi.WMI ()
+    for process in c.Win32_Process (name="blackbox.exe"):
+        blackbox = True
 
-    shell = "Unknown"
-    name = "Unknown"
-    
-    try:
-        shell = get_registry_value("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon", "Shell")
-    except:
-        try:
-            shell = get_registry_value("HKEY_LOCAL_MACHINE", "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon", "Shell")
-        except:
-            pass
+    for process in c.Win32_Process (name="sharpenviro.exe"):
+        sharp = True
 
-    for shell_ret, shell_str in shells:
-        if shell_ret.lower() in shell.lower():
-            name = shell_str
+    for process in c.Win32_Process (name="litestep.exe"):
+        litestep = True
 
-    return { 'raw': shell, 'name': name }
+    for process in c.Win32_Process (name="emerge.exe"):
+        emerge = True
+
+    if blackbox == True:
+        return{ 'name': 'bbLean' }
+    elif sharp == True:
+        return{ 'name': 'SharpEnviro' }
+    elif litestep == True:
+        return{ 'name': 'LiteStep' }
+    elif emerge == True:
+        return{ 'name': 'Emerge Desktop' }
+    else:
+        return{ 'name': 'Explorer' }
+
+
 
 
 def visual_style():
