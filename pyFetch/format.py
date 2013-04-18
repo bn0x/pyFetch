@@ -5,6 +5,7 @@ def time_metric(secs=60):
     :param secs: int
     :rtype: string
     """
+
     time = ''
     for metric_secs, metric_char in [[7*24*60*60, 'w'], [24*60*60, 'd'], [60*60, 'h'], [60, 'm']]:
         if secs > metric_secs:
@@ -21,6 +22,7 @@ def sizeof_fmt(num):
     :param num: int
     :rtype: string
     """
+    
     for x in [ 'bytes', 'KB', 'MB', 'GB' ]:
         if num < 1024.0 and num > -1024.0:
             return "%3.1f%s" % (num, x)
