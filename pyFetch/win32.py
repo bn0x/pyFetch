@@ -269,7 +269,7 @@ def screen_shot():
 
         import Image
         im = Image.frombuffer('RGB', (bmpinfo['bmWidth'], bmpinfo['bmHeight']), bmpstr, 'raw', 'BGRX', 0, 1)
-        im.save('pyFetch-' + re.sub(":", "-", str(datetime.now())) + ".png")
+        im.save(os.getenv("UserProfile") + '\Desktop\pyFetch-' + re.sub(":", "-", str(datetime.now())) + ".png")
 
         return True
 
