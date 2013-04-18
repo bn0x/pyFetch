@@ -248,19 +248,31 @@ def screen_shot():
     except:
         return False
 
-def window_manager():
+def window_manager(): 
     """\
-    Current window manager/shell
-    Supports: bbLean, Explorer
-s
-    :rtype: str
+    Get current window manager.
+
+    :rtype: dict
     """
 
     try:
+        shells = [ 
+            ["explorer", "Explorer"],
+            ["expstart", "Explorer"],
+            ["blackbox", "bbLean"],
+            ["sharpenviro", "SharpEnviro"],
+            ["litestep", "LiteStep"],
+            ["emerge", "Emerge Desktop"],
+        ]
+
         shell = get_registry_value("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon", "Shell")
-        for shell_ret, shell_str in [ ["expstart.exe", "Explorer"], ["blackbox.exe", "bbLean"], ["explorer.exe", "Explorer"] ]:
-            if shell_ret in shell:
+        if not shell:
+            shell = get_registry_value("HKEY_LOCAL_MACHINE", "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon", "Shell")
+
+        for shell_ret, shell_str in shells:
+            if shell_ret.lower() in shell.lower():
                 name = shell_str
+
         return { 'raw': shell, 'name': name }
     
     except:
