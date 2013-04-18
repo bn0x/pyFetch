@@ -339,3 +339,15 @@ def visual_style():
 #    for process in c.Win32_Process ():
 #        runningProcesses = runningProcesses+1
 #    return{ 'numProcesses': runningProcesses }
+
+def arch():
+    """\
+    Return platform architecture.
+    
+    :rtype: string
+    """
+    if '3' in platform.machine():
+        architecture = '32bit'
+    else:
+        architecture = '64bit'
+    return{ 'archi': architecture }

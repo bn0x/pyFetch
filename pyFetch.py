@@ -50,7 +50,7 @@ def draw():
     import getpass, socket
 
     line(ascii)
-    line(ascii, "%sOS:      %s%s" % (Fore.WHITE, Fore.CYAN, system.os_release()))
+    line(ascii, "%sOS:      %s%s %s" % (Fore.WHITE, Fore.CYAN, system.os_release(), system.arch()['archi']))
     line(ascii, "%sName:    %s%s%s@%s%s" % (Fore.WHITE, Fore.YELLOW, getpass.getuser(), Fore.WHITE, Fore.CYAN, socket.gethostname()))
     line(ascii, "%sUptime:  %s%s" % (Fore.WHITE, Fore.CYAN, pyFetch.format.time_metric(system.uptime())))
     #line(ascii, "%sProcesses Running: %s%s" % (Fore.WHITE, Fore.CYAN, system.processes_running()['numProcesses']))
