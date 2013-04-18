@@ -62,8 +62,11 @@ def get_registry_value(key, subkey, value):
     """
 
     key = getattr(_winreg, key)
-    handle = _winreg.OpenKey(key, subkey)
-    (value, type) = _winreg.QueryValueEx(handle, value)
+    
+    for x in subkey.split("\\"):
+        key = _winreg.OpenKeyEx(key, x)
+
+    (value, type) = _winreg.QueryValueEx(key, value)
     return value
 
 class MEMORYSTATUS(ctypes.Structure):
@@ -257,29 +260,31 @@ def window_manager():
     :rtype: dict
     """
 
-    try:
-        shells = [ 
-            ["explorer", "Explorer"],
-            ["expstart", "Explorer"],
-            ["blackbox", "bbLean"],
-            ["sharpenviro", "SharpEnviro"],
-            ["litestep", "LiteStep"],
-            ["emerge", "Emerge Desktop"],
-        ]
+    shells = [ 
+        ["explorer", "Explorer"],
+        ["expstart", "Explorer"],
+        ["blackbox", "bbLean"],
+        ["sharpenviro", "SharpEnviro"],
+        ["litestep", "LiteStep"],
+        ["emerge", "Emerge Desktop"],
+    ]
 
-        shell = get_registry_value("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon", "Shell")
-        
-        if shell == None or shell == "":
-            shell = get_registry_value("HKEY_LOCAL_MACHINE", "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon", "Shell")
-
-        for shell_ret, shell_str in shells:
-            if shell_ret.lower() in shell.lower():
-                name = shell_str
-
-        return { 'raw': shell, 'name': name }
+    shell = "Unknown"
+    name = "Unknown"
     
+    try:
+        shell = get_registry_value("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon", "Shell")
     except:
-        return { 'raw': "Unknown", 'name': "Unknown" }
+        try:
+            shell = get_registry_value("HKEY_LOCAL_MACHINE", "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon", "Shell")
+        except:
+            pass
+
+    for shell_ret, shell_str in shells:
+        if shell_ret.lower() in shell.lower():
+            name = shell_str
+
+    return { 'raw': shell, 'name': name }
 
 
 def visual_style():
