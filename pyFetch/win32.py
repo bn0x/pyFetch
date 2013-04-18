@@ -281,14 +281,16 @@ def window_manager():
 
 def visual_style():
     """\
-    Current Windows visualStyle
+    Current visual style.
 
-    :rtype: string
+    :rtype: dict
     """
+    
     try:
         visualStyle = get_registry_value("HKEY_CURRENT_USER", "Software\Microsoft\Windows\CurrentVersion\ThemeManager", "DllName")
         visualStyle = visualStyle.split('\\')[-1].split(".")[0]
         return { 'name': visualStyle }
+
     except:
         return { 'name': "Unknown"}
 

@@ -190,5 +190,13 @@ def window_manager():
     :rtype: dict
     """
 
-
     return { 'raw': "Unknown", 'name': "Unknown" }
+
+def visual_style():
+    """\
+    Current visual style.
+
+    :rtype: dict
+    """
+    
+    return { 'name': "Unknown"}
