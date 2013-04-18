@@ -247,3 +247,33 @@ def screen_shot():
         return True
     except:
         return False
+
+def window_manager(): 
+    """\
+    Get current window manager.
+
+    :rtype: dict
+    """
+
+    try:
+        shells = [ 
+            ["explorer", "Explorer"],
+            ["expstart", "Explorer"],
+            ["blackbox", "bbLean"],
+            ["sharpenviro", "SharpEnviro"],
+            ["litestep", "LiteStep"],
+            ["emerge", "Emerge Desktop"],
+        ]
+
+        shell = get_registry_value("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon", "Shell")
+        if not shell:
+            shell = get_registry_value("HKEY_LOCAL_MACHINE", "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon", "Shell")
+
+        for shell_ret, shell_str in shells:
+            if shell_ret.lower() in shell.lower():
+                name = shell_str
+
+        return { 'raw': shell, 'name': name }
+    
+    except:
+        return { 'raw': "Unknown", 'name': "Unknown" }

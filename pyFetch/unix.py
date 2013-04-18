@@ -183,3 +183,11 @@ def screen_shot():
     except:
         return False
 
+def window_manager(): 
+    """\
+    Get current window manager.
+
+    :rtype: dict
+    """
+
+    return { 'raw': "Unknown", 'name': "Unknown" }

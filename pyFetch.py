@@ -53,6 +53,8 @@ def draw():
     line(ascii, "%sOS:      %s%s" % (Fore.WHITE, Fore.CYAN, system.os_release()))
     line(ascii, "%sName:    %s%s%s@%s%s" % (Fore.WHITE, Fore.YELLOW, getpass.getuser(), Fore.WHITE, Fore.CYAN, socket.gethostname()))
     line(ascii, "%sUptime:  %s%s" % (Fore.WHITE, Fore.CYAN, pyFetch.format.time_metric(system.uptime())))
+    line(ascii)
+    line(ascii, "%sWM:      %s%s" % (Fore.WHITE, Fore.CYAN, system.window_manager()['name']))
     line(ascii, "%sBrowser: %s%s" % (Fore.WHITE, Fore.CYAN, system.web_browser()['name']))
     line(ascii)
     line(ascii, "%sDisk:    %s%s free %s/%s %s total" % (Fore.WHITE, Fore.YELLOW, pyFetch.format.sizeof_fmt(disk['free']), Fore.WHITE, Fore.CYAN, pyFetch.format.sizeof_fmt(disk['total'])))
