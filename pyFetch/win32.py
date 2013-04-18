@@ -252,7 +252,7 @@ def window_manager():
     """\
     Current window manager/shell
     Supports: bbLean, Explorer
-
+s
     :rtype: str
     """
 
