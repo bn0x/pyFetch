@@ -23,7 +23,18 @@ global ascii
 global totalRam
 global availableRam
 global blackbox
+global pcount
+global per
+pcount = 0
+per = 0.0
+
+c = wmi.WMI()
+for p in c.Win32_Processor():
+    pcount += 1
+    per += p.LoadPercentage
+
 blackbox = 0
+
 
 print Style.BRIGHT
 
@@ -219,13 +230,8 @@ def defaultBrowser(): #Default webbrowser
     print "%s %s  Browser: %sUnknown" % (ascii[5], Fore.RED, Fore.WHITE)
 
 def cpuUsage():
-    pcount = 0
-    per = 0.0
-
-    c = wmi.WMI()
-    for p in c.Win32_Processor():
-        pcount += 1
-        per += p.LoadPercentage
+    global pcount
+    global per
     print "%s%s   CPU Usage: %s%s" % (ascii[11], Fore.RED, Fore.WHITE, per / pcount)
 
 print("")
