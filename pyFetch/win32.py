@@ -243,6 +243,7 @@ def screen_shot():
     """
 
     try:
+        from PIL import ImageGrab
         PIL.ImageGrab.grab().save('pyFetch-' + re.sub(":", "-", str(datetime.now())) + ".png")
         return True
     except:
