@@ -191,3 +191,5 @@ def window_manager():
     """
 
     return { 'raw': "Unknown", 'name': "Unknown" }
+
+    return None    

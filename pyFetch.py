@@ -36,7 +36,7 @@ def line(ascii, text = "", fill = False):
 
 def draw():
     """\
-    Draw the system's ASCII art and output system information.
+    Draw the system's ASCII art and output system information.s
     """
 
     system = pyFetch.system
