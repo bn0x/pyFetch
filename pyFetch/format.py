@@ -1,3 +1,14 @@
+# ---------------------------------------------------------------------------------
+# time_metric() function is under the following licence:
+# 
+# "THE BEER-WARE LICENSE" (Revision 42):
+# <danneh@danneh.net> wrote this file. As long as you retain this notice you
+# can do whatever you want with this stuff. If we meet some day, and you think
+# this stuff is worth it, you can buy me a beer in return Daniel Oakley
+#
+# https://github.com/DanielOaks/Goshubot/blob/goshu3/gbot/libs/helper.py#L128-L137
+# ----------------------------------------------------------------------------------
+
 def time_metric(secs=60):
     """\
     Returns user-readable string representing given number of seconds.
@@ -22,7 +33,7 @@ def sizeof_fmt(num):
     :param num: int
     :rtype: string
     """
-    
+
     for x in [ 'bytes', 'KB', 'MB', 'GB' ]:
         if num < 1024.0 and num > -1024.0:
             return "%3.1f%s" % (num, x)
