@@ -13,6 +13,7 @@ def line(ascii, text = "", fill = False):
     """\
     Print a line of ASCII art followed by text. Used by the draw() function.
     If `fill` is `True`, this function will print all remaining lines of ASCII art.
+    Expects ascii[0] to be a line of spaces with the same length as the rest of the lines.
 
     :param ascii: list
     :param text: string
@@ -20,10 +21,15 @@ def line(ascii, text = "", fill = False):
     """
 
     global lineno
+
     if fill:
-        print '\n'.join(ascii[lineno:])
+        if lineno < len(ascii):
+            print '\n'.join(ascii[lineno:])
     else:
-        print "%s %s" % (ascii[lineno], text)
+        if lineno < len(ascii):
+            print "%s %s" % (ascii[lineno], text)
+        else:
+            print "%s %s" % (ascii[0], text)
 
     lineno += 1
 
