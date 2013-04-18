@@ -1,4 +1,4 @@
 @echo off
 cls
-pyFetch.exe
+pyFetch.exe -s
 pause
