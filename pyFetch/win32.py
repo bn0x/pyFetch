@@ -323,5 +323,13 @@ def visual_style():
         return { 'name': visualStyle }
 
     except:
-        return { 'name': "Unknown"}
+        try:
+            visualStyle = get_registry_value("HKEY_CURRENT_USER", "Software\Microsoft\Windows\CurrentVersion\Themes", "CurrentTheme")
+            visualStyle = visualStyle.split('\\')[-1].split(".")[0]
+            if 'classic' in visualStyle:
+                return { 'name': 'Windows Classic' }
+            else:
+                return { 'name': visualStyle }
+        except:
+            return { 'name': "Unknown"}
 
