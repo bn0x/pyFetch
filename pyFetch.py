@@ -64,7 +64,7 @@ def draw():
     line(ascii, "%sCPU:     %s%s" % (Fore.WHITE, Fore.CYAN, cpu['name']))
     line(ascii, "%sUsage:   %s%s%%" % (Fore.WHITE, Fore.CYAN, cpu['load_percentage']))
     line(ascii)
-    line(ascii, "%s GPU:     %s%s" % (Fore.WHITE, Fore.CYAN, system.gpu()))
+    line(ascii, "%sGPU:     %s%s" % (Fore.WHITE, Fore.CYAN, system.gpu()))
     line(ascii, "%sRes:     %s%s%sx%s%s" % (Fore.WHITE, Fore.CYAN, res['x'], Fore.WHITE, Fore.CYAN, res['y']))
     line(ascii, fill=True)
     print Style.RESET_ALL
