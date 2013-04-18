@@ -5,7 +5,6 @@ import subprocess
 import re
 import _winreg
 import wmi
-import PIL
 from win32api import GetSystemMetrics
 from datetime import datetime, timedelta
 from colorama import Fore, Back, Style
@@ -243,7 +242,9 @@ def screen_shot():
     """
 
     try:
+        import PIL
         from PIL import ImageGrab
+
         PIL.ImageGrab.grab().save('pyFetch-' + re.sub(":", "-", str(datetime.now())) + ".png")
         return True
     except:
