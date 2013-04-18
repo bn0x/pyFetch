@@ -48,7 +48,7 @@ winX_ascii = [
     Fore.YELLOW + "              " +                "`VEz:;;z>*`  " + Fore.RESET,
 ]
 
-if 'Windows 8' in release():
+if float(platform.win32_ver()[1][:3]) > 6.1:
     ascii_art = win8_ascii
 else:
     ascii_art = winX_ascii
