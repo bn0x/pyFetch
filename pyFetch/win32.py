@@ -29,6 +29,26 @@ ascii_art = [
     Fore.CYAN + "           ':::::::: ",
 ]
 
+ascii_to_7 = [
+    Fore.RED + " ,.=:!!t3Z3z., " + Fore.RESET,
+    Fore.RED + " :tt:::tt333EE3 " + Fore.RESET,
+    Fore.RED + " Et:::ztt33EEEL " + Fore.GREEN + "@Ee.,       ..," + Fore.RESET,
+    Fore.RED + " ;tt:::tt333EE7 " + Fore.GREEN + ";EEEEEEttttt33#" + Fore.RESET,
+    Fore.RED + " :Et:::zt333EEQ. " + Fore.GREEN + "$EEEEEttttt33QL" + Fore.RESET,
+    Fore.RED + " ;3=*^````*4EEV " + Fore.GREEN + ":EEEEEEttttt33@." + Fore.RESET,
+    Fore.BLUE + " ,.=::::!t=., ` " + Fore.GREEN + "@EEEEEEtttz33QF " + Fore.RESET,
+    Fore.BLUE + " ;::::::::zt33) " + Fore.GREEN + "`4EEEtttji3P* " + Fore.RESET,
+    Fore.BLUE + " :t::::::::tt33. " + Fore.YELLOW + ":Z3z.. `` ,..g. " + Fore.RESET,
+    Fore.BLUE + " i::::::::zt33F " + Fore.YELLOW + "AEEEtttt::::ztF " + Fore.RESET,
+    Fore.BLUE + " ;:::::::::t33V " + Fore.YELLOW + ";EEEttttt::::t3 " + Fore.RESET,
+    Fore.BLUE + " E::::::::zt33L " + Fore.YELLOW + "@EEEtttt::::z3F " + Fore.RESET,
+    Fore.BLUE + " {3=*^````*4E3) " + Fore.YELLOW + ";EEEtttt:::::tZ` " + Fore.RESET,
+    Fore.BLUE + " ` " + Fore.YELLOW + "             :EEEEtttt::::z7 " + Fore.RESET,
+    Fore.YELLOW + "                 `VEzjt:;;z>*` " + Fore.RESET,
+]
+
+
+
 def get_registry_value(key, subkey, value):
     """\
     Get a value from the Windows registry.
@@ -225,7 +245,7 @@ def screen_shot():
                 screenShot = ImageGrab.grab()
                 screenShot.save('pyFetch-' + strftime("%Y-%m-%d-%H-%M-%S", gmtime()) + ".png")
                 return True
-            except None:
+            except:
                 return None
-    except None:
+    except:
             None

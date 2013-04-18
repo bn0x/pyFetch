@@ -1,6 +1,7 @@
 import os
 import pyFetch
 import colorama
+import platform
 from colorama import Fore, Back, Style
 
 """\
@@ -40,7 +41,11 @@ def draw():
 
     system = pyFetch.system
 
-    ascii = system.ascii_art
+    sysinfo = platform.win32_ver()
+    if '6.2.' in sysinfo[1]:
+        ascii = system.ascii_art
+    else:
+        ascii = system.ascii_to_7
     disk = system.system_disk_usage()
     ram = system.ram()
     res = system.screen_resolution()
