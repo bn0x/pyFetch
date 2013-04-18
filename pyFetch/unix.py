@@ -166,3 +166,11 @@ def web_browser():
     """
 
     return { 'raw': "Unknown", 'name': "Unknown" }
+
+def screen_shot():
+    """\
+    Save a image of the current screen.
+
+    :rtype: bool
+    """
+    return None

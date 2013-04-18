@@ -5,6 +5,7 @@ import subprocess
 import re
 import _winreg
 import wmi
+import sys
 from win32api import GetSystemMetrics
 from datetime import datetime, timedelta
 from colorama import Fore, Back, Style
@@ -207,3 +208,24 @@ def web_browser():
 
     except:
         return { 'raw': "Unknown", 'name': "Unknown" }
+
+
+def screen_shot():
+    """\
+    Screenshot desktop if -s is an arguement
+
+    :rtype: bool
+    """
+    try:
+        if '-s' in sys.argv[1]:
+            try:
+                import PIL
+                from time import gmtime, strftime
+                from PIL import ImageGrab
+                screenShot = ImageGrab.grab()
+                screenShot.save('pyFetch-' + strftime("%Y-%m-%d-%H-%M-%S", gmtime()) + ".png")
+                return True
+            except None:
+                return None
+    except None:
+            None
