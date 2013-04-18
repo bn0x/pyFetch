@@ -151,30 +151,21 @@ def currentRamUsage(): #Ram Free and Maximum
     totalRam = totalRam / (1024*1024)
     print(ascii[12] + Fore.RED + "  RAM: " + Fore.GREEN + "%sMB" + Fore.RED + "/" + Fore.BLUE + "%sMB") % (availableRam, totalRam)
 
+def time_metric(secs=60): #Coded by aki--aki
+    time = ''
+    for metric_secs, metric_char in [[7*24*60*60, 'w '], [24*60*60, 'd '], [60*60, 'h '], [60, 'm ']]:
+        if secs > metric_secs:
+            time += '{}{}'.format(int(secs / metric_secs), metric_char)
+            secs -= int(secs / metric_secs) * metric_secs
+    if secs > 0:
+        time += '{}s'.format(secs)
+    return time
 
-
-def winUpTime(): #Uptime
-    output = subprocess.check_output(["net", "stats", "srv"])
-    timestring = " ".join(output.split("\n")[3].split()[2:]).strip()
-    timestring = re.sub("p.m.", "PM", timestring)
-    timestring = re.sub("a.m.", "AM", timestring)
-    try:
-        diff = datetime.now() - datetime.strptime(timestring, "%d/%m/%Y %I:%M:%S %p")
-    except:
-        try:
-            diff = datetime.now() - datetime.strptime(timestring, "%m/%d/%Y %I:%M:%S %p")
-        except:
-            try:
-                diff = datetime.now() - datetime.strptime(timestring, "%m/%d/%Y %I:%M:%S")
-            except:
-                try:
-                    diff = datetime.now() - datetime.strptime(timestring, "%d/%m/%Y %I:%M:%S")
-                except:
-                    print("Cannot get date and time.")
-    upMinutes = diff.seconds / 60
-    upHours = upMinutes / 60
-    print("%s" + Fore.RED + "   Uptime: " + Fore.WHITE + str(upHours) + Fore.CYAN + "H" + Fore.RED + " " + Fore.WHITE + str(upMinutes) + Fore.CYAN + "M" + Fore.RED + " " + Fore.WHITE + str(diff.seconds) + Fore.CYAN + "S") % ascii[4]
-
+def winUpTime(): #Uptime coded by aki--aki
+    from datetime import timedelta
+    ret = ctypes.windll.kernel32.GetTickCount64()
+    diff = timedelta(milliseconds = ret)
+    print "%s %s  Uptime: %s%s" % (ascii[4], Fore.RED, Fore.WHITE, time_metric(diff.seconds))
 
 #Shell Detect/bbLean Dectection Detection
 def detectBBLean(): #Detect what shell is being used, currently only support Explorer and bbLean
@@ -219,8 +210,12 @@ def winVisualStyle(): #Windows 7 Visual Style
 	print(ascii[7] + Fore.RED + "     Visual Style: " + Fore.WHITE + "%s") % (visualStyle)
 
 def defaultBrowser(): #Default webbrowser
-    webBrowser = get_registry_value("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice", "Progid")
-    print(ascii[5] + Fore.RED + "   Browser: " + Fore.WHITE + webBrowser)
+    browser = get_registry_value("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice", "Progid")
+    for browser_ret, browser_str in [ ["FirefoxURL", "Mozilla Firefox"], ["ChromeHTML", "Google Chrome"] ]:
+        if browser_ret in browser:
+            print "%s %s  Browser: %s%s" % (ascii[5], Fore.RED, Fore.WHITE, browser_str)
+            return None
+    print "%s %s  Browser: %sUnknown" % (ascii[5], Fore.RED, Fore.WHITE)
 
 print("")
 print("")
