@@ -189,3 +189,21 @@ def screen_resolution():
     """
 
     return { 'x': GetSystemMetrics(0), 'y': GetSystemMetrics(1) }
+
+def web_browser():
+    """\
+    Get the default webbrowser of the system.
+
+    :rtype: dict
+    """
+
+    try:
+        name = "Unknown"
+        browser = get_registry_value("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice", "Progid")
+        for browser_ret, browser_str in [ ["FirefoxURL", "Mozilla Firefox"], ["ChromeHTML", "Google Chrome"] ]:
+            if browser_ret in browser:
+                name = browser_str
+        return { 'raw': browser, 'name': name }
+
+    except:
+        return { 'raw': "Unknown", 'name': "Unknown" }
