@@ -15,4 +15,5 @@ Requirements
 
 ### Windows-only
 
-* [PyWin32](sourceforge.net/projects/pywin32)
+* [PyWin32](http://sourceforge.net/projects/pywin32)
+* [WMI](https://pypi.python.org/pypi/WMI)
