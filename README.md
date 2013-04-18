@@ -1,24 +1,19 @@
 pyFetch
 =======
 
-![Screenshot](http://puu.sh/2Cb1R)
+![Screenshot](http://puu.sh/2BQ5E)
 
 Usage
 -----
 
 	$ python pyFetch.py
-	$ python pyFetch.py -s (screenshot)
 
 Requirements
 ------------
 
 * [colorama](https://pypi.python.org/pypi/colorama)
-* [WMI](https://pypi.python.org/pypi/WMI/#downloads)
-* [pywin32](http://sourceforge.net/projects/pywin32/files/?source=navbar)
-* [PIL](http://www.pythonware.com/products/pil/)
-* [psutil](https://code.google.com/p/psutil/)
 
-Operating System
-----------------
+### Windows-only
 
-Currently only Windows, soon multiplatform for Linux.
+* [PyWin32](http://sourceforge.net/projects/pywin32)
+* [WMI](https://pypi.python.org/pypi/WMI)
