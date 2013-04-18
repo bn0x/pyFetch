@@ -1,6 +1,7 @@
 import os
 import pyFetch
 import colorama
+from optparse import OptionParser
 from colorama import Fore, Back, Style
 
 """\
@@ -49,25 +50,36 @@ def draw():
     import getpass, socket
 
     line(ascii)
-    line(ascii, "%sOS:     %s%s" % (Fore.WHITE, Fore.CYAN, system.os_release()))
-    line(ascii, "%sName:   %s%s%s@%s%s" % (Fore.WHITE, Fore.YELLOW, getpass.getuser(), Fore.WHITE, Fore.CYAN, socket.gethostname()))
-    line(ascii, "%sUptime: %s%s" % (Fore.WHITE, Fore.CYAN, pyFetch.format.time_metric(system.uptime())))
-    line(ascii, "%sBrowser:%s%s" % (Fore.WHITE, Fore.CYAN, system.web_browser()['name']))
+    line(ascii, "%sOS:      %s%s" % (Fore.WHITE, Fore.CYAN, system.os_release()))
+    line(ascii, "%sName:    %s%s%s@%s%s" % (Fore.WHITE, Fore.YELLOW, getpass.getuser(), Fore.WHITE, Fore.CYAN, socket.gethostname()))
+    line(ascii, "%sUptime:  %s%s" % (Fore.WHITE, Fore.CYAN, pyFetch.format.time_metric(system.uptime())))
+    line(ascii, "%sBrowser: %s%s" % (Fore.WHITE, Fore.CYAN, system.web_browser()['name']))
     line(ascii)
-    line(ascii, "%sDisk:   %s%s free %s/%s %s total" % (Fore.WHITE, Fore.YELLOW, pyFetch.format.sizeof_fmt(disk['free']), Fore.WHITE, Fore.CYAN, pyFetch.format.sizeof_fmt(disk['total'])))
-    line(ascii, "%sRAM:    %s%s free %s/%s %s total" % (Fore.WHITE, Fore.YELLOW, pyFetch.format.sizeof_fmt(ram['free']), Fore.WHITE, Fore.CYAN, pyFetch.format.sizeof_fmt(ram['total'])))
+    line(ascii, "%sDisk:    %s%s free %s/%s %s total" % (Fore.WHITE, Fore.YELLOW, pyFetch.format.sizeof_fmt(disk['free']), Fore.WHITE, Fore.CYAN, pyFetch.format.sizeof_fmt(disk['total'])))
+    line(ascii, "%sRAM:     %s%s free %s/%s %s total" % (Fore.WHITE, Fore.YELLOW, pyFetch.format.sizeof_fmt(ram['free']), Fore.WHITE, Fore.CYAN, pyFetch.format.sizeof_fmt(ram['total'])))
     line(ascii)
-    line(ascii, "%sCPU:    %s%s" % (Fore.WHITE, Fore.CYAN, cpu['name']))
-    line(ascii, "%sUsage:  %s%s%%" % (Fore.WHITE, Fore.CYAN, cpu['load_percentage']))
+    line(ascii, "%sCPU:     %s%s" % (Fore.WHITE, Fore.CYAN, cpu['name']))
+    line(ascii, "%sUsage:   %s%s%%" % (Fore.WHITE, Fore.CYAN, cpu['load_percentage']))
     line(ascii)
-    line(ascii, "%sGPU:    %s%s" % (Fore.WHITE, Fore.CYAN, system.gpu()))
-    line(ascii, "%sRes:    %s%s%sx%s%s" % (Fore.WHITE, Fore.CYAN, res['x'], Fore.WHITE, Fore.CYAN, res['y']))
+    line(ascii, "%sGPU:     %s%s" % (Fore.WHITE, Fore.CYAN, system.gpu()))
+    line(ascii, "%sRes:     %s%s%sx%s%s" % (Fore.WHITE, Fore.CYAN, res['x'], Fore.WHITE, Fore.CYAN, res['y']))
     line(ascii)
     line(ascii)
-    system.screen_shot()
     line(ascii, fill=True)
     print Style.RESET_ALL
 
 if __name__ == "__main__":
-    colorama.init()
+    parser = OptionParser()
+    parser.add_option("-c", "--color", action="store_false", dest="color", default=True, help="Make output colorful")
+    parser.add_option("-n", "--no-color", action="store_true", dest="color", help="Strip color from output")
+    parser.add_option("-s", "--screenshot", action="store_true", dest="screenshot", help="Take a screenshot after printing the information", default=False)
+    (options, args) = parser.parse_args()
+
+    colorama.init(strip=options.color)
     draw()
+
+    if options.screenshot:
+        if pyFetch.system.screen_shot():
+            print "Screenshot captured."
+        else:
+            print "Failed to capture screenshot."

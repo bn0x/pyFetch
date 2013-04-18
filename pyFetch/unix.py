@@ -169,8 +169,17 @@ def web_browser():
 
 def screen_shot():
     """\
-    Save a image of the current screen.
+    Take a screenshot of the desktop.
+    Returns True on success, False on failure.
 
     :rtype: bool
     """
-    return None
+
+    try:
+        if subprocess.call(["scrot"]) == 0:
+            return True
+        return False
+
+    except:
+        return False
+

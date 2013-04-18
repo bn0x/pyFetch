@@ -5,12 +5,12 @@ import subprocess
 import re
 import _winreg
 import wmi
-import sys
+import PIL
 from win32api import GetSystemMetrics
 from datetime import datetime, timedelta
 from colorama import Fore, Back, Style
 
-ascii_art = [
+win8_ascii = [
                 "                     ",
     Fore.CYAN + "                _.,, ",
     Fore.CYAN + "          ,::::::::: ",
@@ -28,6 +28,30 @@ ascii_art = [
     Fore.CYAN + "   .::::: :::::::::: ",
     Fore.CYAN + "           ':::::::: ",
 ]
+
+winX_ascii = [
+                  "              " +               "              ",
+    Fore.RED    + "    ,.=:!!t3z." +               "              " + Fore.RESET,
+    Fore.RED    + "  :tt:tt333EE3" +               "              " + Fore.RESET,
+    Fore.RED    + "  Et:ztt33EEEL" + Fore.GREEN  + "@Ee.,     .., " + Fore.RESET,
+    Fore.RED    + " ;tt::tt333EE7" + Fore.GREEN  + ";EEEEttttt33# " + Fore.RESET,
+    Fore.RED    + " :Et::zt333EEQ" + Fore.GREEN  + "$EEEttttt33QL " + Fore.RESET,
+    Fore.RED    + " ;3=*^``*4EEV " + Fore.GREEN  + ":EEEEEEttt33@." + Fore.RESET,
+    Fore.BLUE   + " ,.=::!t=., ` " + Fore.GREEN  + "@EEEEEttz33QF " + Fore.RESET,
+    Fore.BLUE   + " ;::::::zt33) " + Fore.GREEN  + "`4EEEtji3P*   " + Fore.RESET,
+    Fore.BLUE   + " :t::::::tt33." + Fore.YELLOW + ":Z3z..``,..g. " + Fore.RESET,
+    Fore.BLUE   + " i::::::zt33F " + Fore.YELLOW + "AEEEtt::::ztF " + Fore.RESET,
+    Fore.BLUE   + " ;:::::::t33V " + Fore.YELLOW + ";EEEttttt::t3 " + Fore.RESET,
+    Fore.BLUE   + " E::::::zt33L " + Fore.YELLOW + "@EEEtttt::z3F " + Fore.RESET,
+    Fore.BLUE   + " {3=*^``*4E3) " + Fore.YELLOW + ";EEEtttt:::tZ " + Fore.RESET,
+    Fore.BLUE   + " `            " + Fore.YELLOW + ":EEEEtt::::z7 " + Fore.RESET,
+    Fore.YELLOW + "              " +                "`VEz:;;z>*`  " + Fore.RESET,
+]
+
+#if 'Windows 8' in release():
+    #ascii_art = win8_ascii
+#else:
+ascii_art = winX_ascii
 
 def get_registry_value(key, subkey, value):
     """\
@@ -212,20 +236,14 @@ def web_browser():
 
 def screen_shot():
     """\
-    Screenshot desktop if -s is an arguement
+    Take a screenshot of the desktop.
+    Returns True on success, False on failure.
 
     :rtype: bool
     """
+
     try:
-        if '-s' in sys.argv[1]:
-            try:
-                import PIL
-                from time import gmtime, strftime
-                from PIL import ImageGrab
-                screenShot = ImageGrab.grab()
-                screenShot.save('pyFetch-' + strftime("%Y-%m-%d-%H-%M-%S", gmtime()) + ".png")
-                return True
-            except None:
-                return None
-    except None:
-            None
+        PIL.ImageGrab.grab().save('pyFetch-' + re.sub(":", "-", str(datetime.now())) + ".png")
+        return True
+    except:
+        return False
