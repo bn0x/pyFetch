@@ -200,3 +200,16 @@ def visual_style():
     """
     
     return { 'name': "Unknown"}
+
+def arch():
+    """\
+    Return platform architecture.
+    
+    :rtype: string
+    """
+    if '3' in platform.machine():
+        architecture = '32bit'
+    else:
+        architecture = '64bit'
+    return{ 'archi': architecture }
+
