@@ -4,7 +4,7 @@ distutils.core.setup(
       console=['pyFetch.py'],
       zipfile=None,
       options={'py2exe':{
-                         'bundle_files': 1
+                         
                         }
       }
   )
