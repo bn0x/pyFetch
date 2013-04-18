@@ -138,30 +138,27 @@ def os_release():
 
 def cpu():
     """\
-    Get the CPU model name.
+    Get information on the system CPU.
+    Returns a dict with 'name', 'load_percentage' values.
 
-    :rtype: string
+    :rtype: dict
     """
+
+    name = "Unknown"
+    load_percentage = 0.0
+    pcount = 0
 
     reg = get_registry_value("HKEY_LOCAL_MACHINE", "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0","ProcessorNameString")
-    return ' '.join([s.strip() for s in reg.split()])
-
-def cpu_usage():
-    """\
-    Get the CPU usage as a percentage.
-
-    :rtype: float
-    """
-
-    pcount = 0
-    per = 0.0
+    name =  ' '.join([s.strip() for s in reg.split()])
 
     c = wmi.WMI()
     for p in c.Win32_Processor():
         pcount += 1
-        per += p.LoadPercentage
+        load_percentage += p.LoadPercentage
 
-    return per / pcount
+    load_percentage = load_percentage / pcount
+
+    return { 'name': name, 'load_percentage': load_percentage }
 
 
 def gpu():

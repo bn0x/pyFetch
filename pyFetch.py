@@ -38,6 +38,7 @@ def draw():
     disk = system.system_disk_usage()
     ram = system.ram()
     res = system.screen_resolution()
+    cpu = system.cpu()
     
     import getpass, socket
 
@@ -49,8 +50,8 @@ def draw():
     line(ascii, "%sDisk:   %s%s free %s/%s %s total" % (Fore.WHITE, Fore.YELLOW, pyFetch.format.sizeof_fmt(disk['free']), Fore.WHITE, Fore.CYAN, pyFetch.format.sizeof_fmt(disk['total'])))
     line(ascii, "%sRAM:    %s%s free %s/%s %s total" % (Fore.WHITE, Fore.YELLOW, pyFetch.format.sizeof_fmt(ram['free']), Fore.WHITE, Fore.CYAN, pyFetch.format.sizeof_fmt(ram['total'])))
     line(ascii)
-    line(ascii, "%sCPU:    %s%s" % (Fore.WHITE, Fore.CYAN, system.cpu()))
-    line(ascii, "%sUsage:  %s%s%%" % (Fore.WHITE, Fore.CYAN, system.cpu_usage()))
+    line(ascii, "%sCPU:    %s%s" % (Fore.WHITE, Fore.CYAN, cpu['name']))
+    line(ascii, "%sUsage:  %s%s%%" % (Fore.WHITE, Fore.CYAN, cpu['load_percentage']))
     line(ascii)
     line(ascii, "%sGPU:    %s%s" % (Fore.WHITE, Fore.CYAN, system.gpu()))
     line(ascii, "%sRes:    %s%s%sx%s%s" % (Fore.WHITE, Fore.CYAN, res['x'], Fore.WHITE, Fore.CYAN, res['y']))

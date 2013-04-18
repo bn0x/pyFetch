@@ -92,24 +92,19 @@ def os_release():
 
 def cpu():
     """\
-    Get the CPU model name.
+    Get information on the system CPU.
+    Returns a dict with 'name', 'load_percentage' values.
 
-    :rtype: string
+    :rtype: dict
     """
+
+    name = "Unknown"
+    load_percentage = 0.0
 
     with open('/proc/cpuinfo', 'r') as f:
         for line in f:
             if 'model name' in line:
-                return ' '.join([s.strip() for s in line.split(":")[1].strip().split()])
-
-    return "Unknown"
-
-def cpu_usage():
-    """\
-    Get the CPU usage as a percentage.
-
-    :rtype: float
-    """
+                name = ' '.join([s.strip() for s in line.split(":")[1].strip().split()])
 
     try:
         output = subprocess.check_output(["top", "-bn1"], stderr=subprocess.STDOUT).split("\n")
@@ -119,12 +114,12 @@ def cpu_usage():
                 for z in y:
                     if 'id' in z:
                         z = re.sub("id", "", z)
-                        return 100 - float(z.strip())
-        return 0.0
-
+                        load_percentage = 100 - float(z.strip())
     except:
-        return 0.0
+        pass
 
+    return { 'name': name, 'load_percentage': load_percentage }
+    
 def gpu():
     """\
     Get the GPU name.
