@@ -333,3 +333,9 @@ def visual_style():
         except:
             return { 'name': "Unknown"}
 
+#def processes_running(runningProcesses=0):
+#    import wmi
+#    c = wmi.WMI ()
+#    for process in c.Win32_Process ():
+#        runningProcesses = runningProcesses+1
+#    return{ 'numProcesses': runningProcesses }

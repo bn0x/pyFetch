@@ -53,6 +53,7 @@ def draw():
     line(ascii, "%sOS:      %s%s" % (Fore.WHITE, Fore.CYAN, system.os_release()))
     line(ascii, "%sName:    %s%s%s@%s%s" % (Fore.WHITE, Fore.YELLOW, getpass.getuser(), Fore.WHITE, Fore.CYAN, socket.gethostname()))
     line(ascii, "%sUptime:  %s%s" % (Fore.WHITE, Fore.CYAN, pyFetch.format.time_metric(system.uptime())))
+    #line(ascii, "%sProcesses Running: %s%s" % (Fore.WHITE, Fore.CYAN, system.processes_running()['numProcesses']))
     line(ascii)
     line(ascii, "%sWM:      %s%s" % (Fore.WHITE, Fore.CYAN, system.window_manager()['name']))
     line(ascii, "%sBrowser: %s%s" % (Fore.WHITE, Fore.CYAN, system.web_browser()['name']))
