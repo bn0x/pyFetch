@@ -1,7 +1,7 @@
 pyFetch
 =======
 
-[![Windows 7](http://puu.sh/2CgH1)](http://puu.sh/2CgyN)
+[![Windows 7](http://puu.sh/2CgO2)](http://puu.sh/2CgyN)
 [![Windows 8](http://puu.sh/2CgLc)](http://puu.sh/2BQ5E)
 
 Usage
