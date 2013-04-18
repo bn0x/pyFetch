@@ -48,10 +48,10 @@ winX_ascii = [
     Fore.YELLOW + "              " +                "`VEz:;;z>*`  " + Fore.RESET,
 ]
 
-#if 'Windows 8' in release():
-    #ascii_art = win8_ascii
-#else:
-ascii_art = winX_ascii
+if 'Windows 8' in release():
+    ascii_art = win8_ascii
+else:
+    ascii_art = winX_ascii
 
 def get_registry_value(key, subkey, value):
     """\

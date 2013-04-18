@@ -63,8 +63,6 @@ def draw():
     line(ascii)
     line(ascii, "%sGPU:     %s%s" % (Fore.WHITE, Fore.CYAN, system.gpu()))
     line(ascii, "%sRes:     %s%s%sx%s%s" % (Fore.WHITE, Fore.CYAN, res['x'], Fore.WHITE, Fore.CYAN, res['y']))
-    line(ascii)
-    line(ascii)
     line(ascii, fill=True)
     print Style.RESET_ALL
 

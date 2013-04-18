@@ -1,12 +1,10 @@
-from distutils.core import setup
+import distutils
 import py2exe
-
-setup(
-	console=['pyFetch.py'],
-	options={
-                "py2exe":{
-                        "bundle_files": 1,
-                        "optimize": 2,
-                }
-	        }
-)
+distutils.core.setup(
+      console=['pyFetch.py'],
+      zipfile=None,
+      options={'py2exe':{
+                         'bundle_files': 1
+                        }
+      }
+  )
