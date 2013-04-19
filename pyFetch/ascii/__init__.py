@@ -1,18 +1,19 @@
-import os
-
 ###### ASCII ART FILE IMPORTS ######
 
 import unix_placeholder
 import windows_8
 import windows
 import arch_big
+import swastika
 
 ######/ASCII ART FILE IMPORTS ######
 
 modules = []
 for x in dir():
-    if not x.startswith("_") or x != "line" or x != "system" or x != "list":
-        modules.append(x)
+    if x[0] == "_" or x == "line" or x == "system" or x == "list" or x == "modules":
+        continue
+
+    modules.append(x)
 
 lineno = 0
 
@@ -63,9 +64,9 @@ def list():
     global lineno
     from colorama import Fore, Back, Style
 
-    for module in moduledir:
+    for module in modules:
         lineno = 0
-        b = eval("%s.ascii_art" % module)
+        b = system(module)
         print
         print "%s%s" % (Fore.WHITE, '-' * 80)
         print "%s %s" % (Fore.WHITE, module)
