@@ -1,14 +1,17 @@
 import os
 
-moduledir = os.listdir(os.path.dirname(__file__))
+###### ASCII ART FILE IMPORTS ######
 
-for module in moduledir:
-    if module.endswith(".py"):
-        module = module[:-3]
-        if module != "__init__":
-            reload(__import__(module, locals(), globals()))
+import unix_placeholder
+import windows_8
+import windows
 
-del module
+######/ASCII ART FILE IMPORTS ######
+
+modules = []
+for x in dir():
+    if not x.startswith("_") or x != "line" or x != "system" or x != "list":
+        modules.append(x)
 
 lineno = 0
 
@@ -44,7 +47,7 @@ def system(sys):
     :rtype: list
     """
 
-    if "%s.py" % sys in moduledir:
+    if sys in modules:
         return eval("%s.ascii_art" % sys)
     else:
         return None
@@ -60,13 +63,10 @@ def list():
     from colorama import Fore, Back, Style
 
     for module in moduledir:
-        if module.endswith(".py"):
-            module = module[:-3]
-            if module != "__init__":
-                lineno = 0
-                b = eval("%s.ascii_art" % module)
-                print
-                print "%s%s" % (Fore.WHITE, '-' * 80)
-                print "%s %s" % (Fore.WHITE, module)
-                line(b, fill=True)
-                print Style.RESET_ALL
+        lineno = 0
+        b = eval("%s.ascii_art" % module)
+        print
+        print "%s%s" % (Fore.WHITE, '-' * 80)
+        print "%s %s" % (Fore.WHITE, module)
+        line(b, fill=True)
+        print Style.RESET_ALL
