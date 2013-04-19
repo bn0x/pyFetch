@@ -15,7 +15,8 @@ def buildinfo():
     """
 
     try:
-        with open(os.path.join(os.path.dirname(__file__), "buildinfo"), 'r') as f:
-            print f
+        from win32api import LoadResource
+        from StringIO import StringIO
+        print StringIO(LoadResource(0, u'buildinfo', 1))
     except:
         pass
