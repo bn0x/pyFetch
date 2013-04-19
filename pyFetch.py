@@ -59,7 +59,7 @@ if __name__ == "__main__":
     parser.add_option("-A", "--list-art", action="store_true", dest="artlist", help="List available ASCII art images and exit", default=False)
     (options, args) = parser.parse_args()
 
-    colorama.init(strip=!options.color)
+    colorama.init(strip=(not options.color))
 
     if options.version:
         print "pyFetch, a Python system information tool"
