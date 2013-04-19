@@ -5,6 +5,7 @@ import windows_8
 import windows
 import arch_big
 import swastika
+import swastika_no_unicode
 
 ######/ASCII ART FILE IMPORTS ######
 
