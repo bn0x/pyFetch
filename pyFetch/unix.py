@@ -1,6 +1,7 @@
 import os
 import re
 import subprocess
+import platform
 from colorama import Fore, Back, Style
 
 ascii_art = [
