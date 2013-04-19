@@ -8,40 +8,19 @@ from colorama import Fore, Back, Style
 pyFetch, a Python system information tool
 """
 
-lineno = 0
-
-def line(ascii, text = "", fill = False):
-    """\
-    Print a line of ASCII art followed by text. Used by the draw() function.
-    If `fill` is `True`, this function will print all remaining lines of ASCII art.
-    Expects ascii[0] to be a line of spaces with the same length as the rest of the lines.
-
-    :param ascii: list
-    :param text: string
-    :param fill: bool
-    """
-
-    global lineno
-
-    if fill:
-        if lineno < len(ascii):
-            print '\n'.join(ascii[lineno:])
-    else:
-        if lineno < len(ascii):
-            print "%s %s" % (ascii[lineno], text)
-        else:
-            print "%s %s" % (ascii[0], text)
-
-    lineno += 1
-
-def draw():
+def draw(options, args):
     """\
     Draw the system's ASCII art and output system information.
     """
 
     system = pyFetch.system
+    line = pyFetch.ascii.line
 
-    ascii = system.ascii_art
+    if options.art:
+        ascii = pyFetch.ascii.system(options.art)
+    else:
+        ascii = pyFetch.ascii.system(system.default_ascii())
+
     disk = system.system_disk_usage()
     ram = system.ram()
     res = system.screen_resolution()
@@ -50,7 +29,7 @@ def draw():
     import getpass, socket
 
     line(ascii)
-    line(ascii, "%sOS:      %s%s %s" % (Fore.WHITE, Fore.CYAN, system.os_release(), system.arch()['archi']))
+    line(ascii, "%sOS:      %s%s %s" % (Fore.WHITE, Fore.CYAN, system.os_release(), system.arch()['arch']))
     line(ascii, "%sName:    %s%s%s@%s%s" % (Fore.WHITE, Fore.YELLOW, getpass.getuser(), Fore.WHITE, Fore.CYAN, socket.gethostname()))
     line(ascii, "%sUptime:  %s%s" % (Fore.WHITE, Fore.CYAN, pyFetch.format.time_metric(system.uptime())))
     #line(ascii, "%sProcesses Running: %s%s" % (Fore.WHITE, Fore.CYAN, system.processes_running()['numProcesses']))
@@ -72,19 +51,28 @@ def draw():
 
 if __name__ == "__main__":
     parser = OptionParser()
+    parser.add_option("-v", "--version", action="store_true", dest="version", help="Print version information and exit")
     parser.add_option("-c", "--color", action="store_false", dest="color", default=True, help="Make output colorful")
-    parser.add_option("-n", "--no-color", action="store_true", dest="color", help="Strip color from output")
+    parser.add_option("-C", "--no-color", action="store_true", dest="color", help="Strip color from output")
     parser.add_option("-s", "--screenshot", action="store_true", dest="screenshot", help="Take a screenshot after printing the information", default=False)
-    parser.add_option("-b", "--bright", action="store_true", dest="bright", help="Make the colors bright", default = False)
-    parser.add_option("-W", "--windows", action="store_true", dest="bright", help="Switch distro.", default = False)
+    parser.add_option("-a", "--art", action="store", dest="art", help="Select ASCII art to display (default: current OS)")
+    parser.add_option("-A", "--list-art", action="store_true", dest="artlist", help="List available ASCII art images and exit", default=False)
     (options, args) = parser.parse_args()
 
     colorama.init(strip=options.color)
-    draw()
 
-    if options.screenshot:
-        if pyFetch.system.screen_shot():
-            print "Screenshot captured."
-        else:
-            print "Failed to capture screenshot."
+    if options.version:
+        print "pyFetch, a Python system information tool"
+        pyFetch.buildinfo()
 
+    elif options.artlist:
+        pyFetch.ascii.list()
+
+    else:
+        draw(options, args)
+
+        if options.screenshot:
+            if pyFetch.system.screen_shot():
+                print "Screenshot captured."
+            else:
+                print "Failed to capture screenshot."

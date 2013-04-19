@@ -13,49 +13,17 @@ from win32api import GetSystemMetrics
 from datetime import datetime, timedelta
 from colorama import Fore, Back, Style
 
-win8_ascii = [
-                "                     ",
-    Fore.CYAN + "                _.,, ",
-    Fore.CYAN + "          ,::::::::: ",
-    Fore.CYAN + " ,.:::::: :::::::::: ",
-    Fore.CYAN + " ,::::::: :::::::::: ",
-    Fore.CYAN + " ,::::::: :::::::::: ",
-    Fore.CYAN + " ,::::::: :::::::::: ",
-    Fore.CYAN + " '.:::::: :::::::::: ",
-    Fore.CYAN + "                     ",
-    Fore.CYAN + " ,.:::::: :::::::::: ",
-    Fore.CYAN + " ,::::::: :::::::::: ",
-    Fore.CYAN + " ,::::::: :::::::::: ",
-    Fore.CYAN + " ,::::::: :::::::::: ",
-    Fore.CYAN + " '.:::::: :::::::::: ",
-    Fore.CYAN + "   .::::: :::::::::: ",
-    Fore.CYAN + "           ':::::::: ",
-]
+def default_ascii():
+    """\
+    Return the name of the default ASCII art for this platform.
 
-winX_ascii = [
-                  "              " +               "                      ",
-    Fore.RED    + "        ,.=:!!t3Z3z., " +               "               " + Fore.RESET,
-    Fore.RED    + "       :tt:::tt333EE3 " +               "               " + Fore.RESET,
-    Fore.RED    + "       Et:::ztt33EEEL " + Fore.GREEN  + "@Ee.,      .., " + Fore.RESET,
-    Fore.RED    + "      ;tt:::tt333EE7 " + Fore.GREEN  + ";EEEEEEttttt33#" + Fore.RESET,
-    Fore.RED    + "     :Et:::zt333EEQ." + Fore.GREEN  + " $EEEEEttttt33QL " + Fore.RESET,
-    Fore.RED    + "     it::::tt333EEF " + Fore.GREEN + "@EEEEEEttttt33F  " + Fore.RESET,
-    Fore.RED    + "    ;3=*^```\"*4EEV " + Fore.GREEN  + ":EEEEEEttttt33@.  " + Fore.RESET,
-    Fore.CYAN   + "    ,.=::::!t=., " + Fore.GREEN  + "  @EEEEEEtttz33QF   " + Fore.RESET,
-    Fore.CYAN   + "   ;::::::::zt33)   " + Fore.GREEN  + "\"4EEEtttji3P*    " + Fore.RESET,
-    Fore.CYAN   + "  :t::::::::tt33." + Fore.YELLOW + ":Z3z.. " + Fore.GREEN + "``" + Fore.YELLOW +  ",..g.      " + Fore.RESET,
-    Fore.CYAN   + "  i::::::::zt33F" + Fore.YELLOW + " AEEEtttt::::ztF    " + Fore.RESET,
-    Fore.CYAN   + " ;::::::::t33V " + Fore.YELLOW + " ;EEEttttt::::t3      " + Fore.RESET,
-    Fore.CYAN   + " E::::::::zt33L" + Fore.YELLOW + " @EEEtttt::::z3F      " + Fore.RESET,
-    Fore.CYAN   + "{3=*^```\"*4E3) " + Fore.YELLOW + ";EEEtttt:::::tZ`     " + Fore.RESET,
-    Fore.CYAN   + "               " + Fore.YELLOW + ":EEEEtttt::::z7       " + Fore.RESET,
-    Fore.YELLOW + "               " +               "  \"VEzjt:;;z>*`       " + Fore.RESET,
-]
+    :rtype: string
+    """
 
-if float(platform.win32_ver()[1][:3]) > 6.1:
-    ascii_art = win8_ascii
-else:
-    ascii_art = winX_ascii
+    if float(platform.win32_ver()[1][:3]) > 6.1:
+        return "windows_8"
+    else:
+        return "windows"
 
 def get_registry_value(key, subkey, value):
     """\
@@ -206,7 +174,8 @@ def gpu():
         for x in reg:
             x = re.sub(" \(Microsoft Corporation - WDDM 1.1\)", "", x)
             x = re.sub("Microsoft Basic Render Driver", "", x)
-            r.append(x)
+            if not x in r:
+                r.append(x)
 
         r = filter(bool, [s.strip() for s in r])
         return ', '.join(r)
@@ -308,9 +277,6 @@ def window_manager(blackbox=False, sharp=False, litestep=False, emerge=False):
     else:
         return{ 'name': 'Explorer' }
 
-
-
-
 def visual_style():
     """\
     Current visual style.
@@ -334,30 +300,11 @@ def visual_style():
         except:
             return { 'name': "Unknown"}
 
-#def processes_running(runningProcesses=0):
-#    import wmi
-#    c = wmi.WMI ()
-#    for process in c.Win32_Process ():
-#        runningProcesses = runningProcesses+1
-#    return{ 'numProcesses': runningProcesses }
-
 def arch():
     """\
     Return platform architecture.
     
-    :rtype: string
-    """
-    if '3' in platform.machine():
-        architecture = '32bit'
-    else:
-        architecture = '64bit'
-    return{ 'archi': architecture }
-
-def ansi_art(windows):
-    """\
-    Return none due to useless on windows.
-
-    :rtype: ret
+    :rtype: dict
     """
 
-    return{ 'none': 'none' }
+    return { 'arch': platform.machine() }
