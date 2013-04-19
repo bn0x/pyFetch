@@ -201,7 +201,7 @@ def arch():
     """
 
     try:
-        arch = subprocess.check_output(["uname", "-m"])
+        arch = subprocess.check_output(["uname", "-m"]).strip()
         return { 'arch': arch }
 
     except:
