@@ -1,6 +1,6 @@
 import os
 
-for module in os.listdir(os.path.dirname(__file__)):
+for module in os.listdir(os.path.dirname(__file__) + os.path.sep):
     if module.endswith(".py"):
         module = module[:-3]
         if module != "__init__":
@@ -41,7 +41,7 @@ def system(sys):
     :rtype: list
     """
 
-    if "%s.py" % sys in os.listdir(os.path.dirname(__file__)):
+    if "%s.py" % sys in os.listdir(os.path.dirname(__file__) + os.path.sep):
         return eval("%s.ascii_art" % sys)
     else:
         return None
@@ -56,7 +56,7 @@ def list():
     global lineno
     from colorama import Fore, Back, Style
 
-    for module in os.listdir(os.path.dirname(__file__)):
+    for module in os.listdir(os.path.dirname(__file__) + os.path.sep):
         if module.endswith(".py"):
             module = module[:-3]
             if module != "__init__":
