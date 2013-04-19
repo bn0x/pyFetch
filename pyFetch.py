@@ -52,14 +52,14 @@ def draw(options, args):
 if __name__ == "__main__":
     parser = OptionParser()
     parser.add_option("-v", "--version", action="store_true", dest="version", help="Print version information and exit")
-    parser.add_option("-c", "--color", action="store_false", dest="color", default=True, help="Make output colorful")
-    parser.add_option("-C", "--no-color", action="store_true", dest="color", help="Strip color from output")
+    parser.add_option("-c", "--color", action="store_true", dest="color", default=True, help="Make output colorful")
+    parser.add_option("-C", "--no-color", action="store_false", dest="color", help="Strip color from output")
     parser.add_option("-s", "--screenshot", action="store_true", dest="screenshot", help="Take a screenshot after printing the information", default=False)
     parser.add_option("-a", "--art", action="store", dest="art", help="Select ASCII art to display (default: current OS)")
     parser.add_option("-A", "--list-art", action="store_true", dest="artlist", help="List available ASCII art images and exit", default=False)
     (options, args) = parser.parse_args()
 
-    colorama.init(strip=options.color)
+    colorama.init(strip=!options.color)
 
     if options.version:
         print "pyFetch, a Python system information tool"
