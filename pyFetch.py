@@ -49,8 +49,6 @@ def draw():
     
     import getpass, socket
 
-
-
     line(ascii)
     line(ascii, "%sOS:      %s%s %s" % (Fore.WHITE, Fore.CYAN, system.os_release(), system.arch()['archi']))
     line(ascii, "%sName:    %s%s%s@%s%s" % (Fore.WHITE, Fore.YELLOW, getpass.getuser(), Fore.WHITE, Fore.CYAN, socket.gethostname()))
@@ -78,8 +76,8 @@ if __name__ == "__main__":
     parser.add_option("-n", "--no-color", action="store_true", dest="color", help="Strip color from output")
     parser.add_option("-s", "--screenshot", action="store_true", dest="screenshot", help="Take a screenshot after printing the information", default=False)
     parser.add_option("-b", "--bright", action="store_true", dest="bright", help="Make the colors bright", default = False)
+    parser.add_option("-W", "--windows", action="store_true", dest="bright", help="Switch distro.", default = False)
     (options, args) = parser.parse_args()
-
 
     colorama.init(strip=options.color)
     draw()

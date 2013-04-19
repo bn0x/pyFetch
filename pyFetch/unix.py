@@ -2,9 +2,10 @@ import os
 import re
 import subprocess
 import platform
+import sys
 from colorama import Fore, Back, Style
 
-ascii_art = [
+unix_art = [
                 "                             ",
     Fore.RED  + "##        ########  ##       ",
     Fore.RED  + "##        ##    ##  ##       ",
@@ -22,6 +23,32 @@ ascii_art = [
     Fore.RED  + "#    # #   # #   ##    #  #  ",
     Fore.RED  + "###### #    ## ###### #    # ",
 ]
+
+winX_ascii = [
+                  "              " +               "               ",
+    Fore.RED    + "    ,.=:!!t3z." +               "               " + Fore.RESET,
+    Fore.RED    + "  :tt:tt333EE3 " +               "              " + Fore.RESET,
+    Fore.RED    + "  Et:ztt33EEEL " + Fore.GREEN  + "@Ee.,     .., " + Fore.RESET,
+    Fore.RED    + " ;tt::tt333EE7 " + Fore.GREEN  + ";EEEEttttt33# " + Fore.RESET,
+    Fore.RED    + " :Et::zt333EEQ " + Fore.GREEN  + "$EEEttttt33QL " + Fore.RESET,
+    Fore.RED    + " ;3=*^``*4EEV  " + Fore.GREEN  + ":EEEEEEttt33@." + Fore.RESET,
+    Fore.CYAN   + " ,.=::!t=., `  " + Fore.GREEN  + "@EEEEEttz33QF " + Fore.RESET,
+    Fore.CYAN   + " ;::::::zt33)  " + Fore.GREEN  + "`4EEEtji3P*   " + Fore.RESET,
+    Fore.CYAN   + " :t::::::tt33. " + Fore.YELLOW + ":Z3z..``,..g. " + Fore.RESET,
+    Fore.CYAN   + " i::::::zt33F  " + Fore.YELLOW + "AEEEtt::::ztF " + Fore.RESET,
+    Fore.CYAN   + " ;:::::::t33V  " + Fore.YELLOW + ";EEEttttt::t3 " + Fore.RESET,
+    Fore.CYAN   + " E::::::zt33L  " + Fore.YELLOW + "@EEEtttt::z3F " + Fore.RESET,
+    Fore.CYAN   + " {3=*^``*4E3)  " + Fore.YELLOW + ";EEEtttt:::tZ " + Fore.RESET,
+    Fore.CYAN   + " `             " + Fore.YELLOW + ":EEEEtt::::z7 " + Fore.RESET,
+    Fore.YELLOW + "               " +               " `VEz:;;z>*`  " + Fore.RESET,
+]
+
+sysargs = sys.argv[1:]
+if 'windows' in sysargs:
+        ascii_art = winX_ascii
+else:
+	ascii_art = unix_art
+
 
 def disk_usage(path):
     """\

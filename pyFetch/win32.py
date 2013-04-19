@@ -269,7 +269,7 @@ def screen_shot():
 
         import Image
         im = Image.frombuffer('RGB', (bmpinfo['bmWidth'], bmpinfo['bmHeight']), bmpstr, 'raw', 'BGRX', 0, 1)
-        im.save(os.getenv("UserProfile") + '\Desktop\pyFetch-' + re.sub(":", "-", str(datetime.now())) + ".png")
+        im.save('pyFetch-' + re.sub(":", "-", str(datetime.now())) + ".png")
 
         return True
 
@@ -351,3 +351,12 @@ def arch():
     else:
         architecture = '64bit'
     return{ 'archi': architecture }
+
+def ansi_art(windows):
+    """\
+    Return none due to useless on windows.
+
+    :rtype: ret
+    """
+
+    return{ 'none': 'none' }
