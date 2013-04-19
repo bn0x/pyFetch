@@ -1,10 +1,11 @@
-import distutils
+from distutils.core import setup
 import py2exe
-distutils.core.setup(
-      console=['pyFetch.py'],
-      zipfile=None,
-      options={'py2exe':{
-                         
-                        }
-      }
-  )
+
+setup(
+    console=[ 'pyFetch.py' ],
+    options={ 'py2exe': 
+    	{
+			'skip_archive': True,
+    	}
+    }
+)
