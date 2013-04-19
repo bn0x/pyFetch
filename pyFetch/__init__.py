@@ -1,7 +1,6 @@
 import platform
 import format
 import ascii
-import buildinfo
 
 if platform.system() == "Windows":
     import win32 as system
