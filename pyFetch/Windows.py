@@ -128,7 +128,8 @@ class Windows(PlatformBase.PlatformBase):
         """
 
         try:
-            oslol = subprocess.check_output(["wmic", "path", "Win32_OperatingSystem", "get", "caption"]).split("\n")[1].rstrip()
+            oslol = subprocess.check_output(["wmic", "path", "Win32_OperatingSystem", "get", "caption"]).split("\n")[1].rstrip().replace('Microsoft', '').replace(' W', 'W')
+
             return{ 'name': oslol }
         except:
             return{ 'name': 'Unknown'}
@@ -261,7 +262,7 @@ class Windows(PlatformBase.PlatformBase):
 
         c = wmi.WMI ()
         for wm_str, wm_name in wms:
-            for process in c.Win32_Process(name = wm_str)
+            for process in c.Win32_Process(name = wm_str):
                 return { 'name': wm_name }
 
         return { 'name': 'Explorer' }
