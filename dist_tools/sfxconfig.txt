@@ -1,5 +1,0 @@
-﻿;!@Install@!UTF-8!
-Title="pyFetch"
-Progress="no"
-RunProgram="pyFetch.bat"
-;!@InstallEnd@!
