@@ -155,7 +155,7 @@ class Windows(PlatformBase.PlatformBase):
         load_percentage = 0.0
         pcount = 0
 
-        reg = get_registry_value("HKEY_LOCAL_MACHINE", "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0","ProcessorNameString")
+        reg = self.get_registry_value("HKEY_LOCAL_MACHINE", "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0","ProcessorNameString")
         name =  ' '.join([s.strip() for s in reg.split()])
 
         c = wmi.WMI()
@@ -207,7 +207,7 @@ class Windows(PlatformBase.PlatformBase):
 
         try:
             name = "Unknown"
-            browser = get_registry_value("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice", "Progid")
+            browser = self.get_registry_value("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice", "Progid")
             for browser_ret, browser_str in [ ["FirefoxURL", "Mozilla Firefox"], ["ChromeHTML", "Google Chrome"] ]:
                 if browser_ret in browser:
                     name = browser_str
@@ -285,13 +285,13 @@ class Windows(PlatformBase.PlatformBase):
         """
 
         try:
-            visualStyle = get_registry_value("HKEY_CURRENT_USER", "Software\Microsoft\Windows\CurrentVersion\ThemeManager", "DllName")
+            visualStyle = self.get_registry_value("HKEY_CURRENT_USER", "Software\Microsoft\Windows\CurrentVersion\ThemeManager", "DllName")
             visualStyle = visualStyle.split('\\')[-1].split(".")[0]
             return { 'name': visualStyle }
 
         except:
             try:
-                visualStyle = get_registry_value("HKEY_CURRENT_USER", "Software\Microsoft\Windows\CurrentVersion\Themes", "CurrentTheme")
+                visualStyle = self.get_registry_value("HKEY_CURRENT_USER", "Software\Microsoft\Windows\CurrentVersion\Themes", "CurrentTheme")
                 visualStyle = visualStyle.split('\\')[-1].split(".")[0]
                 if 'classic' in visualStyle:
                     return { 'name': 'Windows Classic' }
