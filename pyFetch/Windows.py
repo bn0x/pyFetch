@@ -270,7 +270,7 @@ class Windows(PlatformBase.PlatformBase):
         name = ""
 
         c = wmi.WMI ()
-        for process in c.Win32_Process:
+        for process in c.Win32_Process():
             for wm_str, wm_name in wms:
                 if wm_str in process.Caption:
                     return { 'name': wm_name }
