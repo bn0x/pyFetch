@@ -1,13 +1,12 @@
-pyFetch
+pyFetch [![Build Status](http://e02.codelolcats.pl:8080/job/pyFetch/badge/icon)](http://e02.codelolcats.pl:8080/job/pyFetch/)
 =======
-
-[![Build Status](http://e02.codelolcats.pl:8080/job/pyFetch/badge/icon)](http://e02.codelolcats.pl:8080/job/pyFetch/)
 
 Screenshots
 -----------
 
-[![Windows 7](http://puu.sh/2CgO2)](http://puu.sh/2CgyN)
-[![Windows 8](http://puu.sh/2CgLc)](http://puu.sh/2BQ5E)
+![Arch Linux](http://i.imgur.com/hviKQoN.png)
+
+![Windows 8 (Server 2012)](http://ompldr.org/vaTV1dg/Untitled.png)
 
 Get it
 ------
