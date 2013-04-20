@@ -2,10 +2,17 @@ import platform
 import format
 import ascii
 
+import PlatformBase
+
 if platform.system() == "Windows":
-    import win32 as system
+    import Windows
+    system = Windows.Windows
 elif platform.system() == "Linux":
-    import unix as system
+    import Linux
+    system = Linux.Linux
+else:
+    print "Your system is not supported."
+    system = PlatformBase.PlatformBase
 
 def buildinfo():
     """\

@@ -31,6 +31,15 @@ def line(ascii, text = "", fill = False):
 
     global lineno
 
+    if not ascii:
+        if text:
+            print text
+        else:
+            print
+
+        return None
+    
+
     if fill:
         if lineno < len(ascii):
             print '\n'.join(ascii[lineno:])
