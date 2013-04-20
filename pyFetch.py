@@ -83,7 +83,7 @@ if __name__ == "__main__":
         draw(options, args)
 
         if options.screenshot:
-            if pyFetch.system.screen_shot():
+            if pyFetch.system().screen_shot():
                 print "Screenshot captured."
             else:
                 print "Failed to capture screenshot."
