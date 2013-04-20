@@ -75,7 +75,7 @@ class Windows(PlatformBase.PlatformBase):
         """
 
         memoryStatus = self.MEMORYSTATUS()
-        memoryStatus.dwLength = ctypes.sizeof(MEMORYSTATUS)
+        memoryStatus.dwLength = ctypes.sizeof(self.MEMORYSTATUS)
         ret = ctypes.windll.kernel32.GlobalMemoryStatus(ctypes.byref(memoryStatus))
 
         return {
