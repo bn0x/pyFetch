@@ -106,7 +106,7 @@ class Windows(PlatformBase.PlatformBase):
         :rtype: dict
         """
 
-        return disk_usage(os.getenv("SystemDrive") + "\\")
+        return self.disk_usage(os.getenv("SystemDrive") + "\\")
 
     def uptime(self):
         """\
