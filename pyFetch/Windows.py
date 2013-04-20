@@ -127,21 +127,11 @@ class Windows(PlatformBase.PlatformBase):
         :rtype: string
         """
 
-        windows_vers = [
-            ["6.2", "Windows 8"],
-            ["6.1", "Windows 7"],
-            ["6.0", "Windows Vista"],
-            ["5.2", "Windows Server 2003"],
-            ["5.1", "Windows XP"],
-            ["5.0", "Windows 2000"]
-        ]
-
-        winver = platform.win32_ver()[1]
-        for ver_num, ver_str in windows_vers:
-            if ver_num in winver:
-                return "%s %s" % (ver_str, platform.win32_ver()[2])
-
-        return "Unknown"
+        try:
+            oslol = subprocess.check_output(["wmic", "path", "Win32_OperatingSystem", "get", "caption"]).split("\n")[1].rstrip()
+            return{ 'name': oslol }
+        except:
+            return{ 'name': 'Unknown'}
 
     def cpu(self):
         """\
