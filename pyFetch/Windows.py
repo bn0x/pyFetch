@@ -271,7 +271,7 @@ class Windows(PlatformBase.PlatformBase):
 
         c = wmi.WMI ()
         for wm_str, wm_name in wms:
-            for process in c.Win32_Process(name = wm_str)
+            for process in c.Win32_Process(name = wm_str):
                 return { 'name': wm_name }
 
         return { 'name': 'Explorer' }
