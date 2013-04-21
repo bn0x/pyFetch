@@ -128,7 +128,7 @@ class Windows(PlatformBase.PlatformBase):
         """
 
         try:
-            oslol = subprocess.check_output(["wmic", "path", "Win32_OperatingSystem", "get", "caption"]).split("\n")[1].rstrip().replace('Microsoft', '').replace(' W', 'W')
+            oslol = subprocess.check_output(["wmic", "path", "Win32_OperatingSystem", "get", "caption"]).split("\n")[1].rstrip().replace('Microsoft ', '') + " " + platform.win32_ver()[2]
 
             return{ 'name': oslol  }
         except:
