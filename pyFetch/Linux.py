@@ -48,4 +48,4 @@ class Linux(Unix.Unix):
         """
 
         inherit = re.sub("Linux", "", Unix.Unix().os_release()).strip()
-        return "%s %s" % (self.get_distro().name, inherit)
+        return { 'name': "%s %s" % (self.get_distro().name, inherit) }
