@@ -10,72 +10,106 @@ class Linux(Unix.Unix):
 
     class Distro(object):
 
-        class DistroBase(object):
+        class Distro(object):
             """\
             Object to represent a Linux distribution.
             """
 
-            name = ""
-            ascii_art = ""
-            lsb = { "distid": "" }
-            fallback = { "file": "", "content": "" }
-
-        class UnknownDistro(DistroBase):
-            """\
-            Object to represent an unknown Linux distribution.
-            """
-
-            name = "Unknown Distro"
+            name = "Unknown"
             ascii_art = "unix_placeholder"
+            lsb = { "distid": "" }
+            fallback = { "file": "", "check": [ "exists", "content" ],"content": "" }
 
-        class ArchLinux(DistroBase):
-            """\
-            Arch Linux
-
-            LSB: Arch Linux; arch
-            Fallback: look for /etc/pacman.d/mirrorlist
-            """
-
+        class ArchLinux(Distro):
             name = "Arch Linux"
             ascii_art = "arch_big"
-            lsb = { "distid": "arch" }
-            fallback = { "file": "/etc/pacman.d/mirrorlist", "content": "archlinux" }
+            lsb = { "distid": "(arch|archlinux|Arch Linux)" }
+            fallback = { "file": "/etc/arch-release", "check": [ "exists" ] }
 
-    show_kernel = True
+        class CrunchBang(Distro):
+            name = "CrunchBang"
+            fallback = { "file": "/etc/crunchbang-lsb-release", "check": [ "exists" ] }
+
+        class Debian(Distro):
+            name = "Debian"
+            lsb = { "distid": "[Dd]ebian" }
+            fallback = { "file": "/etc/debian_version", "check": [ "exists" ] }
+
+        class Ubuntu(Distro):
+            name = "Ubuntu"
+            lsb = { "distid": "[Uu]buntu" }
+
+        class LMDE(Distro):
+            name = "LMDE"
+            lsb = { "distid": "[Mm]int", "codename": "[Dd]ebian" }
+
+        class Mint(Distro):
+            name = "Linux Mint"
+            lsb = { "distid": "[Mm]int" }
+
+
+    distroforce = ""
+    def force_distro(self, distro):
+        """\
+        Force the get_distro() function to return the selected distro.
+
+        :param distro: string
+        :rtype: None
+        """
+
+        global distroforce
+        self.distroforce = distro
+        return None
 
     def get_distro(self):
         """\
         Return information on the Linux distribution the system is currently running.
 
-        :rtype: `:class: pyFetch.Linux.Distro`
+        :rtype: `:class: pyFetch.Linux.Distro.Distro`
         """
 
         for d in dir(self.Distro):
             if d[0] == "_": continue
-            if d == "DistroBase" or d == "UnknownDistro": continue
+            if d == "Distro": continue
             e = eval("self.Distro.%s" % d)
             s = e()
+
+            # Check if we've been forced.
+            if self.distroforce:
+                if self.distroforce == d:
+                    return { 'distro': e, 'ver': '', 'codename': '' }
+                else:
+                    continue
+
 
             # LSB search
             try:
                 output = subprocess.check_output(["lsb_release", "-sirc"], stderr=subprocess.STDOUT).split('\n')[0].split()
-                if output[0] == s.lsb['distid']:
-                    return { 'distro': e, 'ver': output[1], 'codename': output[2] if output[2] != "n/a" else '' }
+                if re.search(s.lsb['distid'], output[0]):
+                    ver = output[1] if output[1].strip() != "rolling" else ''
+                    if s.lsb['codename'] and re.search(s.lsb['codename'], output[2]):
+                        return { 'distro': e, 'ver': ver, 'codename': output[2] }
+                    elif not s.lsb['codename']:
+                        return { 'distro': e, 'ver': ver, 'codename': output[2] if output[2] != "n/a" else '' }
 
             except:
                 pass
 
             # Fallback
             try:
-                with open(s.fallback['file']) as f:
-                    for x in f:
-                        if s.fallback['content'] in x:
+                if "exists" in s.fallback['check'] or "content" in s.fallback['check']:
+                    with open(s.fallback['file']) as f:
+                        if not "content" in s.fallback['check']:
                             return { 'distro': e, 'ver': '', 'codename': '' }
+
+                        for x in f:
+                            if s.fallback['content'] in x:
+                                return { 'distro': e, 'ver': '', 'codename': '' }
 
             except IOError:
                 pass
 
-            return { 'distro': self.Distro.UnknownDistro, 'ver': '', 'codename': '' }
+            return { 'distro': self.Distro.Distro, 'ver': '', 'codename': '' }
 
     def default_ascii(self):
         """\
@@ -96,6 +130,7 @@ class Linux(Unix.Unix):
         distro = self.get_distro()
         return { 'name': " ".join([distro['distro']().name, distro['ver'], distro['codename']]) }
 
+    show_kernel = True
     def kernel(self):
         """\
         Return the kernel version.

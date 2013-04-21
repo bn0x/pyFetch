@@ -16,13 +16,11 @@ def draw(options, args):
     if options.bright and options.color:
         print Style.BRIGHT
 
-    try:
-        system = pyFetch.system()
-    except:
-        print "Error: could not determine your system."
-        return None
-
+    system = pyFetch.system()
     line = pyFetch.ascii.line
+
+    if options.forcedistro:
+        system.force_distro(options.forcedistro)
 
     if options.art:
         ascii = pyFetch.ascii.system(options.art)
@@ -38,7 +36,7 @@ def draw(options, args):
     import getpass, socket
 
     line(ascii)
-    line(ascii, "%sOS:      %s%s %s" % (Fore.RED, Fore.WHITE, system.os_release()['name'], system.arch()['arch']))
+    line(ascii, "%sOS:      %s%s %s" % (Fore.RED, Fore.WHITE, system.os_release()['name'].strip(), system.arch()['arch']))
     if system.show_kernel:
         line(ascii, "%sKernel:  %s%s" % (Fore.RED, Fore.WHITE, system.kernel()))
     line(ascii, "%sName:    %s%s%s@%s%s" % (Fore.RED, Fore.GREEN, getpass.getuser(), Fore.RED, Fore.WHITE, socket.gethostname()))
@@ -71,12 +69,18 @@ if __name__ == "__main__":
     parser = OptionParser()
     parser.add_option("-c", "--color", action="store_true", dest="color", default=True, help="Make output colorful")
     parser.add_option("-C", "--no-color", action="store_false", dest="color", help="Strip color from output")
+
     parser.add_option("-s", "--screenshot", action="store_true", dest="screenshot", help="Take a screenshot after printing the information", default=False)
+    parser.add_option("-f", "--free", action="store_true", dest="free", help="Show amount of free RAM/disk instead of used")
+
     parser.add_option("-a", "--art", action="store", dest="art", help="Select ASCII art to display. Uses the art for your OS by default. Use \"none\" to disable ASCII art display.")
     parser.add_option("-A", "--list-art", action="store_true", dest="artlist", help="List available ASCII art images and exit", default=False)
+
     parser.add_option("-b", "--bright", action="store_true", dest="bright", help="Enable bright colors", default=True)
     parser.add_option("-B", "--no-bright", action="store_false", dest="bright", help="Disable bright colors")
-    parser.add_option("-f", "--free", action="store_true", dest="free", help="Show amount of free RAM/disk instead of used")
+
+    parser.add_option("-d", "--distro", action="store", dest="forcedistro", metavar="DISTRO", help="Ignore system distribution information and use DISTRO instead (Linux only)")
+
     parser.add_option("--version", action="store_true", dest="version", help="Print version information and exit")
     (options, args) = parser.parse_args()
 
