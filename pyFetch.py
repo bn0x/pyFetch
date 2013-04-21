@@ -44,7 +44,7 @@ def draw(options, args):
     line(ascii, "%sUptime:  %s%s" % (Fore.RED, Fore.WHITE, pyFetch.format.time_metric(system.uptime())))
     #line(ascii, "%sProcesses Running: %s%s" % (Fore.WHITE, Fore.WHITE, system.processes_running()['numProcesses']))
     line(ascii)
-    if 'Windows' in platform.system():
+    if "Windows" in dir(pyFetch):
         line(ascii, "%sShell:   %s%s" % (Fore.RED, Fore.WHITE, system.window_manager()['name']))
     else:
         line(ascii, "%sWM:      %s%s" % (Fore.RED, Fore.WHITE, system.window_manager()['name']))
