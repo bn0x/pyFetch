@@ -1,6 +1,7 @@
 import os
 import pyFetch
 import colorama
+import platform
 from optparse import OptionParser
 from colorama import Fore, Back, Style
 
@@ -43,7 +44,10 @@ def draw(options, args):
     line(ascii, "%sUptime:  %s%s" % (Fore.RED, Fore.WHITE, pyFetch.format.time_metric(system.uptime())))
     #line(ascii, "%sProcesses Running: %s%s" % (Fore.WHITE, Fore.WHITE, system.processes_running()['numProcesses']))
     line(ascii)
-    line(ascii, "%sWM:      %s%s" % (Fore.RED, Fore.WHITE, system.window_manager()['name']))
+    if 'Windows' in platform.system():
+        line(ascii, "%sShell:   %s%s" % (Fore.RED, Fore.WHITE, system.window_manager()['name']))
+    else:
+        line(ascii, "%sWM:      %s%s" % (Fore.RED, Fore.WHITE, system.window_manager()['name']))
     line(ascii, "%sBrowser: %s%s" % (Fore.RED, Fore.WHITE, system.web_browser()['name']))
     line(ascii, "%sTheme:   %s%s" % (Fore.RED, Fore.WHITE, system.visual_style()['name']))
     line(ascii)
