@@ -3,6 +3,8 @@ class PlatformBase(object):
     Base class for pyFetch platform modules.
     """
 
+    show_kernel = False
+
     def default_ascii(self):
         """\
         Return the name of the default ASCII art for this platform.

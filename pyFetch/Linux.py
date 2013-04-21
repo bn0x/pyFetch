@@ -7,6 +7,7 @@ class Linux(Unix.Unix):
     """\
     Linux platform class.
     """
+
     class Distro(object):
 
         class DistroBase(object):
@@ -16,7 +17,7 @@ class Linux(Unix.Unix):
 
             name = ""
             ascii_art = ""
-            lsb = { "distid": "", "description": "" }
+            lsb = { "distid": "" }
             fallback = { "file": "", "content": "" }
 
         class UnknownDistro(DistroBase):
@@ -37,8 +38,10 @@ class Linux(Unix.Unix):
 
             name = "Arch Linux"
             ascii_art = "arch_big"
-            lsb = { "distid": "arch", "description": "Arch Linux" }
-            fallback = { "file": "/etc/pacman.d/mirrorlist", "content": "archlinuix" }
+            lsb = { "distid": "arch" }
+            fallback = { "file": "/etc/pacman.d/mirrorlist", "content": "archlinux" }
+
+    show_kernel = True
 
     def get_distro(self):
         """\
@@ -55,13 +58,10 @@ class Linux(Unix.Unix):
 
             # LSB search
             try:
-                output = subprocess.check_output(["lsb_release", "-a"], stderr=subprocess.STDOUT).split('\n')
-                for line in output:
-                    line = " ".join([g.strip() for g in line.split()])
-                    if "Distribution ID: %s" % s.lsb['distid'] in line:
-                        return e
-                    elif "Description: %s" % s.lsb['description'] in line:
-                        return e
+                output = subprocess.check_output(["lsb_release", "-sirc"], stderr=subprocess.STDOUT).split('\n')[0].split()
+                if output[0] == s.lsb['distid']:
+                    return { 'distro': e, 'ver': output[1], 'codename': output[2] if output[2] != "n/a" else '' }
+
             except:
                 pass
 
@@ -70,11 +70,12 @@ class Linux(Unix.Unix):
                 with open(s.fallback['file']) as f:
                     for x in f:
                         if s.fallback['content'] in x:
-                            return e
+                            return { 'distro': e, 'ver': '', 'codename': '' }
+
             except IOError:
                 pass
 
-            return self.Distro.UnknownDistro
+            return { 'distro': self.Distro.UnknownDistro, 'ver': '', 'codename': '' }
 
     def default_ascii(self):
         """\
@@ -83,14 +84,23 @@ class Linux(Unix.Unix):
         :rtype: string
         """
 
-        return self.get_distro().ascii_art
+        return self.get_distro()['distro'].ascii_art
 
     def os_release(self):
         """\
         Return a human-readable string of the OS release information.
 
+        :rtype: dict
+        """
+
+        distro = self.get_distro()
+        return { 'name': " ".join([distro['distro']().name, distro['ver'], distro['codename']]) }
+
+    def kernel(self):
+        """\
+        Return the kernel version.
+
         :rtype: string
         """
 
-        inherit = re.sub("Linux", "", Unix.Unix().os_release()).strip()
-        return { 'name': "%s %s" % (self.get_distro().name, inherit) }
+        return " ".join([s.strip() for s in re.sub("Linux", "", Unix.Unix().os_release()['name']).split()])

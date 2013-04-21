@@ -81,9 +81,9 @@ class Unix(PlatformBase.PlatformBase):
 
         try:
             output = subprocess.check_output(["uname", "-sr"])
-            return output.strip()
+            return { 'name': output.strip(), 'ver': '', 'codename': '' }
         except:
-            return "Unknown"
+            return { 'name': "Unknown", 'ver': '', 'codename': '' }
 
     def cpu(self):
         """\

@@ -129,11 +129,11 @@ class Windows(PlatformBase.PlatformBase):
 
         try:
             output = subprocess.check_output(["wmic", "path", "Win32_OperatingSystem", "get", "caption"]).split("\n")[1]
-            output = " ".join([s.strip() for s in re.sub("Microsoft", "", output).split()])
+            output = " ".join([s.strip() for s in re.sub("Microsoft Windows", "", output).split()])
 
-            return { 'name': output }
+            return { 'name': 'Windows', 'ver': output, 'codename': '' }
         except:
-            return { 'name': 'Unknown'}
+            return { 'name': 'Windows', 'ver': 'unknown', 'codename': '' }
 
     def cpu(self):
         """\
