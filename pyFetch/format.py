@@ -39,3 +39,18 @@ def sizeof_fmt(num):
             return "%3.1f%s" % (num, x)
         num /= 1024.0
     return "%3.1f%s" % (num, 'TB')
+
+def smart_truncate(content, length=100, suffix='...'):
+    """\
+    Truncate a string at a given length.
+
+    :param content: string
+    :param length: int
+    :param suffix: string
+    :rtype: string
+    """
+
+    if len(content) <= length:
+        return content
+    else:
+        return content[:length].rsplit(' ', 1)[0]+suffix
