@@ -128,11 +128,12 @@ class Windows(PlatformBase.PlatformBase):
         """
 
         try:
-            oslol = subprocess.check_output(["wmic", "path", "Win32_OperatingSystem", "get", "caption"]).split("\n")[1].rstrip().replace('Microsoft ', '') + " " + platform.win32_ver()[2]
+            output = subprocess.check_output(["wmic", "path", "Win32_OperatingSystem", "get", "caption"]).split("\n")[1]
+            output = " ".join([s.strip() for s in re.sub("Microsoft", "", output).split()])
 
-            return{ 'name': oslol  }
+            return { 'name': output }
         except:
-            return{ 'name': 'Unknown'}
+            return { 'name': 'Unknown'}
 
     def cpu(self):
         """\
