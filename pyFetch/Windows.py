@@ -129,7 +129,10 @@ class Windows(PlatformBase.PlatformBase):
 
         try:
             output = subprocess.check_output(["wmic", "path", "Win32_OperatingSystem", "get", "caption"]).split("\n")[1]
-            output = " ".join([s.strip() for s in re.sub("Microsoft Windows", "", output).split()])
+            output = " ".join([s.strip() for s in re.sub("Microsoft Windows", "", output).split()]).strip()
+
+            if len(output) == 0:
+                output = platform.win32_ver()[1]
 
             return { 'name': 'Windows', 'ver': output, 'codename': '' }
         except:
