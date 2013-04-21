@@ -16,12 +16,7 @@ def draw(options, args):
     if options.bright and options.color:
         print Style.BRIGHT
 
-    try:
-        system = pyFetch.system()
-    except:
-        print "Error: could not determine your system."
-        return None
-
+    system = pyFetch.system()
     line = pyFetch.ascii.line
 
     if options.art:
@@ -38,7 +33,7 @@ def draw(options, args):
     import getpass, socket
 
     line(ascii)
-    line(ascii, "%sOS:      %s%s %s" % (Fore.RED, Fore.WHITE, system.os_release()['name'], system.arch()['arch']))
+    line(ascii, "%sOS:      %s%s %s" % (Fore.RED, Fore.WHITE, system.os_release()['name'].strip(), system.arch()['arch']))
     if system.show_kernel:
         line(ascii, "%sKernel:  %s%s" % (Fore.RED, Fore.WHITE, system.kernel()))
     line(ascii, "%sName:    %s%s%s@%s%s" % (Fore.RED, Fore.GREEN, getpass.getuser(), Fore.RED, Fore.WHITE, socket.gethostname()))
