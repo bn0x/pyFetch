@@ -88,15 +88,15 @@ class Linux(Unix.Unix):
 
             # LSB search
             try:
-                output = subprocess.check_output(["lsb_release", "-sirc"], stderr=subprocess.STDOUT)
-                output = " ".join([o.strip() for o in output.split("\n")])
-                output = output.split(" ")
+                output = " ".join([o.strip() for o in subprocess.check_output(["lsb_release", "-sirc"], stderr=subprocess.STDOUT).split("\n")]).strip().split()
 
                 if re.search(s.lsb['distid'], output[0]):
                     ver = output[1] if output[1].strip() != "rolling" else ''
                     if 'codename' in s.lsb:
                         if re.search(s.lsb['codename'], output[2]):
                             return { 'distro': e, 'ver': ver, 'codename': output[2] if output[2] != "n/a" else '' }
+
+                    return { 'distro': e, 'ver': ver, 'codename': '' }
 
             except:
                 pass
