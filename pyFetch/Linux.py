@@ -46,7 +46,7 @@ class Linux(Unix.Unix):
 
         class CrunchBang(Distro):
             name = "CrunchBang"
-            lsb = { "distid": "" }
+            lsb = { "distid": False }
             fallback = { "file": "/etc/crunchbang-lsb-release", "check": [ "exists" ] }
 
     distroforce = ""
@@ -90,6 +90,10 @@ class Linux(Unix.Unix):
 
             # LSB search
             try:
+                if s.lsb['distid'] is False:
+                    print "Skipping LSB check."
+                    continue
+
                 output = " ".join([o.strip() for o in subprocess.check_output(["lsb_release", "-sirc"], stderr=subprocess.STDOUT).split("\n")]).strip().split()
                 if debug: print "LSB: %s" % output
 
