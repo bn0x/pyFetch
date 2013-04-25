@@ -37,6 +37,7 @@ class Linux(Unix.Unix):
 
         class Ubuntu(Distro):
             name = "Ubuntu"
+            ascii_art = "ubuntu"
             lsb = { "distid": "[Uu]buntu" }
 
         class LMDE(Distro):
