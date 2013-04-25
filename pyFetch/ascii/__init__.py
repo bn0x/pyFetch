@@ -21,6 +21,21 @@ for x in dir():
     modules.append(x)
 
 lineno = 0
+maxwidth = 0
+
+def setMaxWidth(width):
+    """\
+    Set the maximum terminal width. All text drawn by `line()` will be truncated
+    at this length.
+
+    Defaults to 0, meaning no truncation will be performed.
+
+    :param width: int
+    """
+
+    assert isinstance(width, int), "Maximum width should be an integer"
+    global maxwidth
+    maxwidth = width
 
 def line(ascii, text = "", fill = False):
     """\
@@ -48,10 +63,16 @@ def line(ascii, text = "", fill = False):
         if lineno < len(ascii):
             print '\n'.join(ascii[lineno:])
     else:
+        t = ""
         if lineno < len(ascii):
-            print "%s %s" % (ascii[lineno], text)
+            t = "%s %s" % (ascii[lineno], text)
         else:
-            print "%s %s" % (ascii[0], text)
+            t = "%s %s" % (ascii[0], text)
+
+        if maxwidth:
+            print t[:maxwidth]
+        else:
+            print t
 
     lineno += 1
 

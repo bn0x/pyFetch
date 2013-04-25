@@ -20,6 +20,9 @@ def draw(options, args):
     system = pyFetch.system()
     line = pyFetch.ascii.line
 
+    if options.maxwidth:
+        pyFetch.ascii.setMaxWidth(options.maxwidth)
+
     if options.forcedistro:
         system.force_distro(options.forcedistro)
 
@@ -32,7 +35,7 @@ def draw(options, args):
     ram = system.ram()
     res = system.screen_resolution()
     cpu = system.cpu()
-    gpu = pyFetch.format.smart_truncate(system.gpu(), 40)
+    gpu = system.gpu()
     
     import getpass, socket
 
@@ -76,6 +79,7 @@ if __name__ == "__main__":
 
     parser.add_option("-s", "--screenshot", action="store_true", dest="screenshot", help="Take a screenshot after printing the information", default=False)
     parser.add_option("-f", "--free", action="store_true", dest="free", help="Show amount of free RAM/disk instead of used")
+    parser.add_option("-w", "--maxwidth", action="store", dest="maxwidth", type=int, help="Set the maximum number of characters per line")
 
     parser.add_option("-a", "--art", action="store", dest="art", help="Select ASCII art to display. Uses the art for your OS by default. Use \"none\" to disable ASCII art display.")
     parser.add_option("-A", "--list-art", action="store_true", dest="artlist", help="List available ASCII art images and exit", default=False)
