@@ -70,8 +70,11 @@ class Linux(Unix.Unix):
         """
 
         for d in dir(self.Distro):
-            if d[0] == "_": continue
-            if d == "Distro": continue
+            if d[0] == "_":
+                continue
+            if d == "Distro":
+                continue
+
             e = eval("self.Distro.%s" % d)
             s = e()
 
@@ -85,16 +88,18 @@ class Linux(Unix.Unix):
 
             # LSB search
             try:
-                output = subprocess.check_output(["lsb_release", "-sirc"], stderr=subprocess.STDOUT).split('\n').join(" ").split()
+                output = subprocess.check_output(["lsb_release", "-sirc"], stderr=subprocess.STDOUT)
+                output = " ".join([o.strip() for o in output.split("\n")])
+                output = output.split(" ")
+
                 if re.search(s.lsb['distid'], output[0]):
                     ver = output[1] if output[1].strip() != "rolling" else ''
-                    if s.lsb['codename'] and re.search(s.lsb['codename'], output[2]):
-                        return { 'distro': e, 'ver': ver, 'codename': output[2] }
-                    elif not s.lsb['codename']:
-                        return { 'distro': e, 'ver': ver, 'codename': output[2] if output[2] != "n/a" else '' }
+                    if 'codename' in s.lsb:
+                        if re.search(s.lsb['codename'], output[2]):
+                            return { 'distro': e, 'ver': ver, 'codename': output[2] if output[2] != "n/a" else '' }
 
             except:
-                pass
+                raise
 
             # Fallback
             try:
@@ -107,7 +112,7 @@ class Linux(Unix.Unix):
                             if s.fallback['content'] in x:
                                 return { 'distro': e, 'ver': '', 'codename': '' }
 
-            except IOError:
+            except:
                 pass
 
             return { 'distro': self.Distro.Distro, 'ver': '', 'codename': '' }
