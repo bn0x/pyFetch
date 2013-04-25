@@ -62,7 +62,7 @@ class Linux(Unix.Unix):
         self.distroforce = distro
         return None
 
-    def get_distro(self):
+    def get_distro(self, debug=False):
         """\
         Return information on the Linux distribution the system is currently running.
 
@@ -78,6 +78,8 @@ class Linux(Unix.Unix):
             e = eval("self.Distro.%s" % d)
             s = e()
 
+            if debug: print "Distro: %s" % d
+
             # Check if we've been forced.
             if self.distroforce:
                 if self.distroforce == d:
@@ -89,13 +91,17 @@ class Linux(Unix.Unix):
             # LSB search
             try:
                 output = " ".join([o.strip() for o in subprocess.check_output(["lsb_release", "-sirc"], stderr=subprocess.STDOUT).split("\n")]).strip().split()
+                if debug: print "LSB: %s" % output
 
                 if re.search(s.lsb['distid'], output[0]):
+                    if debug: print "LSB match."
                     ver = output[1] if output[1].strip() != "rolling" else ''
                     if 'codename' in s.lsb:
                         if re.search(s.lsb['codename'], output[2]):
+                            if debug: print "Codename."
                             return { 'distro': e, 'ver': ver, 'codename': output[2] if output[2] != "n/a" else '' }
 
+                    if debug: print "No codename."
                     return { 'distro': e, 'ver': ver, 'codename': '' }
 
             except:
@@ -103,19 +109,23 @@ class Linux(Unix.Unix):
 
             # Fallback
             try:
+                if debug: print "Fallback"
                 if "exists" in s.fallback['check'] or "content" in s.fallback['check']:
                     with open(s.fallback['file']) as f:
+                        if debug: print "File found."
                         if not "content" in s.fallback['check']:
                             return { 'distro': e, 'ver': '', 'codename': '' }
 
                         for x in f:
                             if s.fallback['content'] in x:
+                                if debug: print "Content match."
                                 return { 'distro': e, 'ver': '', 'codename': '' }
 
             except:
                 pass
 
-            return { 'distro': self.Distro.Distro, 'ver': '', 'codename': '' }
+        if debug: print "Unknown."
+        return { 'distro': self.Distro.Distro, 'ver': '', 'codename': '' }
 
     def default_ascii(self):
         """\
