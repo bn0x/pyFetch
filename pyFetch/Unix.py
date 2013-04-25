@@ -162,7 +162,7 @@ class Unix(PlatformBase.PlatformBase):
         """
 
         try:
-            if subprocess.call(["scrot"]) == 0:
+            if subprocess.call(["scrot", "-mcd3"]) == 0:
                 return True
             return False
 
