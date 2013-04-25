@@ -28,6 +28,7 @@ class Linux(Unix.Unix):
 
         class CrunchBang(Distro):
             name = "CrunchBang"
+            lsb = { "distid": "" }
             fallback = { "file": "/etc/crunchbang-lsb-release", "check": [ "exists" ] }
 
         class Debian(Distro):
