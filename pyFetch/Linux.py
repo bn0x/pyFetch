@@ -129,7 +129,7 @@ class Linux(Unix.Unix):
         """
 
         distro = self.get_distro()
-        return { 'name': " ".join([distro['distro']().name, distro['ver'], distro['codename']]) }
+        return { 'name': distro['distro'].name, 'ver': distro['ver'], 'codename': distro['codename'] }
 
     show_kernel = True
     def kernel(self):

@@ -36,11 +36,14 @@ def draw(options, args):
     res = system.screen_resolution()
     cpu = system.cpu()
     gpu = system.gpu()
-    
+    osobj = system.os_release()
+    osstr = "%s %s %s" % (osobj['name'], osobj['ver'], osobj['codename'])
+    osstr = " ".join([s.strip() for s in osstr.split()])
+
     import getpass, socket
 
     line(ascii)
-    line(ascii, "%sOS:      %s%s %s" % (Fore.RED, Fore.WHITE, system.os_release()['name'].strip(), system.arch()['arch']))
+    line(ascii, "%sOS:      %s%s %s" % (Fore.RED, Fore.WHITE, osstr, system.arch()['arch']))
     if system.show_kernel:
         line(ascii, "%sKernel:  %s%s" % (Fore.RED, Fore.WHITE, system.kernel()))
     line(ascii, "%sName:    %s%s%s@%s%s" % (Fore.RED, Fore.GREEN, getpass.getuser(), Fore.RED, Fore.WHITE, socket.gethostname()))
