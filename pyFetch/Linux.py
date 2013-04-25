@@ -99,7 +99,7 @@ class Linux(Unix.Unix):
                             return { 'distro': e, 'ver': ver, 'codename': output[2] if output[2] != "n/a" else '' }
 
             except:
-                raise
+                pass
 
             # Fallback
             try:
