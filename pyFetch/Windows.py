@@ -136,7 +136,7 @@ class Windows(PlatformBase.PlatformBase):
 
             output += " " + platform.win32_ver()[2]
 
-            return { 'name': output, 'ver': output, 'codename': '' }
+            return { 'name': 'Windows', 'ver': output, 'codename': '' }
         except:
             return { 'name': 'Windows', 'ver': 'unknown', 'codename': '' }
 
