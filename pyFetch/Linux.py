@@ -26,11 +26,6 @@ class Linux(Unix.Unix):
             lsb = { "distid": "(arch|archlinux|Arch Linux)" }
             fallback = { "file": "/etc/arch-release", "check": [ "exists" ] }
 
-        class CrunchBang(Distro):
-            name = "CrunchBang"
-            lsb = { "distid": "" }
-            fallback = { "file": "/etc/crunchbang-lsb-release", "check": [ "exists" ] }
-
         class Debian(Distro):
             name = "Debian"
             lsb = { "distid": "[Dd]ebian" }
@@ -49,6 +44,10 @@ class Linux(Unix.Unix):
             name = "Linux Mint"
             lsb = { "distid": "[Mm]int" }
 
+        class CrunchBang(Distro):
+            name = "CrunchBang"
+            lsb = { "distid": "" }
+            fallback = { "file": "/etc/crunchbang-lsb-release", "check": [ "exists" ] }
 
     distroforce = ""
     def force_distro(self, distro):
