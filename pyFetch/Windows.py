@@ -158,7 +158,8 @@ class Windows(PlatformBase.PlatformBase):
         c = wmi.WMI()
         for p in c.Win32_Processor():
             pcount += 1
-            load_percentage += p.LoadPercentage
+            if p.LoadPercentage:
+                load_percentage += p.LoadPercentage
 
         load_percentage = load_percentage / pcount
 
