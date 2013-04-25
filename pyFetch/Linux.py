@@ -111,6 +111,17 @@ class Linux(Unix.Unix):
             except:
                 pass
 
+        for d in dir(self.Distro):
+            if d[0] == "_":
+                continue
+            if d == "Distro":
+                continue
+
+            e = eval("self.Distro.%s" % d)
+            s = e()
+
+            if debug: print "Distro: %s" % d
+
             # Fallback
             try:
                 if debug: print "Fallback"
