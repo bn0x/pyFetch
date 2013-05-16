@@ -26,5 +26,5 @@ ascii_art = [
     Fore.MAGENTA + " MN" + Fore.WHITE + "NNNNNNmmmmmNNMmhs+/" + Fore.MAGENTA + "-`            "               ,
     Fore.MAGENTA + " /h" + Fore.WHITE + "MMNNNNNNNNMNdhs++/" + Fore.MAGENTA + "-`             "                ,
     Fore.MAGENTA + " `/o" + Fore.WHITE + "hdmmddhys+++/:" + Fore.MAGENTA + ".`                "                   ,
-    Fore.MAGENTA +   "`-//////:--.                        "
+    Fore.MAGENTA +   "   `-//////:--.                        "
 ]
