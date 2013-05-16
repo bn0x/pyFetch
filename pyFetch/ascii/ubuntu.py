@@ -1,5 +1,8 @@
 from colorama import Fore, Back, Style
-""""""
+
+highlight = Fore.YELLOW
+text = Fore.RESET
+plustext = Fore.RED
 
 ascii_art = [
                   "                                    ",

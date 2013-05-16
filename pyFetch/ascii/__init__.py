@@ -45,13 +45,13 @@ def line(ascii, text = "", fill = False):
     
 
     if fill:
-        if lineno < len(ascii):
-            print '\n'.join(ascii[lineno:])
+        if lineno < len(ascii.ascii_art):
+            print '\n'.join(ascii.ascii_art[lineno:])
     else:
-        if lineno < len(ascii):
-            print "%s %s" % (ascii[lineno], text)
+        if lineno < len(ascii.ascii_art):
+            print "%s %s" % (ascii.ascii_art[lineno], text)
         else:
-            print "%s %s" % (ascii[0], text)
+            print "%s %s" % (ascii.ascii_art[0], text)
 
     lineno += 1
 
@@ -64,7 +64,7 @@ def system(sys):
     """
 
     if sys in modules:
-        return eval("%s.ascii_art" % sys)
+        return eval("%s" % sys)
     else:
         return None
 

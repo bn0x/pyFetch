@@ -43,35 +43,35 @@ def draw(options, args):
     import getpass, socket
 
     line(ascii)
-    line(ascii, "%sOS:      %s%s %s" % (Fore.RED, Fore.WHITE, osstr, system.arch()['arch']))
+    line(ascii, "%sOS:      %s%s %s" % (ascii.highlight, ascii.text, osstr, system.arch()['arch']))
     if system.show_kernel:
-        line(ascii, "%sKernel:  %s%s" % (Fore.RED, Fore.WHITE, system.kernel()))
-    line(ascii, "%sName:    %s%s%s@%s%s" % (Fore.RED, Fore.GREEN, getpass.getuser(), Fore.RED, Fore.WHITE, socket.gethostname()))
-    line(ascii, "%sUptime:  %s%s" % (Fore.RED, Fore.WHITE, pyFetch.format.time_metric(system.uptime())))
-    #line(ascii, "%sProcesses Running: %s%s" % (Fore.WHITE, Fore.WHITE, system.processes_running()['numProcesses']))
+        line(ascii, "%sKernel:  %s%s" % (ascii.highlight, ascii.text, system.kernel()))
+    line(ascii, "%sName:    %s%s%s@%s%s" % (ascii.highlight, ascii.plustext, getpass.getuser(), ascii.highlight, ascii.text, socket.gethostname()))
+    line(ascii, "%sUptime:  %s%s" % (ascii.highlight, ascii.text, pyFetch.format.time_metric(system.uptime())))
+    #line(ascii, "%sProcesses Running: %s%s" % (ascii.text, ascii.text, system.processes_running()['numProcesses']))
     line(ascii)
     if "Windows" in dir(pyFetch):
-        line(ascii, "%sShell:   %s%s" % (Fore.RED, Fore.WHITE, system.window_manager()['name']))
+        line(ascii, "%sShell:   %s%s" % (ascii.highlight, ascii.text, system.window_manager()['name']))
     else:
-        line(ascii, "%sWM:      %s%s" % (Fore.RED, Fore.WHITE, system.window_manager()['name']))
-    line(ascii, "%sBrowser: %s%s" % (Fore.RED, Fore.WHITE, system.web_browser()['name']))
-    line(ascii, "%sTheme:   %s%s" % (Fore.RED, Fore.WHITE, system.visual_style()['name']))
+        line(ascii, "%sWM:      %s%s" % (ascii.highlight, ascii.text, system.window_manager()['name']))
+    line(ascii, "%sBrowser: %s%s" % (ascii.highlight, ascii.text, system.web_browser()['name']))
+    line(ascii, "%sTheme:   %s%s" % (ascii.highlight, ascii.text, system.visual_style()['name']))
     line(ascii)
     if options.free:
-        fmtDisk = "%sDisk:    %s%s free %s/%s %s total" % (Fore.RED, Fore.GREEN, pyFetch.format.sizeof_fmt(disk['free']), Fore.RED, Fore.WHITE, pyFetch.format.sizeof_fmt(disk['total']))
-        fmtRAM  = "%sRAM:     %s%s free %s/%s %s total" % (Fore.RED, Fore.GREEN, pyFetch.format.sizeof_fmt(ram['free']), Fore.RED, Fore.WHITE, pyFetch.format.sizeof_fmt(ram['total']))
+        fmtDisk = "%sDisk:    %s%s free %s/%s %s total" % (ascii.highlight, ascii.plustext, pyFetch.format.sizeof_fmt(disk['free']), ascii.highlight, ascii.text, pyFetch.format.sizeof_fmt(disk['total']))
+        fmtRAM  = "%sRAM:     %s%s free %s/%s %s total" % (ascii.highlight, ascii.plustext, pyFetch.format.sizeof_fmt(ram['free']), ascii.highlight, ascii.text, pyFetch.format.sizeof_fmt(ram['total']))
     else:
-        fmtDisk = "%sDisk:    %s%s used %s/%s %s total" % (Fore.RED, Fore.GREEN, pyFetch.format.sizeof_fmt(disk['used']), Fore.RED, Fore.WHITE, pyFetch.format.sizeof_fmt(disk['total']))
-        fmtRAM  = "%sRAM:     %s%s used %s/%s %s total" % (Fore.RED, Fore.GREEN, pyFetch.format.sizeof_fmt(ram['used']), Fore.RED, Fore.WHITE, pyFetch.format.sizeof_fmt(ram['total']))
+        fmtDisk = "%sDisk:    %s%s used %s/%s %s total" % (ascii.highlight, ascii.plustext, pyFetch.format.sizeof_fmt(disk['used']), ascii.highlight, ascii.text, pyFetch.format.sizeof_fmt(disk['total']))
+        fmtRAM  = "%sRAM:     %s%s used %s/%s %s total" % (ascii.highlight, ascii.plustext, pyFetch.format.sizeof_fmt(ram['used']), ascii.highlight, ascii.text, pyFetch.format.sizeof_fmt(ram['total']))
 
     line(ascii, fmtDisk)
     line(ascii, fmtRAM)
     line(ascii)
-    line(ascii, "%sCPU:     %s%s" % (Fore.RED, Fore.WHITE, cpu['name']))
-    line(ascii, "%sUsage:   %s%s%s/%s100%%" % (Fore.RED, Fore.GREEN, cpu['load_percentage'], Fore.RED, Fore.WHITE))
+    line(ascii, "%sCPU:     %s%s" % (ascii.highlight, ascii.text, cpu['name']))
+    line(ascii, "%sUsage:   %s%s%s/%s100%%" % (ascii.highlight, ascii.plustext, cpu['load_percentage'], ascii.highlight, ascii.text))
     line(ascii)
-    line(ascii, "%sGPU:     %s%s" % (Fore.RED, Fore.WHITE, gpu))
-    line(ascii, "%sRes:     %s%s%sx%s%s%s" % (Fore.RED, Fore.GREEN, res['x'], Fore.RED, Fore.GREEN, res['y'], Fore.RESET))
+    line(ascii, "%sGPU:     %s%s" % (ascii.highlight, ascii.text, gpu))
+    line(ascii, "%sRes:     %s%s%sx%s%s%s" % (ascii.highlight, ascii.plustext, res['x'], ascii.highlight, ascii.plustext, res['y'], Fore.RESET))
     line(ascii, fill=True)
     print Style.RESET_ALL
 

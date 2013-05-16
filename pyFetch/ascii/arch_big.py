@@ -3,6 +3,10 @@ from colorama import Fore, Back, Style
 # arch_big ascii art provided by KittyKatt
 # https://github.com/KittyKatt/screenFetch/blob/master/screenfetch-dev
 
+highlight = Fore.BLUE 
+text = Fore.RESET
+plustext = Fore.CYAN
+
 ascii_art = [
 	Fore.BLUE + "                                       ",
 	Fore.BLUE + "                  .o+\\`                ",

@@ -26,6 +26,12 @@ class Linux(Unix.Unix):
             lsb = { "distid": "(arch|archlinux|Arch Linux)" }
             fallback = { "file": "/etc/arch-release", "check": [ "exists" ] }
 
+        class Gentoo(Distro):
+            name = "Gentoo"
+            ascii_art = "gentoo"
+            lsb = { "distid": "gentoo" }
+            fallback = { "file": "/etc/gentoo-release", "check": [ "exists" ] }
+
         class Debian(Distro):
             name = "Debian"
             lsb = { "distid": "[Dd]ebian" }
@@ -91,7 +97,7 @@ class Linux(Unix.Unix):
             # LSB search
             try:
                 if s.lsb['distid'] is False:
-                    print "Skipping LSB check."
+                    if debug: print "Skipping LSB check."
                     continue
 
                 output = " ".join([o.strip() for o in subprocess.check_output(["lsb_release", "-sirc"], stderr=subprocess.STDOUT).split("\n")]).strip().split()
