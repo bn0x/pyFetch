@@ -184,15 +184,18 @@ class Linux(Unix.Unix):
         :rtype: dict
         """
 
-        output = " ".join([o.strip() for o in subprocess.check_output(["xdg-settings", "get", "default-web-browser"], stderr=subprocess.STDOUT).split(" ")])
-        if ".desktop" in output:
-            name = re.sub(".desktop", "", output)
-            t = []
-            for i in [o.strip() for o in name.split("-")]:
-                i = i[0].upper() + i[1:]
-                t.append(i)
-            name = " ".join(t)
-            return { 'raw': output, 'name': name }
-        else:
+        try:
+            output = " ".join([o.strip() for o in subprocess.check_output(["xdg-settings", "get", "default-web-browser"], stderr=subprocess.STDOUT).split(" ")])
+            if ".desktop" in output:
+                name = re.sub(".desktop", "", output)
+                t = []
+                for i in [o.strip() for o in name.split("-")]:
+                    i = i[0].upper() + i[1:]
+                    t.append(i)
+                name = " ".join(t)
+                return { 'raw': output, 'name': name }
+            else:
+                return { 'raw': "Unknown", 'name': "Unknown" }
+        except:
             return { 'raw': "Unknown", 'name': "Unknown" }
 
