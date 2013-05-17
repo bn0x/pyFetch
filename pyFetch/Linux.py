@@ -176,3 +176,23 @@ class Linux(Unix.Unix):
         """
 
         return " ".join([s.strip() for s in re.sub("Linux", "", Unix.Unix().os_release()['name']).split()])
+
+    def web_browser(self):
+        """\
+        Get the default webbrowser of the system.
+
+        :rtype: dict
+        """
+
+        output = " ".join([o.strip() for o in subprocess.check_output(["xdg-settings", "get", "default-web-browser"], stderr=subprocess.STDOUT).split(" ")])
+        if ".desktop" in output:
+            name = re.sub(".desktop", "", output)
+            t = []
+            for i in [o.strip() for o in name.split("-")]:
+                i = i[0].upper() + i[1:]
+                t.append(i)
+            name = " ".join(t)
+            return { 'raw': output, 'name': name }
+        else:
+            return { 'raw': "Unknown", 'name': "Unknown" }
+
