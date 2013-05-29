@@ -10,7 +10,6 @@ import swastika
 import swastika_no_unicode
 import ubuntu
 import gentoo
-import crunchbang
 
 ######/ASCII ART FILE IMPORTS  ######
 
