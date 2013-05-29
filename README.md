@@ -25,6 +25,10 @@ Requirements
 
 * [colorama](https://pypi.python.org/pypi/colorama)
 
+### Linux-only
+
+* [Scrot](http://en.wikipedia.org/wiki/Scrot) (for screenshotting)
+
 ### Windows-only
 
 * [PyWin32](http://sourceforge.net/projects/pywin32)
