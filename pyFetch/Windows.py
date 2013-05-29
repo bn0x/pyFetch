@@ -206,7 +206,7 @@ class Windows(PlatformBase.PlatformBase):
         try:
             name = "Unknown"
             browser = self.get_registry_value("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice", "Progid")
-            for browser_ret, browser_str in [ ["FirefoxURL", "Mozilla Firefox"], ["ChromeHTML", "Google Chrome"] ]:
+            for browser_ret, browser_str in [ ["FirefoxURL", "Mozilla Firefox"], ["ChromeHTML", "Google Chrome"], ["Opera", "Opera"] ]:
                 if browser_ret in browser:
                     name = browser_str
             return { 'raw': browser, 'name': name }
