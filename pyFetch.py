@@ -84,7 +84,7 @@ if __name__ == "__main__":
     parser.add_option("-f", "--free", action="store_true", dest="free", help="Show amount of free RAM/disk instead of used")
     parser.add_option("-w", "--maxwidth", action="store", dest="maxwidth", type=int, help="Set the maximum number of characters per line")
 
-    parser.add_option("-a", "--art", action="store", dest="art", help="Select ASCII art to display. Uses the art for your OS by default. Use \"none\" to disable ASCII art display.")
+    parser.add_option("-a", "--art", action="store", dest="art", help="Select ASCII art to display. Uses the art for your OS by default. Use \"default\" to disable ASCII art display.")
     parser.add_option("-A", "--list-art", action="store_true", dest="artlist", help="List available ASCII art images and exit", default=False)
 
     parser.add_option("-b", "--bright", action="store_true", dest="bright", help="Enable bright colors", default=True)
