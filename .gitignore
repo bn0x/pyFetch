@@ -6,3 +6,4 @@ dist/
 *.png
 *.zip
 *.swp
+*.sublime-*
