@@ -116,7 +116,7 @@ class Windows(PlatformBase.PlatformBase):
         """
 
         ret = ctypes.windll.kernel32.GetTickCount64()
-        diff = timedelta(milliseconds = ret)
+        diff = timedelta(milliseconds=ret)
 
         return diff.seconds
 
@@ -204,9 +204,14 @@ class Windows(PlatformBase.PlatformBase):
         """
 
         try:
+            browserlist = [
+                ["FirefoxURL", "Mozilla Firefox"],
+                ["ChromeHTML", "Google Chrome"],
+                ["Opera", "Opera"]
+            ]
             name = "Unknown"
             browser = self.get_registry_value("HKEY_CURRENT_USER", "Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice", "Progid")
-            for browser_ret, browser_str in [ ["FirefoxURL", "Mozilla Firefox"], ["ChromeHTML", "Google Chrome"], ["Opera", "Opera"] ]:
+            for browser_ret, browser_str in browserlist:
                 if browser_ret in browser:
                     name = browser_str
             return { 'raw': browser, 'name': name }
@@ -267,7 +272,7 @@ class Windows(PlatformBase.PlatformBase):
 
         name = ""
 
-        c = wmi.WMI ()
+        c = wmi.WMI()
         for wm_str, wm_name in wms:
             for process in c.Win32_Process(name = wm_str):
                 return { 'name': wm_name }
