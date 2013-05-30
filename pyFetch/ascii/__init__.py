@@ -11,6 +11,8 @@ import swastika
 import swastika_no_unicode
 import ubuntu
 import gentoo
+import macosx
+import apple
 
 ######/ASCII ART FILE IMPORTS  ######
 

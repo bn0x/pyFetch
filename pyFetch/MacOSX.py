@@ -27,8 +27,7 @@ class MacOSX(Unix.Unix):
         :rtype: string
         """
 
-        #return "macosx"
-        return "unix_placeholder"
+        return "macosx"
 
     def uptime(self):
         """\
@@ -221,7 +220,10 @@ class MacOSX(Unix.Unix):
         :rtype: dict
         """
 
-        return { 'total': 0, 'used': 0, 'free': 0 }
+        total = float(subprocess.check_output(['sysctl', '-n', 'hw.physmem']).strip())
+        used = float(subprocess.check_output(['sysctl', '-n', 'hw.usermem']).strip())
+
+        return { 'total': total, 'used': used, 'free': total - used }
 
     def visual_style(self):
         """\

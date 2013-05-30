@@ -50,9 +50,9 @@ def draw(options, args):
     line(ascii, "%sName:    %s%s%s@%s%s" % (ascii.highlight, ascii.plustext, getpass.getuser(), ascii.highlight, ascii.text, socket.gethostname()))
     line(ascii, "%sUptime:  %s%s" % (ascii.highlight, ascii.text, pyFetch.format.time_metric(system.uptime())))
     line(ascii)
-    if "Windows" in dir(pyFetch):
+    if system.__class__.__name__ == "Windows":
         line(ascii, "%sShell:   %s%s" % (ascii.highlight, ascii.text, system.window_manager()['name']))
-    else:
+    elif system.__class__.__name__ != "MacOSX":
         line(ascii, "%sWM:      %s%s" % (ascii.highlight, ascii.text, system.window_manager()['name']))
     line(ascii, "%sBrowser: %s%s" % (ascii.highlight, ascii.text, system.web_browser()['name']))
     line(ascii, "%sTheme:   %s%s" % (ascii.highlight, ascii.text, system.visual_style()['name']))
