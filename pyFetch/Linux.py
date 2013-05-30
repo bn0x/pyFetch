@@ -9,8 +9,11 @@ class Linux(Unix.Unix):
     Linux platform class.
     """
 
-    class Distro(object):
+    show_kernel = True
+    distroforce = ""
+    "Name of distro to force get_distro() to display."
 
+    class Distro(object):
         class Distro(object):
             """\
             Object to represent a Linux distribution.
@@ -56,7 +59,6 @@ class Linux(Unix.Unix):
             lsb = { "distid": False }
             fallback = { "file": "/etc/crunchbang-lsb-release", "check": [ "exists" ] }
 
-    distroforce = ""
     def force_distro(self, distro):
         """\
         Force the get_distro() function to return the selected distro.
@@ -167,8 +169,7 @@ class Linux(Unix.Unix):
 
         distro = self.get_distro()
         return { 'name': distro['distro'].name, 'ver': distro['ver'], 'codename': distro['codename'] }
-
-    show_kernel = True
+    
     def kernel(self):
         """\
         Return the kernel version.
