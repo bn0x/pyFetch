@@ -2,6 +2,7 @@
 
 """ A lot of ASCII from @KittyKatt aka screenFetch """
 
+import default
 import unix_placeholder
 import windows_8
 import windows
@@ -66,7 +67,8 @@ def system(sys):
     if sys in modules:
         return eval("%s" % sys)
     else:
-        return None
+        print "WARNING: selected ASCII art not found, returning the default one"
+        return default
 
 def list():
     """\
