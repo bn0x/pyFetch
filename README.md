@@ -4,11 +4,11 @@ pyFetch [![Build Status](http://e02.codelolcats.pl:8080/job/pyFetch/badge/icon)]
 Screenshots
 -----------
 
-![Arch Linux](http://i.imgur.com/hviKQoN.png)
+![Arch Linux](http://a.pomf.se/5Hk4.png)
 
 ![Windows 8 (Server 2012)](http://ompldr.org/vaTV1dg/Untitled.png)
 
-![Mac OS X](http://a.pomf.se/8Ew5.png)
+![Mac OS X](http://a.pomf.se/9Bg1.png)
 
 Get it
 ------
