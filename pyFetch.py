@@ -49,7 +49,6 @@ def draw(options, args):
         line(ascii, "%sKernel:  %s%s" % (ascii.highlight, ascii.text, system.kernel()))
     line(ascii, "%sName:    %s%s%s@%s%s" % (ascii.highlight, ascii.plustext, getpass.getuser(), ascii.highlight, ascii.text, socket.gethostname()))
     line(ascii, "%sUptime:  %s%s" % (ascii.highlight, ascii.text, pyFetch.format.time_metric(system.uptime())))
-    #line(ascii, "%sProcesses Running: %s%s" % (ascii.text, ascii.text, system.processes_running()['numProcesses']))
     line(ascii)
     if "Windows" in dir(pyFetch):
         line(ascii, "%sShell:   %s%s" % (ascii.highlight, ascii.text, system.window_manager()['name']))
