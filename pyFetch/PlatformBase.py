@@ -4,6 +4,7 @@ class PlatformBase(object):
     """
 
     show_kernel = False
+    "Whether or not to show the Kernel line in the output."
 
     def default_ascii(self):
         """\
@@ -60,7 +61,7 @@ class PlatformBase(object):
         :rtype: string
         """
 
-        return "Unknown"
+        return { 'name': 'Unknown', 'ver': 'Unknown', 'codename': 'Unknown' }
 
     def cpu(self):
         """\
@@ -125,7 +126,7 @@ class PlatformBase(object):
         :rtype: dict
         """
     
-        return { 'name': "Unknown"}
+        return { 'name': "Unknown" }
 
     def arch(self):
         """\
