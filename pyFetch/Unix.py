@@ -6,6 +6,7 @@ import sys
 from colorama import Fore, Back, Style
 import PlatformBase
 
+
 class Unix(PlatformBase.PlatformBase):
 
     def default_ascii(self):

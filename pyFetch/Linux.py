@@ -3,6 +3,7 @@ import re
 import os
 import subprocess
 
+
 class Linux(Unix.Unix):
     """\
     Linux platform class.

@@ -15,6 +15,7 @@ from colorama import Fore, Back, Style
 
 import PlatformBase
 
+
 class Windows(PlatformBase.PlatformBase):
     """\
     Windows platform class.

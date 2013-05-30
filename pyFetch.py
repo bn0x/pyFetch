@@ -5,6 +5,7 @@ import platform
 from optparse import OptionParser
 from colorama import Fore, Back, Style
 
+
 """\
 pyFetch, a Python system information tool
 """

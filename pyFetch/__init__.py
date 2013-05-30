@@ -12,4 +12,3 @@ elif platform.system() == "Linux":
     system = Linux.Linux
 else:
     raise NotImplementedError("Your operating system is not supported.")
-
