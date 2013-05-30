@@ -174,7 +174,8 @@ class Windows(PlatformBase.PlatformBase):
         """
 
         try:
-            reg = subprocess.check_output(["wmic", "path", "Win32_VideoController", "get", "caption"]).split("\n")[1:]
+            c = wmi.WMI()
+            reg = [s.Caption.strip() for s in c.Win32_VideoController()]
             r = []
             for x in reg:
                 x = re.sub(" \(Microsoft Corporation - WDDM 1.1\)", "", x)
