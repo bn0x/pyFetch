@@ -24,6 +24,21 @@ for x in dir():
     modules.append(x)
 
 lineno = 0
+maxwidth = 0
+
+def setMaxWidth(width):
+    """\
+    Set the maximum terminal width. All text drawn by `line()` will be truncated
+    at this length.
+
+    Defaults to 0, meaning no truncation will be performed.
+
+    :param width: int
+    """
+
+    assert isinstance(width, int), "Maximum width should be an integer"
+    global maxwidth
+    maxwidth = width
 
 def line(ascii, text = "", fill = False):
     """\
@@ -38,24 +53,48 @@ def line(ascii, text = "", fill = False):
 
     global lineno
 
+    class Mark:
+        pass
+
+    mark = Mark()
+    mark.skip = mark.len = 0
+    mark.out = mark.input = ""
+
     if not ascii:
-        if text:
-            print text
-        else:
-            print
-
+        mark.input = text
         return None
-    
-
-    if fill:
+    elif fill:
         if lineno < len(ascii.ascii_art):
             print '\n'.join(ascii.ascii_art[lineno:])
+            return None
     else:
         if lineno < len(ascii.ascii_art):
-            print "%s %s" % (ascii.ascii_art[lineno], text)
+            mark.input = "%s %s" % (ascii.ascii_art[lineno], text)
         else:
-            print "%s %s" % (ascii.ascii_art[0], text)
+            mark.input = "%s %s" % (ascii.ascii_art[0], text)
 
+    if maxwidth == 0:
+        print mark.input
+        lineno += 1
+        return None
+
+    for character in mark.input:
+        if character == "\x1b":
+            # start of color character
+            mark.skip += 4
+        elif mark.skip != 0:
+            mark.skip -= 1
+        else:
+            mark.len += 1
+        
+        mark.out += character
+
+        if mark.len == maxwidth:
+            print mark.out
+            lineno += 1
+            return None
+
+    print mark.out
     lineno += 1
 
 def system(sys):
