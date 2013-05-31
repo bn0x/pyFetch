@@ -6,7 +6,7 @@ Screenshots
 
 ![Arch Linux](http://a.pomf.se/5Hk4.png)
 
-![Windows 8 (Server 2012)](http://ompldr.org/vaTV1dg/Untitled.png)
+![Windows 7](http://puu.sh/34WF5.png)
 
 ![Mac OS X](http://a.pomf.se/9Bg1.png)
 
