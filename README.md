@@ -6,14 +6,14 @@ Screenshots
 
 ![Arch Linux](http://a.pomf.se/5Bf7.png)
 
-![Windows 7](http://puu.sh/34WF5.png)
+![Windows 7](http://a.pomf.se/2Bt4.png)
 
 ![Mac OS X](http://a.pomf.se/9Bg1.png)
 
 Get it
 ------
 
-	$ pip install pyfetch
+    $ pip install pyfetch
     $ pyfetch
 
 Requirements
