@@ -75,7 +75,7 @@ def draw(options, args):
     line(ascii, fill=True)
     print Style.RESET_ALL
 
-if __name__ == "__main__":
+def run():
     parser = OptionParser()
     parser.add_option("-c", "--color", action="store_true", dest="color", default=True, help="Make output colorful")
     parser.add_option("-C", "--no-color", action="store_false", dest="color", help="Strip color from output")

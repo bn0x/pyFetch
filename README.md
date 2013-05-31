@@ -36,3 +36,11 @@ Requirements
 * [PyWin32](http://sourceforge.net/projects/pywin32)
 * [WMI](https://pypi.python.org/pypi/WMI)
 * [PIL](https://pypi.python.org/pypi/PIL) (for screenshotting)
+
+Licence
+-------
+
+    "THE BEER-WARE LICENSE" (Revision 44):
+    @__akiaki and @obn0xious wrote these files. As long as you retain this notice you can
+    do whatever you want with this stuff. If we meet some day, and you think this stuff 
+    is worth it, you can buy either of us a beer (or caffeinated beverage) in return.
