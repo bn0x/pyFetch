@@ -259,6 +259,7 @@ class Windows(PlatformBase.PlatformBase):
             return False
 
     def window_manager(self): 
+        global winmanager
         """\
         Get current window manager.
 
@@ -277,8 +278,10 @@ class Windows(PlatformBase.PlatformBase):
         c = wmi.WMI()
         for wm_str, wm_name in wms:
             for process in c.Win32_Process(name = wm_str):
+                winmanager = wm_name
                 return { 'name': wm_name }
 
+        winmanager = 'Explorer'
         return { 'name': 'Explorer' }
 
     def visual_style(self):
@@ -287,22 +290,33 @@ class Windows(PlatformBase.PlatformBase):
 
         :rtype: dict
         """
-
-        try:
-            visualStyle = self.get_registry_value("HKEY_CURRENT_USER", "Software\Microsoft\Windows\CurrentVersion\ThemeManager", "DllName")
-            visualStyle = visualStyle.split('\\')[-1].split(".")[0]
-            return { 'name': visualStyle }
-
-        except:
+        global winmanager
+        if 'bbLean' in winmanager:
             try:
-                visualStyle = self.get_registry_value("HKEY_CURRENT_USER", "Software\Microsoft\Windows\CurrentVersion\Themes", "CurrentTheme")
-                visualStyle = visualStyle.split('\\')[-1].split(".")[0]
-                if 'classic' in visualStyle:
-                    return { 'name': 'Windows Classic' }
-                else:
+                    with open('C:\\bbLean\\blackbox.rc') as f:
+                        blackBoxRC = f.readlines()
+                        for i in range(len(blackBoxRC)):
+                            if 'session.styleFile:' in blackBoxRC[i]:
+                                themeName = blackBoxRC[i].split(':')[1].split('\\')[1:]
+                                return { 'name': '\\'.join(themeName) }
+            except os.error:
+                    return { 'name': 'Unknown bbLean Theme' }
+        else:
+                try:
+                    visualStyle = self.get_registry_value("HKEY_CURRENT_USER", "Software\Microsoft\Windows\CurrentVersion\ThemeManager", "DllName")
+                    visualStyle = visualStyle.split('\\')[-1].split(".")[0]
                     return { 'name': visualStyle }
-            except:
-                return { 'name': "Unknown"}
+
+                except:
+                    try:
+                        visualStyle = self.get_registry_value("HKEY_CURRENT_USER", "Software\Microsoft\Windows\CurrentVersion\Themes", "CurrentTheme")
+                        visualStyle = visualStyle.split('\\')[-1].split(".")[0]
+                        if 'classic' in visualStyle:
+                            return { 'name': 'Windows Classic' }
+                        else:
+                            return { 'name': visualStyle }
+                    except:
+                            return { 'name': "Unknown"}
 
     def arch(self):
         """\

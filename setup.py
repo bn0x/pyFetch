@@ -22,12 +22,12 @@ setup(
     packages=['pyFetch', 'pyFetch.ascii'],
     package_data={'pyFetch': ['helpers/macosx/*']},
     classifiers=[
-        "License :: The Beer-ware Licence (Revision 44)",
+        "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
         "Programming Language :: Python",
         "Development Status :: 4 - Beta",
     ],
     scripts=['bin/pyfetch'],
     keywords='screenshot system_information',
-    license='The Beer-Ware Licence (Revision 44)',
+    license='Public Domain',
     install_requires=requires,
 )
