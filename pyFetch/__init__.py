@@ -5,7 +5,7 @@ import re
 
 import PlatformBase
 
-version = "0.1.1"
+version = "0.1.2"
 
 if platform.system() == "Windows":
     import Windows

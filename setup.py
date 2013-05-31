@@ -1,9 +1,15 @@
+import os
+import pyFetch
 import platform
 from setuptools import setup
-import pyFetch
+from setuptools.command.install import install as _install
 
 requires = [
     'colorama',
+]
+
+scripts = [
+    'bin/pyfetch',
 ]
 
 if platform.system() == "Windows":
@@ -11,6 +17,10 @@ if platform.system() == "Windows":
         'WMI',
         'PIL',
         'pywin32',
+    ]
+elif platform.system() == "Darwin":
+    scripts += [
+        'bin/pyfetch_macosx_defbrowser',
     ]
 
 setup(
@@ -21,13 +31,12 @@ setup(
     author_email='0_bn0x@hushmail.com',
     url='https://github.com/bn0x/pyFetch',
     packages=['pyFetch', 'pyFetch.ascii'],
-    package_data={'pyFetch': ['helpers/macosx/*']},
     classifiers=[
         "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
         "Programming Language :: Python",
         "Development Status :: 4 - Beta",
     ],
-    scripts=['bin/pyfetch'],
+    scripts=scripts,
     keywords='screenshot system_information',
     license='Public Domain',
     install_requires=requires,

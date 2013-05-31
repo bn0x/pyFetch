@@ -143,15 +143,8 @@ class MacOSX(Unix.Unix):
             return browser
 
         try:
-            path = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-            path = os.path.join(path, "helpers", "macosx", "defbrowser")
-
-            if os.path.isfile(path):
-                defbrowser = subprocess.check_output([path]).strip()
-                return { 'raw': defbrowser, 'name': get_name(defbrowser) }
-            else:
-                # we should fallback here somehow
-                return { 'raw': 'Unknown', 'name': "Unknown" }
+            defbrowser = subprocess.check_output(['pyfetch_macosx_defbrowser']).strip()
+            return { 'raw': defbrowser, 'name': get_name(defbrowser) }
         except: 
             return { 'raw': 'Unknown', 'name': "Unknown" }
 
