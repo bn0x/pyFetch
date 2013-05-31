@@ -133,6 +133,7 @@ class MacOSX(Unix.Unix):
             names = [
                 ["org.mozilla.firefox", "Firefox"],
                 ["org.apple.safari", "Safari"],
+                ["com.google.chrome", "Chrome"],
             ]
 
             for v, i in names:
