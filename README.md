@@ -4,7 +4,7 @@ pyFetch
 Screenshots
 -----------
 
-![Arch Linux](http://a.pomf.se/5Hk4.png)
+![Arch Linux](http://a.pomf.se/5Bf7.png)
 
 ![Windows 7](http://puu.sh/34WF5.png)
 
