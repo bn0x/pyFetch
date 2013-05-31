@@ -1,5 +1,6 @@
 import platform
 from setuptools import setup
+import pyFetch
 
 requires = [
     'colorama',
@@ -14,7 +15,7 @@ if platform.system() == "Windows":
 
 setup(
     name='pyFetch',
-    version='0.1.0',
+    version=pyFetch.version,
     description='Python system information tool',
     author='bn0x and aki--aki',
     author_email='0_bn0x@hushmail.com',

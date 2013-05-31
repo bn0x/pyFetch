@@ -99,7 +99,8 @@ def run():
 
     if options.version:
         print "pyFetch, a Python system information tool"
-        pyFetch.buildinfo()
+        print "version %s" % pyFetch.version
+        print ""
 
     elif options.artlist:
         pyFetch.ascii.list()
