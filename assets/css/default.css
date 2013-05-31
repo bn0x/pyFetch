@@ -30,7 +30,7 @@ a:hover {
     margin: 0 auto;
 }
 
-pre {
+.code {
     background: rgb(75, 75, 75);
     border-radius: 5px;
     padding: 20px;
