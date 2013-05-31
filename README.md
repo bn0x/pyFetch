@@ -1,4 +1,4 @@
-pyFetch [![Build Status](http://e02.codelolcats.pl:8080/job/pyFetch/badge/icon)](http://e02.codelolcats.pl:8080/job/pyFetch/)
+pyFetch
 =======
 
 Screenshots
