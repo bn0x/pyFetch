@@ -298,7 +298,6 @@ class Windows(PlatformBase.PlatformBase):
                         for i in range(len(blackBoxRC)):
                             if 'session.styleFile:' in blackBoxRC[i]:
                                 themeName = blackBoxRC[i].split(':')[1].split('\\')[1:]
-                                firstUpper = themeName[0].upper()
                                 return { 'name': '\\'.join(themeName) }
             except os.error:
                     return { 'name': 'Unknown bbLean Theme' }
