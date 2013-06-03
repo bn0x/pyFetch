@@ -1,4 +1,5 @@
 import os
+import sys
 import pyFetch
 import colorama
 import platform
@@ -10,6 +11,22 @@ from colorama import Fore, Back, Style
 pyFetch, a Python system information tool
 """
 
+debugmode = False
+"Enable debugging information."
+gopts = ""
+
+def debug(text):
+    """\
+    """
+
+    if debugmode:
+        for index, line in enumerate(text.split('\n')):
+            t = " !! " if index is 0 else "    "
+            sys.stdout.write(Style.RESET_ALL + Fore.RED + t + Fore.RESET + line + "\n")
+
+        if gopts.bright and gopts.color:
+            sys.stdout.write(Style.BRIGHT)
+
 def draw(options, args):
     """\
     Draw the system's ASCII art and output system information.
@@ -19,18 +36,16 @@ def draw(options, args):
         print Style.BRIGHT
 
     system = pyFetch.system()
+    debug("System: %s" % system.__class__.__name__)
+    debug(system.__class__.__doc__)
     line = pyFetch.ascii.line
-
-    if options.maxwidth:
-        pyFetch.ascii.setMaxWidth(options.maxwidth)
-
-    if options.forcedistro:
-        system.force_distro(options.forcedistro)
 
     if options.art:
         ascii = pyFetch.ascii.system(options.art)
     else:
         ascii = pyFetch.ascii.system(system.default_ascii())
+
+        debug("ASCII art: %s" % ascii.__name__)
 
     disk = system.system_disk_usage()
     ram = system.ram()
@@ -91,10 +106,20 @@ def run():
     parser.add_option("-B", "--no-bright", action="store_false", dest="bright", help="Disable bright colors")
 
     parser.add_option("-d", "--distro", action="store", dest="forcedistro", metavar="DISTRO", help="Ignore system distribution information and use DISTRO instead (Linux only)")
-
+    
+    parser.add_option("--debug", action="store_true", dest="debugmode", help="Enable debugging mode.")
     parser.add_option("--version", action="store_true", dest="version", help="Print version information and exit")
-    (options, args) = parser.parse_args()
 
+    (options, args) = parser.parse_args()
+    global gopts
+    gopts = options
+
+    if options.debugmode:
+        global debugmode
+        debugmode = True
+        debug("Welcome to pyFetch.")
+
+    debug("Color strip mode: %s" % str(not options.color))
     colorama.init(strip=(not options.color))
 
     if options.version:
@@ -103,9 +128,19 @@ def run():
         print ""
 
     elif options.artlist:
+        debug("Printing ASCII art list.")
         pyFetch.ascii.list()
 
     else:
+        if options.maxwidth:
+            debug("Maximum width set to %d." % options.maxwidth)
+            pyFetch.ascii.setMaxWidth(options.maxwidth)
+
+        if options.forcedistro:
+            debug("Setting distro force flag to \"%s\"." % options.forcedistro)
+            system.force_distro(options.forcedistro)
+
+        debug("Calling pyFetch.fetch.draw()...")
         draw(options, args)
 
         if options.screenshot:

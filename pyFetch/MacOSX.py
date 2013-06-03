@@ -3,12 +3,15 @@ import re
 import os
 import subprocess
 import inspect
+import pyFetch.fetch
 from datetime import timedelta
 
 try:
     import lxml.etree
+    pyFetch.fetch.debug("lxml successfully imported, will use it to get version")
     lxml_enabled = True
 except:
+    pyFetch.fetch.debug("can't import lxml, will use fallback_get_version")
     lxml_enabled = False
 
 
@@ -38,6 +41,7 @@ class MacOSX(Unix.Unix):
 
         output = subprocess.check_output(['sysctl', '-n', 'kern.boottime']).strip()
         boottime = re.search('sec = (\d+),', output).group(1)
+        pyFetch.fetch.debug("Kernel boot time: %s" % boottime)
         return timedelta(seconds=float(boottime)).seconds
 
     def os_release(self):
@@ -66,10 +70,13 @@ class MacOSX(Unix.Unix):
                 ["10.8", "Mountain Lion"],
             ]
 
+            t = []
             for num, codename in codenames:
+                t.append(num)
                 if version.startswith(num):
                     return codename
 
+            pyFetch.fetch.debug("Checking Mac OS X version: %s" % ", ".join(t))
             return ''
 
         def lxml_get_version():
@@ -108,12 +115,15 @@ class MacOSX(Unix.Unix):
             if lxml_enabled:
                 t = lxml_get_version()
                 if t:
+                    pyFetch.fetch.debug("lxml version retrieval succeeded")
                     return t
                 else:
+                    pyFetch.fetch.debug("lxml version retrieval failed, using fallback_get_version")
                     return fallback_get_version()
             else:
                 return fallback_get_version()
         except:
+            pyFetch.fetch.debug("Version retrieval failed.")
             return { 'name': 'Mac OS X', 'ver': '10.x', 'codename': 'Unknown' }
 
     def web_browser(self):
@@ -136,16 +146,21 @@ class MacOSX(Unix.Unix):
                 ["com.google.chrome", "Chrome"],
             ]
 
+            t = []
             for v, i in names:
+                t.append(v)
                 if browser.startswith(v):
                     return i
 
+            pyFetch.fetch.debug("Searching for default browser: %s" % ", ".join(t))
             return browser
 
         try:
-            defbrowser = subprocess.check_output(['pyfetch_macosx_defbrowser']).strip()
+            pyFetch.fetch.debug("Calling pyfetch_macosx_defbrowser to get default browser...")
+            defbrowser = subprocess.check_output(['pyfetch_macosx_defbrowser']).strip()            
             return { 'raw': defbrowser, 'name': get_name(defbrowser) }
         except: 
+            pyFetch.fetch.debug("Calling pyfetch_macosx_defbrowser failed")
             return { 'raw': 'Unknown', 'name': "Unknown" }
 
 
@@ -166,6 +181,7 @@ class MacOSX(Unix.Unix):
                     y = x.split(",")
                     for z in y:
                         if 'idle' in z:
+                            pyFetch.fetch.debug("CPU: %s" % z)
                             z = re.sub("% idle", "", z)
                             load_percentage = 100 - float(z.strip())
         except:
@@ -173,6 +189,7 @@ class MacOSX(Unix.Unix):
 
         name = subprocess.check_output(['sysctl', '-bn', 'machdep.cpu.brand_string']).strip()
         name = " ".join([s.strip() for s in name.split()])
+        pyFetch.fetch.debug("CPU: %s" % name)
         return { 'name': name, 'load_percentage': load_percentage }
     
     def gpu(self):
@@ -186,6 +203,7 @@ class MacOSX(Unix.Unix):
             output = subprocess.check_output(['/usr/sbin/system_profiler', 'SPDisplaysDataType'])
             for s in [y.strip() for y in output.split('\n')]:
                 if s.startswith('Chipset Model'):
+                    pyFetch.fetch.debug("GPU: %s" % s)
                     return s.split(': ')[1]
         except:
             return "Unknown"
@@ -201,6 +219,7 @@ class MacOSX(Unix.Unix):
             output = subprocess.check_output(['/usr/sbin/system_profiler', 'SPDisplaysDataType'])
             for s in [y.strip() for y in output.split('\n')]:
                 if s.startswith('Resolution'):
+                    pyFetch.fetch.debug("Resolution: %s" % s)
                     s = s.split(': ')[1].split(' x ')
                     return { 'x': s[0], 'y': s[1] }
         except:
@@ -216,7 +235,7 @@ class MacOSX(Unix.Unix):
 
         total = float(subprocess.check_output(['sysctl', '-n', 'hw.physmem']).strip())
         used = float(subprocess.check_output(['sysctl', '-n', 'hw.usermem']).strip())
-
+        pyFetch.fetch.debug("Memory: %d total, %d used" % (total, used))
         return { 'total': total, 'used': used, 'free': total - used }
 
     def visual_style(self):
@@ -233,6 +252,7 @@ class MacOSX(Unix.Unix):
                 '6': 'Graphite',
             }
 
+            pyFetch.fetch.debug("AppleAquaColorVariant = %s (%s)" % (key, friendly[key] if key in friendly else "Unknown"))
             return { 'name': friendly[key] }
         except:
             return { 'name': "Unknown" }
