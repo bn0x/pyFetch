@@ -16,6 +16,12 @@ Get it
     $ pip install pyfetch
     $ pyfetch
 
+If you don't have pip, you can do it the classic way:
+
+    $ python setup.py install
+    $ pyfetch
+    # or python -m pyFetch
+
 Requirements
 ------------
 
