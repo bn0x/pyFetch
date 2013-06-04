@@ -30,7 +30,7 @@ setup(
     author='bn0x and aki--aki',
     author_email='0_bn0x@hushmail.com',
     url='https://github.com/bn0x/pyFetch',
-    packages=['pyFetch', 'pyFetch.ascii'],
+    packages=['pyFetch', 'pyFetch.Art', 'pyFetch.Platform'],
     classifiers=[
         "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
         "Programming Language :: Python",
