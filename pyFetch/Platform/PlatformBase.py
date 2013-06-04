@@ -1,3 +1,5 @@
+import pyFetch.Debug
+
 class PlatformBase(object):
     """\
     Base class for pyFetch platform modules.
@@ -5,6 +7,58 @@ class PlatformBase(object):
 
     show_kernel = False
     "Whether or not to show the Kernel line in the output."
+
+    def collate_data(self, info=False, excludes=[]):
+        """\
+        Call every defined function in the platform class and return their
+        values in a dictionary, keyed by the function name.
+        """
+
+        twist = {}
+        excludes = ['collate_data', 'disk_usage', 'screen_shot'] + excludes
+
+        pyFetch.Debug.debug("Starting collate_data (info provided: %s, excludes: %s)" % (bool(info), str(excludes)))
+
+        if not info:
+            info = []
+            t = []
+            for name in dir(self):
+                obj = eval("self.%s" % name)
+                if not str(type(obj)) == "<type 'instancemethod'>":
+                    continue
+                if name.startswith('_'):
+                    continue
+                if name in excludes:
+                    continue
+                t.append(name)
+                info.append((name, obj))
+
+        pyFetch.Debug.debug("collate_data: will get %s" % str(t))
+
+        for name, obj in info:
+            try:
+                twist[name] = obj()
+            except:
+                pyFetch.Debug.debug("collate_data: failed in %s, adding 'False' in it's place" % name)
+                twist[name] = False
+                pass
+
+        pyFetch.Debug.debug("collate_data: done.")
+        return twist
+
+    def username(self):
+        """\
+        Return the name of the currently logged in user.
+        """
+
+        return __import__("getpass").getuser()
+
+    def hostname(self):
+        """\
+        Get the system hostname.
+        """
+
+        return __import__("socket").gethostname()
 
     def default_ascii(self):
         """\

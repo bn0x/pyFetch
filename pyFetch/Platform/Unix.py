@@ -3,11 +3,15 @@ import re
 import subprocess
 import platform
 import sys
+import pyFetch.Debug
 from colorama import Fore, Back, Style
 import PlatformBase
 
 
 class Unix(PlatformBase.PlatformBase):
+    """\
+    Generic UNIX platform class.
+    """
 
     def default_ascii(self):
         """\
@@ -16,7 +20,8 @@ class Unix(PlatformBase.PlatformBase):
         :rtype: string
         """
 
-        return "unix_placeholder"
+        import pyFetch.ascii.unix_placeholder
+        return pyFetch.ascii.unix_placeholder
 
     def disk_usage(self, path):
         """\
@@ -31,6 +36,7 @@ class Unix(PlatformBase.PlatformBase):
         free = st.f_bavail * st.f_frsize
         total = st.f_blocks * st.f_frsize
         used = (st.f_blocks - st.f_bfree) * st.f_frsize
+        pyFetch.Debug.debug("Disk \"%s\": %d total, %d free" % (path, total, free))
         return { 'total': total, 'used': used, 'free': free }
 
     def system_disk_usage(self):
@@ -70,8 +76,11 @@ class Unix(PlatformBase.PlatformBase):
         :rtype: int
         """
 
-        with open('/proc/uptime', 'r') as f:
-            return float(f.readline().split()[0])
+        try:
+            with open('/proc/uptime', 'r') as f:
+                return int(f.readline().split()[0])
+        except:
+            return 1
 
     def os_release(self):
         """\

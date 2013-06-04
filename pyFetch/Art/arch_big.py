@@ -8,6 +8,7 @@ text = Fore.RESET
 plustext = Fore.CYAN
 
 ascii_art = [
+	Fore.BLUE + "                                      ",
 	Fore.BLUE + "                   -`                 ",
 	Fore.BLUE + "                  .o+`                ",
 	Fore.BLUE + "                 `ooo/                ",

@@ -29,9 +29,11 @@ class Windows(PlatformBase.PlatformBase):
         """
 
         if float(platform.win32_ver()[1][:3]) > 6.1:
-            return "windows_8"
+            import pyFetch.ascii.windows_8
+            return pyFetch.ascii.windows_8
         else:
-            return "windows"
+            import pyFetch.ascii.windows
+            return pyFetch.ascii.windows
 
     def get_registry_value(self, key, subkey, value):
         """\

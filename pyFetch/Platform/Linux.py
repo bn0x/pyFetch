@@ -2,6 +2,7 @@ import Unix
 import re
 import os
 import subprocess
+import pyFetch.Debug
 
 
 class Linux(Unix.Unix):
@@ -13,8 +14,15 @@ class Linux(Unix.Unix):
     distroforce = ""
     "Name of distro to force get_distro() to display."
 
-    class Distro(object):
-        class Distro(object):
+    def __init__(self):
+        self.detected_distro = False
+
+    def collate_data(self, info=False, excludes=[]):
+        excludes = ['get_distro', 'force_distro'] + excludes
+        return super(self.__class__, self).collate_data(excludes=excludes)
+
+    class Distro:
+        class Distro:
             """\
             Object to represent a Linux distribution.
             """
@@ -22,7 +30,7 @@ class Linux(Unix.Unix):
             name = "Unknown"
             ascii_art = "unix_placeholder"
             lsb = { "distid": "" }
-            fallback = { "file": "", "check": [ "exists", "content" ],"content": "" }
+            fallback = { "file": "", "check": [ "exists", "content" ], "content": "" }
 
         class ArchLinux(Distro):
             name = "Arch Linux"
@@ -71,13 +79,17 @@ class Linux(Unix.Unix):
         self.distroforce = distro
         return None
 
-    def get_distro(self, debug=False):
+    def get_distro(self):
         """\
         Return information on the Linux distribution the system is currently running.
 
         :rtype: `:class: pyFetch.Linux.Distro.Distro`
         """
 
+        if self.detected_distro:
+            pyFetch.Debug.debug("Skipping distro detection because we've been run before this session. self.detected_distro: %s" % str(self.detected_distro['distro']))
+            return self.detected_distro
+
         for d in dir(self.Distro):
             if d[0] == "_":
                 continue
@@ -87,35 +99,38 @@ class Linux(Unix.Unix):
             e = eval("self.Distro.%s" % d)
             s = e()
 
-            if debug: print "Distro: %s" % d
+            pyFetch.Debug.debug("Distro: %s" % d)
 
             # Check if we've been forced.
             if self.distroforce:
                 if self.distroforce == d:
-                    return { 'distro': e, 'ver': '', 'codename': '' }
+                    self.detected_distro = { 'distro': e, 'ver': '', 'codename': '' }
+                    return self.detected_distro
                 else:
-                    continue
+                    raise
 
 
             # LSB search
             try:
                 if s.lsb['distid'] is False:
-                    if debug: print "Skipping LSB check."
-                    continue
+                    pyFetch.Debug.debug("Skipping LSB check.")
+                    raise
 
                 output = " ".join([o.strip() for o in subprocess.check_output(["lsb_release", "-sirc"], stderr=subprocess.STDOUT).split("\n")]).strip().split()
-                if debug: print "LSB: %s" % output
+                pyFetch.Debug.debug("Distro %s: LSB should be %s" % (d, str(output)))
 
                 if re.search(s.lsb['distid'], output[0]):
-                    if debug: print "LSB match."
+                    pyFetch.Debug.debug("Distro %s: LSB match." % d)
                     ver = output[1] if output[1].strip() != "rolling" else ''
                     if 'codename' in s.lsb:
                         if re.search(s.lsb['codename'], output[2]):
-                            if debug: print "Codename."
-                            return { 'distro': e, 'ver': ver, 'codename': output[2] if output[2] != "n/a" else '' }
+                            pyFetch.Debug.debug("Distro %s: LSB codename found." % d)
+                            self.detected_distro = { 'distro': e, 'ver': ver, 'codename': output[2] if output[2] != "n/a" else '' }
+                            return self.detected_distro
 
-                    if debug: print "No codename."
-                    return { 'distro': e, 'ver': ver, 'codename': '' }
+                    pyFetch.Debug.debug("Distro %s: No codename." % d)
+                    self.detected_distro = { 'distro': e, 'ver': ver, 'codename': '' }
+                    return self.detected_distro
 
             except:
                 pass
@@ -129,27 +144,27 @@ class Linux(Unix.Unix):
             e = eval("self.Distro.%s" % d)
             s = e()
 
-            if debug: print "Distro: %s" % d
-
-            # Fallback
             try:
-                if debug: print "Fallback"
+                # Fallback
+                pyFetch.Debug.debug("Distro %s: Fallback detection mode" % d)
                 if "exists" in s.fallback['check'] or "content" in s.fallback['check']:
                     with open(s.fallback['file']) as f:
-                        if debug: print "File found."
+                        pyFetch.Debug.debug("Distro %s: File found.")
                         if not "content" in s.fallback['check']:
-                            return { 'distro': e, 'ver': '', 'codename': '' }
-
+                            self.detected_distro = { 'distro': e, 'ver': '', 'codename': '' }
+                            return self.detected_distro
                         for x in f:
                             if s.fallback['content'] in x:
-                                if debug: print "Content match."
-                                return { 'distro': e, 'ver': '', 'codename': '' }
+                                pyFetch.Debug.debug("Distro %s: File content match." % d)
+                                self.detected_distro = { 'distro': e, 'ver': '', 'codename': '' }
+                                return self.detected_distro
 
             except:
                 pass
 
-        if debug: print "Unknown."
-        return { 'distro': self.Distro.Distro, 'ver': '', 'codename': '' }
+        pyFetch.Debug.debug("Unknown distro.")
+        self.detected_distro = { 'distro': self.Distro.Distro, 'ver': '', 'codename': '' }
+        return self.detected_distro
 
     def default_ascii(self):
         """\
@@ -157,8 +172,9 @@ class Linux(Unix.Unix):
 
         :rtype: string
         """
-
-        return self.get_distro()['distro'].ascii_art
+        distro = self.get_distro()['distro']()
+        pyFetch.Debug.debug("Linux default_ascii: getting art for %s" % distro.name)
+        return distro.ascii_art
 
     def os_release(self):
         """\

@@ -1,7 +1,4 @@
 ###### ASCII ART FILE IMPORTS ######
-
-""" A lot of ASCII from @KittyKatt aka screenFetch """
-
 import default
 import unix_placeholder
 import windows_8
@@ -13,18 +10,14 @@ import ubuntu
 import gentoo
 import macosx
 import apple
+######/ASCII ART FILE IMPORTS ######
 
-######/ASCII ART FILE IMPORTS  ######
+import re
+import pyFetch.Debug
 
-modules = []
-for x in dir():
-    if x[0] == "_" or x == "line" or x == "system" or x == "list" or x == "modules":
-        continue
-
-    modules.append(x)
-
-lineno = 0
-maxwidth = 0
+lineno = 0 # current line number for line()
+maxwidth = 0 # maximum width
+artlist = [] # loaded ascii art
 
 def setMaxWidth(width):
     """\
@@ -97,7 +90,7 @@ def line(ascii, text = "", fill = False):
     print mark.out
     lineno += 1
 
-def system(sys):
+def system(sys, warn=True):
     """\
     Get the ASCII art for the given system.
 
@@ -105,10 +98,17 @@ def system(sys):
     :rtype: list
     """
 
-    if sys in modules:
-        return eval("%s" % sys)
+    if str(type(sys)) == "<type 'module'>" and sys.ascii_art:
+        return sys
+    elif isinstance(sys, str):
+        if sys in artlist:
+            return eval("%s" % sys)
+        else:
+            if warn:
+                print "WARNING: selected ASCII art not found, returning the default one"
+            return default
     else:
-        print "WARNING: selected ASCII art not found, returning the default one"
+        pyFetch.Debug.debug("pyFetch.ascii.system: expected sys to be <type 'str'> or <type 'module'>, got %s" % type(sys))
         return default
 
 def list():
@@ -121,11 +121,34 @@ def list():
     global lineno
     from colorama import Fore, Back, Style
 
-    for module in modules:
+    for module in artlist:
         lineno = 0
         b = system(module)
         print
-        print "%s%s" % (Fore.WHITE, '-' * 80)
-        print "%s %s" % (Fore.WHITE, module)
+        print "%s%s" % (Fore.RESET, '-' * 80 if maxwidth is 0 else maxwidth)
+        print "--%s %s" % (Fore.RESET, module)
         line(b, fill=True)
         print Style.RESET_ALL
+
+excludes = [
+    '__.*__',
+    're',
+    'pyFetch',
+    'excludes',
+    'line',
+    'list',
+    'system',
+    'maxwidth',
+    'setMaxWidth',
+    'lineno',
+    'artlist',
+]
+
+for x in dir():
+    try:
+        for item in excludes:
+            if re.match(item, x):
+                raise Exception
+        artlist.append(x)
+    except:
+        pass

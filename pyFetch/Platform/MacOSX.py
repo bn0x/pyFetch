@@ -3,34 +3,37 @@ import re
 import os
 import subprocess
 import inspect
-import pyFetch.fetch
-from datetime import timedelta
+import pyFetch.Art
+import pyFetch.Debug
+import pyFetch.Format
+from datetime import datetime
+import time
 
 try:
     import lxml.etree
-    pyFetch.fetch.debug("lxml successfully imported, will use it to get version")
+    pyFetch.Debug.debug("lxml successfully imported, will use it to get version")
     lxml_enabled = True
 except:
-    pyFetch.fetch.debug("can't import lxml, will use fallback_get_version")
+    pyFetch.Debug.debug("can't import lxml, will use fallback_get_version")
     lxml_enabled = False
 
 
 class MacOSX(Unix.Unix):
     """\
     Mac OS X platform class.
-
-    We inherit Unix because we're *technically* a Unix OS, and some stuff there
-    will work here.
     """
+
+    # We inherit Unix because we're *technically* a Unix OS, and some stuff there
+    # will work here. In the future, we should switch to inheriting Darwin and move
+    # common things from this class to the Darwin class (ie. non-OS X-specifics like
+    # uptime and RAM usage).
 
     def default_ascii(self):
         """\
-        Return the name of the default ASCII art for this platform.
-
-        :rtype: string
+        Return the default ASCII module for this platform.
         """
 
-        return "macosx"
+        return pyFetch.Art.macosx
 
     def uptime(self):
         """\
@@ -40,9 +43,15 @@ class MacOSX(Unix.Unix):
         """
 
         output = subprocess.check_output(['sysctl', '-n', 'kern.boottime']).strip()
-        boottime = re.search('sec = (\d+),', output).group(1)
-        pyFetch.fetch.debug("Kernel boot time: %s" % boottime)
-        return timedelta(seconds=float(boottime)).seconds
+        boottime = int(re.search('sec = (\d+),', output).group(1))
+        currenttime = int(time.time())
+        diff = currenttime - boottime
+        pyFetch.Debug.debug("Kernel boot time: %d, current time: %d, %d seconds (%s) since boot" 
+            % (boottime, currenttime, diff, pyFetch.Format.time_metric(diff)))
+        return diff
+
+    def hostname(self):
+        return re.sub('.local$', '', pyFetch.Platform.PlatformBase.PlatformBase().hostname())
 
     def os_release(self):
         """\
@@ -71,13 +80,15 @@ class MacOSX(Unix.Unix):
             ]
 
             t = []
+            found = False
             for num, codename in codenames:
                 t.append(num)
                 if version.startswith(num):
-                    return codename
+                    found = True
+                    break
 
-            pyFetch.fetch.debug("Checking Mac OS X version: %s" % ", ".join(t))
-            return ''
+            pyFetch.Debug.debug("Checking Mac OS X version: %s%s" % (", ".join(t), " okay" if found else " not found"))
+            return codenames[len(t) - 1][1]
 
         def lxml_get_version():
             """\
@@ -115,15 +126,15 @@ class MacOSX(Unix.Unix):
             if lxml_enabled:
                 t = lxml_get_version()
                 if t:
-                    pyFetch.fetch.debug("lxml version retrieval succeeded")
+                    pyFetch.Debug.debug("lxml version retrieval succeeded")
                     return t
                 else:
-                    pyFetch.fetch.debug("lxml version retrieval failed, using fallback_get_version")
+                    pyFetch.Debug.debug("lxml version retrieval failed, using fallback_get_version")
                     return fallback_get_version()
             else:
                 return fallback_get_version()
         except:
-            pyFetch.fetch.debug("Version retrieval failed.")
+            pyFetch.Debug.debug("Version retrieval failed.")
             return { 'name': 'Mac OS X', 'ver': '10.x', 'codename': 'Unknown' }
 
     def web_browser(self):
@@ -138,7 +149,7 @@ class MacOSX(Unix.Unix):
             Get web browser name from a defbrowser returned key.
             """
 
-            assert isinstance(browser, str), "browser must be <type: 'str'>, got %s" % typeof(browser)
+            assert isinstance(browser, str), "browser must be <type: 'str'>, got %s" % type(browser)
 
             names = [
                 ["org.mozilla.firefox", "Firefox"],
@@ -147,20 +158,22 @@ class MacOSX(Unix.Unix):
             ]
 
             t = []
+            found = False
             for v, i in names:
                 t.append(v)
                 if browser.startswith(v):
-                    return i
+                    found = True
+                    break
 
-            pyFetch.fetch.debug("Searching for default browser: %s" % ", ".join(t))
-            return browser
+            pyFetch.Debug.debug("Searching for default browser: %s%s" % (", ".join(t), " okay" if found else " not found"))
+            return names[len(t) - 1][1]
 
         try:
-            pyFetch.fetch.debug("Calling pyfetch_macosx_defbrowser to get default browser...")
+            pyFetch.Debug.debug("Calling pyfetch_macosx_defbrowser to get default browser...")
             defbrowser = subprocess.check_output(['pyfetch_macosx_defbrowser']).strip()            
             return { 'raw': defbrowser, 'name': get_name(defbrowser) }
         except: 
-            pyFetch.fetch.debug("Calling pyfetch_macosx_defbrowser failed")
+            pyFetch.Debug.debug("Calling pyfetch_macosx_defbrowser failed")
             return { 'raw': 'Unknown', 'name': "Unknown" }
 
 
@@ -181,15 +194,15 @@ class MacOSX(Unix.Unix):
                     y = x.split(",")
                     for z in y:
                         if 'idle' in z:
-                            pyFetch.fetch.debug("CPU: %s" % z)
+                            pyFetch.Debug.debug("CPU: %s" % z)
                             z = re.sub("% idle", "", z)
                             load_percentage = 100 - float(z.strip())
         except:
             pass
 
-        name = subprocess.check_output(['sysctl', '-bn', 'machdep.cpu.brand_string']).strip()
-        name = " ".join([s.strip() for s in name.split()])
-        pyFetch.fetch.debug("CPU: %s" % name)
+        name = subprocess.check_output(['sysctl', '-n', 'machdep.cpu.brand_string']).strip()
+        name = " ".join([s.strip() for s in name.strip().split()])
+        pyFetch.Debug.debug("CPU: %s" % name)
         return { 'name': name, 'load_percentage': load_percentage }
     
     def gpu(self):
@@ -203,7 +216,7 @@ class MacOSX(Unix.Unix):
             output = subprocess.check_output(['/usr/sbin/system_profiler', 'SPDisplaysDataType'])
             for s in [y.strip() for y in output.split('\n')]:
                 if s.startswith('Chipset Model'):
-                    pyFetch.fetch.debug("GPU: %s" % s)
+                    pyFetch.Debug.debug("GPU: %s" % s)
                     return s.split(': ')[1]
         except:
             return "Unknown"
@@ -219,7 +232,7 @@ class MacOSX(Unix.Unix):
             output = subprocess.check_output(['/usr/sbin/system_profiler', 'SPDisplaysDataType'])
             for s in [y.strip() for y in output.split('\n')]:
                 if s.startswith('Resolution'):
-                    pyFetch.fetch.debug("Resolution: %s" % s)
+                    pyFetch.Debug.debug("SPDisplaysDataType: %s" % s)
                     s = s.split(': ')[1].split(' x ')
                     return { 'x': s[0], 'y': s[1] }
         except:
@@ -235,7 +248,7 @@ class MacOSX(Unix.Unix):
 
         total = float(subprocess.check_output(['sysctl', '-n', 'hw.physmem']).strip())
         used = float(subprocess.check_output(['sysctl', '-n', 'hw.usermem']).strip())
-        pyFetch.fetch.debug("Memory: %d total, %d used" % (total, used))
+        pyFetch.Debug.debug("Memory: %d total, %d used" % (total, used))
         return { 'total': total, 'used': used, 'free': total - used }
 
     def visual_style(self):
@@ -252,7 +265,7 @@ class MacOSX(Unix.Unix):
                 '6': 'Graphite',
             }
 
-            pyFetch.fetch.debug("AppleAquaColorVariant = %s (%s)" % (key, friendly[key] if key in friendly else "Unknown"))
+            pyFetch.Debug.debug("AppleAquaColorVariant = %s (%s)" % (key, friendly[key] if key in friendly else "Unknown"))
             return { 'name': friendly[key] }
         except:
             return { 'name': "Unknown" }

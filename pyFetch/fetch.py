@@ -1,93 +1,75 @@
 import os
 import sys
-import pyFetch
 import colorama
-import platform
 from optparse import OptionParser
 from colorama import Fore, Back, Style
+
+import pyFetch.Debug
+import pyFetch.Platform
+import pyFetch.Art
+import pyFetch.Format
 
 
 """\
 pyFetch, a Python system information tool
 """
 
-debugmode = False
-"Enable debugging information."
-gopts = ""
-
-def debug(text):
-    """\
-    """
-
-    if debugmode:
-        for index, line in enumerate(text.split('\n')):
-            t = " !! " if index is 0 else "    "
-            sys.stdout.write(Style.RESET_ALL + Fore.RED + t + Fore.RESET + line + "\n")
-
-        if gopts.bright and gopts.color:
-            sys.stdout.write(Style.BRIGHT)
-
-def draw(options, args):
+def draw(system, options, args):
     """\
     Draw the system's ASCII art and output system information.
     """
 
-    if options.bright and options.color:
-        print Style.BRIGHT
+    line = pyFetch.Art.line
+    data = system.collate_data()
 
-    system = pyFetch.system()
-    debug("System: %s" % system.__class__.__name__)
-    debug(system.__class__.__doc__)
-    line = pyFetch.ascii.line
+    if options.bright and options.color:
+        sys.stdout.write(Style.BRIGHT)
+        sys.stdout.flush()
 
     if options.art:
-        ascii = pyFetch.ascii.system(options.art)
+        ascii = pyFetch.Art.system(options.art)
     else:
-        ascii = pyFetch.ascii.system(system.default_ascii())
+        ascii = pyFetch.Art.system(data['default_ascii'])
 
-        debug("ASCII art: %s" % ascii.__name__)
-
-    disk = system.system_disk_usage()
-    ram = system.ram()
-    res = system.screen_resolution()
-    cpu = system.cpu()
-    gpu = system.gpu()
-    osobj = system.os_release()
-    osstr = "%s %s %s" % (osobj['name'], osobj['ver'], osobj['codename'])
-    osstr = " ".join([s.strip() for s in osstr.split()])
+    pyFetch.Debug.debug("ASCII art: %s" % ascii.__name__)    
 
     import getpass, socket
 
     line(ascii)
-    line(ascii, "%sOS:      %s%s %s" % (ascii.highlight, ascii.text, osstr, system.arch()['arch']))
+    osstr = " ".join([s.strip() for s in ("%s %s %s" % (data['os_release']['name'] if data['os_release'] else "Unknown", data['os_release']['ver'] if data['os_release'] else "Unknown", data['os_release']['codename'] if data['os_release'] else "Unknown")).split()])
+    line(ascii, "%sOS:      %s%s %s" % (ascii.highlight, ascii.text, osstr, data['arch']['arch'] if data['arch'] else "Unknown"))
     if system.show_kernel:
-        line(ascii, "%sKernel:  %s%s" % (ascii.highlight, ascii.text, system.kernel()))
-    line(ascii, "%sName:    %s%s%s@%s%s" % (ascii.highlight, ascii.plustext, getpass.getuser(), ascii.highlight, ascii.text, socket.gethostname()))
-    line(ascii, "%sUptime:  %s%s" % (ascii.highlight, ascii.text, pyFetch.format.time_metric(system.uptime())))
+        line(ascii, "%sKernel:  %s%s" % (ascii.highlight, ascii.text, data['kernel'] if data['kernel'] else "Unknown"))
+    line(ascii, "%sName:    %s%s%s@%s%s" % (ascii.highlight, ascii.plustext, data['username'] if data['username'] else "Unknown", ascii.highlight, ascii.text, data['hostname'] if data['hostname'] else "Unknown"))
+    line(ascii, "%sUptime:  %s%s" % (ascii.highlight, ascii.text, pyFetch.Format.time_metric(data['uptime']) if data['uptime'] else "Unknown"))
     line(ascii)
+
     if system.__class__.__name__ == "Windows":
-        line(ascii, "%sShell:   %s%s" % (ascii.highlight, ascii.text, system.window_manager()['name']))
+        line(ascii, "%sShell:   %s%s" % (ascii.highlight, ascii.text, data['window_manager']['name'] if data['window_manager'] else "Unknown"))
     elif system.__class__.__name__ != "MacOSX":
-        line(ascii, "%sWM:      %s%s" % (ascii.highlight, ascii.text, system.window_manager()['name']))
-    line(ascii, "%sBrowser: %s%s" % (ascii.highlight, ascii.text, system.web_browser()['name']))
-    line(ascii, "%sTheme:   %s%s" % (ascii.highlight, ascii.text, system.visual_style()['name']))
+        line(ascii, "%sWM:      %s%s" % (ascii.highlight, ascii.text, data['window_manager']['name'] if data['window_manager'] else "Unknown"))
+
+    line(ascii, "%sBrowser: %s%s" % (ascii.highlight, ascii.text, data['web_browser']['name'] if data['web_browser'] else "Unknown"))
+    line(ascii, "%sTheme:   %s%s" % (ascii.highlight, ascii.text, data['visual_style']['name'] if data['visual_style'] else "Unknown"))
     line(ascii)
+
     if options.free:
-        fmtDisk = "%sDisk:    %s%s free %s/%s %s total" % (ascii.highlight, ascii.plustext, pyFetch.format.sizeof_fmt(disk['free']), ascii.highlight, ascii.text, pyFetch.format.sizeof_fmt(disk['total']))
-        fmtRAM  = "%sRAM:     %s%s free %s/%s %s total" % (ascii.highlight, ascii.plustext, pyFetch.format.sizeof_fmt(ram['free']), ascii.highlight, ascii.text, pyFetch.format.sizeof_fmt(ram['total']))
+        fmtDisk = "%sDisk:    %s%s free %s/%s %s total" % (ascii.highlight, ascii.plustext, pyFetch.Format.sizeof_fmt(data['system_disk_usage']['free']) if data['system_disk_usage'] else "Unknown", ascii.highlight, ascii.text, pyFetch.Format.sizeof_fmt(data['system_disk_usage']['total']) if data['system_disk_usage'] else "Unknown")
+        fmtRAM  = "%sRAM:     %s%s free %s/%s %s total" % (ascii.highlight, ascii.plustext, pyFetch.Format.sizeof_fmt(data['ram']['free']) if data['ram'] else "Unknown", ascii.highlight, ascii.text, pyFetch.Format.sizeof_fmt(data['ram']['total']) if data['ram'] else "Unknown")
     else:
-        fmtDisk = "%sDisk:    %s%s used %s/%s %s total" % (ascii.highlight, ascii.plustext, pyFetch.format.sizeof_fmt(disk['used']), ascii.highlight, ascii.text, pyFetch.format.sizeof_fmt(disk['total']))
-        fmtRAM  = "%sRAM:     %s%s used %s/%s %s total" % (ascii.highlight, ascii.plustext, pyFetch.format.sizeof_fmt(ram['used']), ascii.highlight, ascii.text, pyFetch.format.sizeof_fmt(ram['total']))
+        fmtDisk = "%sDisk:    %s%s used %s/%s %s total" % (ascii.highlight, ascii.plustext, pyFetch.Format.sizeof_fmt(data['system_disk_usage']['used']) if data['system_disk_usage'] else "Unknown", ascii.highlight, ascii.text, pyFetch.Format.sizeof_fmt(data['system_disk_usage']['total']) if data['system_disk_usage'] else "Unknown")
+        fmtRAM  = "%sRAM:     %s%s used %s/%s %s total" % (ascii.highlight, ascii.plustext, pyFetch.Format.sizeof_fmt(data['ram']['used']) if data['ram'] else "Unknown", ascii.highlight, ascii.text, pyFetch.Format.sizeof_fmt(data['ram']['total']) if data['ram'] else "Unknown")
 
     line(ascii, fmtDisk)
     line(ascii, fmtRAM)
     line(ascii)
-    line(ascii, "%sCPU:     %s%s" % (ascii.highlight, ascii.text, cpu['name']))
-    line(ascii, "%sUsage:   %s%s%s/%s100%%" % (ascii.highlight, ascii.plustext, cpu['load_percentage'], ascii.highlight, ascii.text))
+    line(ascii, "%sCPU:     %s%s" % (ascii.highlight, ascii.text, data['cpu']['name'] if data['cpu'] else "Unknown"))
+    line(ascii, "%sUsage:   %s%s%s/%s100%%" % (ascii.highlight, ascii.plustext, data['cpu']['load_percentage'] if data['cpu'] else "Unknown", ascii.highlight, ascii.text))
     line(ascii)
-    line(ascii, "%sGPU:     %s%s" % (ascii.highlight, ascii.text, gpu))
-    line(ascii, "%sRes:     %s%s%sx%s%s%s" % (ascii.highlight, ascii.plustext, res['x'], ascii.highlight, ascii.plustext, res['y'], Fore.RESET))
+    line(ascii, "%sGPU:     %s%s" % (ascii.highlight, ascii.text, data['gpu'] if data['gpu'] else "Unknown"))
+    line(ascii, "%sRes:     %s%s%sx%s%s%s" % (ascii.highlight, ascii.plustext, data['screen_resolution']['x'] if data['screen_resolution'] else "Unknown", ascii.highlight, ascii.plustext, data['screen_resolution']['y'] if data['screen_resolution'] else "Unknown", Fore.RESET))
     line(ascii, fill=True)
+
     print Style.RESET_ALL
 
 def run():
@@ -105,21 +87,19 @@ def run():
     parser.add_option("-b", "--bright", action="store_true", dest="bright", help="Enable bright colors", default=True)
     parser.add_option("-B", "--no-bright", action="store_false", dest="bright", help="Disable bright colors")
 
-    parser.add_option("-d", "--distro", action="store", dest="forcedistro", metavar="DISTRO", help="Ignore system distribution information and use DISTRO instead (Linux only)")
+    parser.add_option("-d", "--distro", action="store", dest="forcedistro", metavar="DISTRO", help="Ignore system distribution information and use DISTRO instead. On Linux, selects distro; on Darwin and Mac OS X, switches between vanilla Darwin (\"Darwin\") and OS X (\"MacOSX\")")
+    parser.add_option("-p", "--platform", action="store", dest="forceplatform", metavar="PLATFORM", help="Ignore system platform information and use the PLATFORM platform class instead", default=False)
     
     parser.add_option("--debug", action="store_true", dest="debugmode", help="Enable debugging mode.")
     parser.add_option("--version", action="store_true", dest="version", help="Print version information and exit")
 
     (options, args) = parser.parse_args()
-    global gopts
-    gopts = options
 
     if options.debugmode:
-        global debugmode
-        debugmode = True
-        debug("Welcome to pyFetch.")
+        pyFetch.Debug.enable_debug()
+        pyFetch.Debug.debug("Welcome to pyFetch.")
 
-    debug("Color strip mode: %s" % str(not options.color))
+    pyFetch.Debug.debug("Color strip mode: %s" % str(not options.color))
     colorama.init(strip=(not options.color))
 
     if options.version:
@@ -128,23 +108,32 @@ def run():
         print ""
 
     elif options.artlist:
-        debug("Printing ASCII art list.")
-        pyFetch.ascii.list()
+        pyFetch.Debug.debug("Printing ASCII art list.")
+        pyFetch.Art.list()
 
     else:
+        system = pyFetch.Platform.guess_platform(options.forceplatform)()
+        pyFetch.Debug.debug("System: %s" % system.__class__.__name__)
+        pyFetch.Debug.debug(system.__class__.__doc__)
+
         if options.maxwidth:
-            debug("Maximum width set to %d." % options.maxwidth)
-            pyFetch.ascii.setMaxWidth(options.maxwidth)
+            pyFetch.Debug.debug("Maximum width set to %d." % options.maxwidth)
+            pyFetch.Art.setMaxWidth(options.maxwidth)
 
         if options.forcedistro:
-            debug("Setting distro force flag to \"%s\"." % options.forcedistro)
-            system.force_distro(options.forcedistro)
+            if system.__class__.__name__ == "Linux":
+                pyFetch.Debug.debug("Setting distro force flag to \"%s\"." % options.forcedistro)
+                system.force_distro(options.forcedistro)
+            elif system.__class__.__name__ == "Darwin" or system.__class__.__name__ == "MacOSX":
+                system = pyFetch.Platform.guess_platform("Darwin", options.forcedistro)()
+            else:
+                pyFetch.Debug.debug("Ignoring distro force flag, we're not on Linux or Darwin", force=True)
 
-        debug("Calling pyFetch.fetch.draw()...")
-        draw(options, args)
+        pyFetch.Debug.debug("Calling pyFetch.fetch.draw()...")
+        draw(system, options, args)
 
         if options.screenshot:
-            if pyFetch.system().screen_shot():
+            if system.screen_shot():
                 print "Screenshot captured."
             else:
                 print "Failed to capture screenshot."
