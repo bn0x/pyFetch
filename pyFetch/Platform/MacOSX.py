@@ -269,3 +269,18 @@ class MacOSX(Unix.Unix):
             return { 'name': friendly[key] }
         except:
             return { 'name': "Unknown" }
+
+    def screen_shot(self):
+        """\
+        Take a screenshot of the desktop.
+        Returns True on success, False on failure.
+
+        :rtype: bool
+        """
+
+        try:
+            print "Capturing screenshot in 5 seconds..."
+            subprocess.check_output(['screencapture', '-tpng', '-T5', os.path.join(os.environ['HOME'], 'Desktop', 'pyFetch - ' + datetime.now().ctime() + '.png')])
+            return True
+        except:
+            return False
