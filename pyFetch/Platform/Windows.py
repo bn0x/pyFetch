@@ -13,13 +13,25 @@ from win32api import GetSystemMetrics
 from datetime import datetime, timedelta
 from colorama import Fore, Back, Style
 
+import pyFetch.Art
+import pyFetch.Art.windows
+import pyFetch.Art.windows_8
 import PlatformBase
+import pyFetch.Debug
+
 
 
 class Windows(PlatformBase.PlatformBase):
     """\
     Windows platform class.
     """
+
+    def __init__(self):
+        self.detected_shell = False
+
+    def collate_data(self, info=False, excludes=[]):
+        excludes = ['get_registry_value'] + excludes
+        return super(self.__class__, self).collate_data(excludes=excludes)
 
     def default_ascii(self):
         """\
@@ -29,11 +41,9 @@ class Windows(PlatformBase.PlatformBase):
         """
 
         if float(platform.win32_ver()[1][:3]) > 6.1:
-            import pyFetch.ascii.windows_8
-            return pyFetch.ascii.windows_8
+            return pyFetch.Art.windows_8
         else:
-            import pyFetch.ascii.windows
-            return pyFetch.ascii.windows
+            return pyFetch.Art.windows
 
     def get_registry_value(self, key, subkey, value):
         """\
@@ -269,22 +279,25 @@ class Windows(PlatformBase.PlatformBase):
         """
 
         wms = [
+            ["explorer.exe", "Explorer"],
             ["blackbox.exe", "bbLean"],
             ["sharpenviro.exe", "SharpEnviro"],
             ["litestep.exe", "LiteStep"],
             ["emergecore.exe", "Emerge Desktop"],
         ]
 
-        name = ""
-
         c = wmi.WMI()
+        t = []
+        found = False
         for wm_str, wm_name in wms:
-            for process in c.Win32_Process(name = wm_str):
-                winmanager = wm_name
-                return { 'name': wm_name }
+            t.append(wm_str)
+            for process in c.Win32_Process(name=wm_str):
+                self.detected_shell = wm_name
+                found = True
+                break
 
-        winmanager = 'Explorer'
-        return { 'name': 'Explorer' }
+        pyFetch.Debug.debug("Checking for shell: %s%s" % (", ".join(t), " okay" if found else " not found"))
+        return wms[len(t) - 1][1]
 
     def visual_style(self):
         """\
@@ -292,33 +305,34 @@ class Windows(PlatformBase.PlatformBase):
 
         :rtype: dict
         """
-        global winmanager
-        if 'bbLean' in winmanager:
-            try:
-                    with open('C:\\bbLean\\blackbox.rc') as f:
-                        blackBoxRC = f.readlines()
-                        for i in range(len(blackBoxRC)):
-                            if 'session.styleFile:' in blackBoxRC[i]:
-                                themeName = blackBoxRC[i].split(':')[1].split('\\')[1:]
-                                return { 'name': '\\'.join(themeName) }
-            except os.error:
-                    return { 'name': 'Unknown bbLean Theme' }
-        else:
-                try:
-                    visualStyle = self.get_registry_value("HKEY_CURRENT_USER", "Software\Microsoft\Windows\CurrentVersion\ThemeManager", "DllName")
-                    visualStyle = visualStyle.split('\\')[-1].split(".")[0]
-                    return { 'name': visualStyle }
 
+        if self.detected_shell == 'bbLean':
+            try:
+                with open('C:\\bbLean\\blackbox.rc') as f:
+                    for line in f:
+                        if 'session.styleFile:' in line:
+                            themeName = line.split(':')[1].split('\\')[1:]
+                            return { 'name': '\\'.join(themeName) }
+            except os.error:
+                return { 'name': 'Unknown bbLean Theme' }
+        else:
+            try:
+                visualStyle = self.get_registry_value("HKEY_CURRENT_USER", "Software\Microsoft\Windows\CurrentVersion\ThemeManager", "DllName")
+                visualStyle = visualStyle.split('\\')[-1].split(".")[0]
+                pyFetch.Debug.debug("Found user style in ThemeManager\\DllName: \"%s\"" % visualStyle)
+                return { 'name': visualStyle }
+            except:
+                try:
+                    visualStyle = self.get_registry_value("HKEY_CURRENT_USER", "Software\Microsoft\Windows\CurrentVersion\Themes", "CurrentTheme")
+                    visualStyle = visualStyle.split('\\')[-1].split(".")[0]
+                    pyFetch.Debug.debug("Found user style in Themes\\CurrentTheme: \"%s\"" % visualStyle)
+                    if 'classic' in visualStyle:
+                        return { 'name': 'Windows Classic' }
+                    else:
+                        return { 'name': visualStyle }
                 except:
-                    try:
-                        visualStyle = self.get_registry_value("HKEY_CURRENT_USER", "Software\Microsoft\Windows\CurrentVersion\Themes", "CurrentTheme")
-                        visualStyle = visualStyle.split('\\')[-1].split(".")[0]
-                        if 'classic' in visualStyle:
-                            return { 'name': 'Windows Classic' }
-                        else:
-                            return { 'name': visualStyle }
-                    except:
-                            return { 'name': "Unknown"}
+                    pyFetch.Debug.debug("Exception in visual style detection, raising")
+                    raise
 
     def arch(self):
         """\
