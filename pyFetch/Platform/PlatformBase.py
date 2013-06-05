@@ -1,3 +1,4 @@
+import traceback
 import pyFetch.Debug
 
 class PlatformBase(object):
@@ -39,7 +40,9 @@ class PlatformBase(object):
             try:
                 twist[name] = obj()
             except:
-                pyFetch.Debug.debug("collate_data: failed in %s, adding 'False' in it's place" % name)
+                error_message = "collate_data: failed in %s, adding 'False' in it's place.\n" % name
+                error_message += "Exception details:\n" + '\n'.join(traceback.format_exc().split("\n")[-4:-1])
+                pyFetch.Debug.debug(error_message)
                 twist[name] = False
                 pass
 
