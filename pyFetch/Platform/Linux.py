@@ -32,6 +32,9 @@ class Linux(Unix.Unix):
             lsb = { "distid": "" }
             fallback = { "file": "", "check": [ "exists", "content" ], "content": "" }
 
+        class GenericDistro(Distro):
+            pass
+
         class ArchLinux(Distro):
             name = "Arch Linux"
             ascii_art = "arch_big"
@@ -107,7 +110,7 @@ class Linux(Unix.Unix):
                     self.detected_distro = { 'distro': e, 'ver': '', 'codename': '' }
                     return self.detected_distro
                 else:
-                    raise
+                    continue
 
 
             # LSB search
@@ -163,7 +166,7 @@ class Linux(Unix.Unix):
                 pass
 
         pyFetch.Debug.debug("Unknown distro.")
-        self.detected_distro = { 'distro': self.Distro.Distro, 'ver': '', 'codename': '' }
+        self.detected_distro = { 'distro': self.Distro.GenericDistro, 'ver': '', 'codename': '' }
         return self.detected_distro
 
     def default_ascii(self):
