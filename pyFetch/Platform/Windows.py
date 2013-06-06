@@ -14,8 +14,6 @@ from datetime import datetime, timedelta
 from colorama import Fore, Back, Style
 
 import pyFetch.Art
-import pyFetch.Art.windows
-import pyFetch.Art.windows_8
 import PlatformBase
 import pyFetch.Debug
 
@@ -41,9 +39,9 @@ class Windows(PlatformBase.PlatformBase):
         """
 
         if float(platform.win32_ver()[1][:3]) > 6.1:
-            return pyFetch.Art.windows_8
+            return "windows_8"
         else:
-            return pyFetch.Art.windows
+            return "windows"
 
     def get_registry_value(self, key, subkey, value):
         """\
