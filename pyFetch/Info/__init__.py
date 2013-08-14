@@ -7,7 +7,7 @@ import gpu
 import normal
 
 def draw(system, options, args, mode):
-	if mode == gpu:
+	if mode == 'gpu':
 		return gpu.draw(system, options, args)
 
 	else:
