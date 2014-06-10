@@ -26,7 +26,7 @@ def draw(system, options, args):
     else:
         ascii = pyFetch.Art.system(data['default_ascii'])
 
-    pyFetch.Debug.debug("ASCII art: %s" % ascii.__name__)    
+    pyFetch.Debug.debug("ASCII art: %s" % ascii.__name__)
 
     import getpass, socket
 

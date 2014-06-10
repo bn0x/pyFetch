@@ -31,7 +31,7 @@ def run():
 
     parser.add_option("-d", "--distro", action="store", dest="forcedistro", metavar="DISTRO", help="Ignore system distribution information and use DISTRO instead. On Linux, selects distro; on Darwin and Mac OS X, switches between vanilla Darwin (\"Darwin\") and OS X (\"MacOSX\")")
     parser.add_option("-p", "--platform", action="store", dest="forceplatform", metavar="PLATFORM", help="Ignore system platform information and use the PLATFORM platform class instead", default=False)
-    
+
     parser.add_option('-g', '--gpu', action='store_true', dest='gpu', help='GPU Information.')
 
     parser.add_option("--debug", action="store_true", dest="debugmode", help="Enable debugging mode.")
@@ -74,7 +74,7 @@ def run():
                 pyFetch.Debug.debug("Ignoring distro force flag, we're not on Linux or Darwin", force=True)
 
         pyFetch.Debug.debug("Calling pyFetch.fetch.draw()...")
-        
+
         if options.gpu:
             mode = gpu
         else:

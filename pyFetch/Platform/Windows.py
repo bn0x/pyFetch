@@ -53,7 +53,7 @@ class Windows(PlatformBase.PlatformBase):
         """
 
         key = getattr(_winreg, key)
-    
+
         for x in subkey.split("\\"):
             key = _winreg.OpenKeyEx(key, x)
 
@@ -90,9 +90,9 @@ class Windows(PlatformBase.PlatformBase):
         ret = ctypes.windll.kernel32.GlobalMemoryStatus(ctypes.byref(memoryStatus))
 
         return {
-            'total': memoryStatus.dwTotalPhys, 
+            'total': memoryStatus.dwTotalPhys,
             'free': memoryStatus.dwAvailPhys,
-            'used': memoryStatus.dwTotalPhys - memoryStatus.dwAvailPhys 
+            'used': memoryStatus.dwTotalPhys - memoryStatus.dwAvailPhys
         }
 
     def disk_usage(self, path):
@@ -197,7 +197,7 @@ class Windows(PlatformBase.PlatformBase):
             r = filter(bool, [s.strip() for s in r])
             return ', '.join(r)
         except:
-            return "Unknown"    
+            return "Unknown"
 
     def screen_resolution(self):
         """\
@@ -242,7 +242,7 @@ class Windows(PlatformBase.PlatformBase):
 
         try:
             hwnd = win32gui.GetDesktopWindow()
-  
+
             vscreenwidth = win32api.GetSystemMetrics(78)
             vscreenheight = win32api.GetSystemMetrics(79)
             vscreenx = win32api.GetSystemMetrics(76)
@@ -250,7 +250,7 @@ class Windows(PlatformBase.PlatformBase):
 
             mfcDC = win32ui.CreateDCFromHandle(win32gui.GetWindowDC(hwnd))
             saveDC = mfcDC.CreateCompatibleDC()
- 
+
             saveBitMap = win32ui.CreateBitmap()
             saveBitMap.CreateCompatibleBitmap(mfcDC, vscreenwidth, vscreenheight)
             saveDC.SelectObject(saveBitMap)
@@ -268,7 +268,7 @@ class Windows(PlatformBase.PlatformBase):
         except:
             return False
 
-    def window_manager(self): 
+    def window_manager(self):
         global winmanager
         """\
         Get current window manager.
@@ -288,14 +288,14 @@ class Windows(PlatformBase.PlatformBase):
         t = []
         found = False
         for wm_str, wm_name in wms:
-            t.append(wm_str)
             for process in c.Win32_Process(name=wm_str):
                 self.detected_shell = wm_name
                 found = True
+                t.append(wm_name)
                 break
 
         pyFetch.Debug.debug("Checking for shell: %s%s" % (", ".join(t), " okay" if found else " not found"))
-        return wms[len(t) - 1][1]
+        return { 'name': t[0] }
 
     def visual_style(self):
         """\
@@ -335,7 +335,7 @@ class Windows(PlatformBase.PlatformBase):
     def arch(self):
         """\
         Return platform architecture.
-    
+
         :rtype: dict
         """
 
